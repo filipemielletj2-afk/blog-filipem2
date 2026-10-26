@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  blog-filipem2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: blog_filipem2_app
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - JWT_SECRET=filipem2_production_secret_key_change_me_2026
+      - NEXT_PUBLIC_SITE_URL=https://blogfilipem2.com.br
+    volumes:
+      - ./data:/app/data
+      - ./public/uploads:/app/public/uploads
