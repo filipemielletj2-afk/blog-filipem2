@@ -4,6 +4,7 @@ import { getDb, toPlain } from '@/lib/db';
 import ArticleCard from '@/components/ArticleCard';
 import BreakingTicker from '@/components/BreakingTicker';
 import AdBanner from '@/components/AdBanner';
+import NewsletterBox from '@/components/NewsletterBox';
 import { ArrowRight, Flame, Play, Mail, CheckCircle2, TrendingUp, Sparkles } from 'lucide-react';
 import { formatDateBR } from '@/lib/utils';
 
@@ -252,48 +253,13 @@ export default function HomePage() {
           // 5. NEWSLETTER
           case 'newsletter': {
             return (
-              <section key={section.id} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="relative rounded-3xl overflow-hidden bg-gradient-to-b from-[#191b26] to-[#0e1017] border border-neutral-800 p-8 sm:p-12 text-center shadow-2xl">
-                  <div className="max-w-2xl mx-auto space-y-4">
-                    <div className="w-12 h-12 mx-auto rounded-2xl bg-red-950/80 border border-red-800 text-red-500 flex items-center justify-center">
-                      <Mail className="w-6 h-6" />
-                    </div>
-                    <h2 className="text-2xl sm:text-3xl font-black text-white">
-                      {section.title || 'Boletim Semanal BLOG FILIPEM2'}
-                    </h2>
-                    <p className="text-sm text-neutral-400">
-                      {section.subtitle || 'Fique por dentro dos principais lançamentos de games, novidades musicais, filmes e tendências da cultura geek direto na sua caixa de entrada.'}
-                    </p>
-
-                    <form
-                      action="#"
-                      onSubmit={(e) => {
-                        e.preventDefault();
-                        alert('Inscrição simulada com sucesso! Em breve você receberá as melhores novidades.');
-                      }}
-                      className="pt-4 flex flex-col sm:flex-row gap-3 max-w-md mx-auto"
-                    >
-                      <input
-                        type="email"
-                        required
-                        placeholder={config.placeholder || 'Digite seu e-mail principal...'}
-                        className="flex-1 px-4 py-3 rounded-xl bg-neutral-900 border border-neutral-700 text-white placeholder-neutral-500 text-sm focus:outline-none focus:border-red-500"
-                      />
-                      <button
-                        type="submit"
-                        className="px-6 py-3 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-xs uppercase tracking-wider shadow-lg shadow-red-600/30 transition-all shrink-0"
-                      >
-                        {config.buttonText || 'Cadastrar Grátis'}
-                      </button>
-                    </form>
-
-                    <p className="text-[11px] text-neutral-500 flex items-center justify-center gap-1.5 pt-2">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
-                      <span>Zero spam. Cancele sua inscrição quando quiser. Conforme LGPD.</span>
-                    </p>
-                  </div>
-                </div>
-              </section>
+              <NewsletterBox
+                key={section.id}
+                title={section.title}
+                subtitle={section.subtitle}
+                buttonText={config.buttonText}
+                placeholder={config.placeholder}
+              />
             );
           }
 
