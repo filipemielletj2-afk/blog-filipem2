@@ -1,0 +1,17 @@
+{
+  "name": "BLOG FILIPEM2 — Games, Cinema, Música e Cultura Geek",
+  "short_name": "FILIPEM2",
+  "description": "Portal profissional de notícias, artigos e análises sobre games, músicas, filmes, séries e tecnologia.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0c0d10",
+  "theme_color": "#dc2626",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
