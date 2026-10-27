@@ -23,11 +23,11 @@
     --primary-glow: rgba(220, 38, 38, 0.2);
     --bg-main: #f8fafc;
     --bg-surface: #ffffff;
-    --bg-card: #f1f5f9;
+    --bg-card: #ffffff;
     --border-color: #e2e8f0;
     --text-primary: #0f172a;
     --text-secondary: #475569;
-    --text-muted: #94a3b8;
+    --text-muted: #64748b;
   }
 
   body {
@@ -35,7 +35,205 @@
     color: var(--text-primary);
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
     overflow-x: hidden;
+    transition: background-color 0.25s ease, color 0.25s ease;
   }
+}
+
+/* ==========================================================================
+   LIGHT THEME OVERRIDES (Ativado ao clicar no botão de Sol/Lua)
+   ========================================================================== */
+html.light-theme {
+  color-scheme: light;
+}
+
+html.light-theme body {
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
+}
+
+/* Backgrounds */
+html.light-theme .bg-\[\#0c0d10\],
+html.light-theme .bg-\[\#070709\],
+html.light-theme .bg-\[\#08090b\],
+html.light-theme .bg-\[\#0e1015\],
+html.light-theme .bg-\[\#12141a\],
+html.light-theme .bg-\[\#12141c\],
+html.light-theme .bg-\[\#14161f\],
+html.light-theme .bg-\[\#14161d\],
+html.light-theme .bg-\[\#191c24\],
+html.light-theme .bg-neutral-900,
+html.light-theme .bg-neutral-950 {
+  background-color: #ffffff !important;
+}
+
+html.light-theme .bg-\[\#0c0d10\]\/95 {
+  background-color: rgba(255, 255, 255, 0.96) !important;
+}
+
+html.light-theme .bg-neutral-900\/60,
+html.light-theme .bg-neutral-900\/50,
+html.light-theme .bg-neutral-800\/60,
+html.light-theme .bg-neutral-800\/70 {
+  background-color: #f1f5f9 !important;
+}
+
+html.light-theme .bg-neutral-800,
+html.light-theme .bg-neutral-800\/50 {
+  background-color: #e2e8f0 !important;
+}
+
+/* Gradients */
+html.light-theme .from-\[\#191b26\],
+html.light-theme .from-\[\#171924\] {
+  --tw-gradient-from: #ffffff !important;
+  --tw-gradient-to: #f1f5f9 !important;
+  background-color: #ffffff !important;
+}
+
+html.light-theme .via-\[\#12141c\] {
+  --tw-gradient-stops: #ffffff, #f8fafc, #f1f5f9 !important;
+}
+
+html.light-theme .to-\[\#0e1017\],
+html.light-theme .to-\[\#1a131b\] {
+  --tw-gradient-to: #f1f5f9 !important;
+}
+
+/* Borders */
+html.light-theme .border-neutral-800,
+html.light-theme .border-neutral-800\/60,
+html.light-theme .border-neutral-800\/80,
+html.light-theme .border-neutral-700,
+html.light-theme .border-neutral-700\/80,
+html.light-theme .border-neutral-900 {
+  border-color: #e2e8f0 !important;
+}
+
+/* Card Shadows */
+html.light-theme article,
+html.light-theme .bg-\[\#14161f\],
+html.light-theme .rounded-3xl.border-neutral-800 {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Typography */
+html.light-theme .text-white,
+html.light-theme .text-slate-100,
+html.light-theme .text-neutral-100,
+html.light-theme .text-neutral-200 {
+  color: #0f172a !important;
+}
+
+/* Keep white text on solid red buttons, category badges and colored tags */
+html.light-theme .bg-red-600 .text-white,
+html.light-theme .bg-red-600,
+html.light-theme [style*="backgroundColor"],
+html.light-theme [style*="background-color"] {
+  color: #ffffff !important;
+}
+
+html.light-theme .text-neutral-300 {
+  color: #334155 !important;
+}
+
+html.light-theme .text-neutral-400 {
+  color: #64748b !important;
+}
+
+html.light-theme .text-neutral-500 {
+  color: #94a3b8 !important;
+}
+
+/* Hover States */
+html.light-theme .hover\:text-white:hover {
+  color: #0f172a !important;
+}
+
+html.light-theme .hover\:bg-neutral-800:hover,
+html.light-theme .hover\:bg-neutral-800\/60:hover,
+html.light-theme .hover\:bg-neutral-800\/70:hover {
+  background-color: #f1f5f9 !important;
+}
+
+/* Hero Section text over image should remain light */
+html.light-theme .group .relative.z-10 .text-white {
+  color: #ffffff !important;
+}
+html.light-theme .group .relative.z-10 .text-neutral-300 {
+  color: #e2e8f0 !important;
+}
+html.light-theme .group .relative.z-10 .text-neutral-400 {
+  color: #cbd5e1 !important;
+}
+
+/* Header & Top Bar */
+html.light-theme header {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  border-color: #e2e8f0 !important;
+}
+
+html.light-theme header .bg-\[\#070709\] {
+  background-color: #f8fafc !important;
+  border-color: #e2e8f0 !important;
+  color: #64748b !important;
+}
+
+/* Footer */
+html.light-theme footer {
+  background-color: #f8fafc !important;
+  border-color: #e2e8f0 !important;
+}
+
+/* Prose for article detail pages */
+html.light-theme .prose-invert {
+  --tw-prose-body: #334155 !important;
+  --tw-prose-headings: #0f172a !important;
+  --tw-prose-lead: #475569 !important;
+  --tw-prose-links: #dc2626 !important;
+  --tw-prose-bold: #0f172a !important;
+  --tw-prose-counters: #64748b !important;
+  --tw-prose-bullets: #cbd5e1 !important;
+  --tw-prose-hr: #e2e8f0 !important;
+  --tw-prose-quotes: #0f172a !important;
+  --tw-prose-quote-borders: #dc2626 !important;
+  --tw-prose-captions: #64748b !important;
+  --tw-prose-code: #0f172a !important;
+  --tw-prose-pre-code: #e2e8f0 !important;
+  --tw-prose-pre-bg: #1e293b !important;
+  --tw-prose-th-borders: #cbd5e1 !important;
+  --tw-prose-td-borders: #e2e8f0 !important;
+  color: #334155 !important;
+}
+
+html.light-theme .prose-invert h1,
+html.light-theme .prose-invert h2,
+html.light-theme .prose-invert h3,
+html.light-theme .prose-invert h4,
+html.light-theme .prose-invert p,
+html.light-theme .prose-invert li,
+html.light-theme .prose-invert strong {
+  color: #0f172a !important;
+}
+
+/* Inputs, Textareas, Modals */
+html.light-theme input,
+html.light-theme textarea,
+html.light-theme select {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #cbd5e1 !important;
+}
+
+html.light-theme input::placeholder {
+  color: #94a3b8 !important;
+}
+
+/* Cookie banner & Search modal */
+html.light-theme .fixed .bg-\[\#12141a\],
+html.light-theme .fixed .bg-\[\#12141c\] {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1) !important;
 }
 
 /* Custom scrollbars */

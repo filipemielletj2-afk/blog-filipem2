@@ -108,6 +108,20 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800;900&display=swap" rel="stylesheet" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var saved = localStorage.getItem('filipem2_theme');
+                  if (saved === 'light') {
+                    document.documentElement.classList.add('light-theme');
+                  }
+                } catch (e) {}
+              })();
+            `
+          }}
+        />
         <style dangerouslySetInnerHTML={{
           __html: `
             :root {
@@ -125,7 +139,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaOrgOrg) }}
         />
       </head>
-      <body className="min-h-screen flex flex-col bg-[#0c0d10] text-slate-100 antialiased selection:bg-red-600 selection:text-white">
+      <body className="min-h-screen flex flex-col antialiased selection:bg-red-600 selection:text-white transition-colors duration-200">
         <Header categories={categories} siteTitle={settings.site_title} />
         <main className="flex-1">{children}</main>
         <Footer categories={categories} footerText={settings.footer_text} />
