@@ -27,6 +27,7 @@ export default function Header({ categories = [], siteTitle = 'BLOG FILIPEM2' }:
     if (savedTheme === 'light') {
       setIsLightMode(true);
       document.documentElement.classList.add('light-theme');
+      document.body?.classList.add('light-theme');
     }
 
     return () => window.removeEventListener('scroll', handleScroll);
@@ -35,10 +36,12 @@ export default function Header({ categories = [], siteTitle = 'BLOG FILIPEM2' }:
   const toggleTheme = () => {
     if (isLightMode) {
       document.documentElement.classList.remove('light-theme');
+      document.body?.classList.remove('light-theme');
       localStorage.setItem('filipem2_theme', 'dark');
       setIsLightMode(false);
     } else {
       document.documentElement.classList.add('light-theme');
+      document.body?.classList.add('light-theme');
       localStorage.setItem('filipem2_theme', 'light');
       setIsLightMode(true);
     }
