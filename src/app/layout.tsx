@@ -58,6 +58,9 @@ export async function generateMetadata(): Promise<Metadata> {
     icons: {
       icon: '/favicon.svg',
       apple: '/favicon.svg'
+    },
+    verification: {
+      google: settings.google_search_console_tag || undefined
     }
   };
 }
@@ -103,6 +106,24 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <head>
+        {settings.google_search_console_tag && (
+          <meta name="google-site-verification" content={settings.google_search_console_tag} />
+        )}
+        {settings.google_analytics_id && (
+          <>
+            <script async src={`https://www.googletagmanager.com/gtag/js?id=${settings.google_analytics_id}`} />
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  gtag('js', new Date());
+                  gtag('config', '${settings.google_analytics_id}');
+                `
+              }}
+            />
+          </>
+        )}
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#dc2626" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
