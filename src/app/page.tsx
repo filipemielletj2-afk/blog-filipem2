@@ -6,7 +6,7 @@ import BreakingTicker from '@/components/BreakingTicker';
 import AdBanner from '@/components/AdBanner';
 import NewsletterBox from '@/components/NewsletterBox';
 import { ArrowRight, Flame, Play, Mail, CheckCircle2, TrendingUp, Sparkles } from 'lucide-react';
-import { formatDateBR } from '@/lib/utils';
+import { formatDateBR, formatYouTubeEmbedUrl } from '@/lib/utils';
 
 export const revalidate = 0; // Always serve fresh dynamic content
 
@@ -237,7 +237,7 @@ export default function HomePage() {
 
                     <div className="lg:w-1/2 w-full aspect-video rounded-2xl overflow-hidden border border-neutral-700/80 shadow-2xl bg-black">
                       <iframe
-                        src={config.videoUrl || 'https://www.youtube.com/embed/dQw4w9WgXcQ'}
+                        src={formatYouTubeEmbedUrl(config.videoUrl) || 'https://www.youtube.com/embed/dQw4w9WgXcQ'}
                         title={config.videoTitle || 'Vídeo em Destaque'}
                         className="w-full h-full"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

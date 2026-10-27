@@ -26,6 +26,7 @@ import {
   Check,
   RotateCcw
 } from 'lucide-react';
+import { formatYouTubeEmbedUrl } from '@/lib/utils';
 
 interface Section {
   id?: number;
@@ -519,14 +520,17 @@ export default function VisualBuilderPage() {
                     {selectedSection.type === 'video_showcase' && (
                       <>
                         <div>
-                          <label className="block text-xs font-semibold text-neutral-300 mb-1">URL de Incorporação do Vídeo (YouTube Embed)</label>
+                          <label className="block text-xs font-semibold text-neutral-300 mb-1">URL do Vídeo do YouTube (Live, Shorts ou Vídeo)</label>
                           <input
                             type="text"
                             value={selectedSection.config_json.videoUrl || ''}
-                            onChange={(e) => handleUpdateConfig('videoUrl', e.target.value)}
-                            placeholder="https://www.youtube.com/embed/..."
+                            onChange={(e) => handleUpdateConfig('videoUrl', formatYouTubeEmbedUrl(e.target.value))}
+                            placeholder="https://www.youtube.com/watch?v=... ou https://www.youtube.com/live/..."
                             className="w-full px-3 py-2 rounded-xl bg-neutral-900 border border-neutral-700 text-white text-xs focus:outline-none focus:border-red-500 font-mono"
                           />
+                          <p className="text-[10px] text-neutral-400 mt-1">
+                            Aceita qualquer link do YouTube (Live ao vivo, Shorts ou Vídeo normal). Convertemos automaticamente para embed seguro.
+                          </p>
                         </div>
 
                         <div>

@@ -89,3 +89,48 @@ export function truncateText(text: string, maxLength: number = 160): string {
   if (clean.length <= maxLength) return clean;
   return clean.substring(0, maxLength).trim() + '...';
 }
+
+export function formatYouTubeEmbedUrl(url: string | null | undefined): string {
+  if (!url) return '';
+  const trimmed = url.trim();
+
+  // If already an iframe tag, extract src
+  const iframeMatch = trimmed.match(/src=["']([^"']+)["']/i);
+  const target = iframeMatch ? iframeMatch[1] : trimmed;
+
+  // If already embed URL
+  if (target.includes('youtube.com/embed/') || target.includes('youtube-nocookie.com/embed/')) {
+    return target;
+  }
+
+  // Handle youtu.be/ID
+  const shortMatch = target.match(/youtu\.be\/([a-zA-Z0-9_-]{6,})/);
+  if (shortMatch) {
+    return `https://www.youtube.com/embed/${shortMatch[1]}`;
+  }
+
+  // Handle youtube.com/live/ID
+  const liveMatch = target.match(/youtube\.com\/live\/([a-zA-Z0-9_-]{6,})/);
+  if (liveMatch) {
+    return `https://www.youtube.com/embed/${liveMatch[1]}`;
+  }
+
+  // Handle youtube.com/shorts/ID
+  const shortsMatch = target.match(/youtube\.com\/shorts\/([a-zA-Z0-9_-]{6,})/);
+  if (shortsMatch) {
+    return `https://www.youtube.com/embed/${shortsMatch[1]}`;
+  }
+
+  // Handle youtube.com/watch?v=ID
+  const watchMatch = target.match(/[?&]v=([a-zA-Z0-9_-]{6,})/);
+  if (watchMatch) {
+    return `https://www.youtube.com/embed/${watchMatch[1]}`;
+  }
+
+  // Fallback: If it's a standalone 11-char ID like hyNtX7HWP5g
+  if (/^[a-zA-Z0-9_-]{11}$/.test(target)) {
+    return `https://www.youtube.com/embed/${target}`;
+  }
+
+  return target;
+}
