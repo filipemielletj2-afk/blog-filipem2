@@ -1,8 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
-import CookieBanner from '@/components/CookieBanner';
+import AppShell from '@/components/AppShell';
 import { getDb, toPlain } from '@/lib/db';
 
 function cleanGoogleCode(raw?: string): string | undefined {
@@ -166,10 +164,9 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-screen flex flex-col antialiased selection:bg-red-600 selection:text-white transition-colors duration-200">
-        <Header categories={categories} siteTitle={settings.site_title} />
-        <main className="flex-1">{children}</main>
-        <Footer categories={categories} footerText={settings.footer_text} />
-        <CookieBanner />
+        <AppShell categories={categories} siteTitle={settings.site_title} footerText={settings.footer_text}>
+          {children}
+        </AppShell>
       </body>
     </html>
   );
