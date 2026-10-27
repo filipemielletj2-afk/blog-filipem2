@@ -34,7 +34,7 @@ const navItems = [
   { label: 'Biblioteca de Mídia', href: '/admin/midia', icon: ImageIcon },
   { label: 'Comentários', href: '/admin/comentarios', icon: MessageSquare },
   { label: 'Páginas & Políticas', href: '/admin/paginas', icon: FileCode },
-  { label: 'Publicidade & Anúncios', href: '/admin/publicidade', icon: Megaphone },
+  { label: 'Publicidade & Monetização', href: '/admin/monetizacao', icon: Megaphone },
   { label: 'SEO & Indexação', href: '/admin/seo', icon: Globe },
   { label: 'Aparência & Temas', href: '/admin/aparencia', icon: Palette },
   { label: 'Usuários & Permissões', href: '/admin/usuarios', icon: Users },
@@ -62,27 +62,27 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       try {
         const res = await fetch('/api/auth/me');
         if (!res.ok) {
-          router.replace('/admin/login');
+          window.location.href = '/admin/login';
           return;
         }
         const data = await res.json();
         if (!data.user) {
-          router.replace('/admin/login');
+          window.location.href = '/admin/login';
           return;
         }
         setUser(data.user);
         setLoading(false);
       } catch {
-        router.replace('/admin/login');
+        window.location.href = '/admin/login';
       }
     };
 
     checkAuth();
-  }, [pathname, isLoginPage, router]);
+  }, [pathname, isLoginPage]);
 
   const handleLogout = async () => {
     await fetch('/api/auth/logout', { method: 'POST' });
-    router.replace('/admin/login');
+    window.location.href = '/admin/login';
   };
 
   if (isLoginPage) {
