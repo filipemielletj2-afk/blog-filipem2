@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Shield, Lock, Mail, AlertCircle, ArrowRight, Loader2, Sparkles } from 'lucide-react';
+import { Shield, Lock, Mail, AlertCircle, ArrowRight, Loader2 } from 'lucide-react';
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -34,11 +34,6 @@ export default function AdminLoginPage() {
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleFillDemo = () => {
-    setEmail('admin@filipem2.com');
-    setPassword('admin123456');
   };
 
   return (
@@ -88,9 +83,10 @@ export default function AdminLoginPage() {
                 <input
                   type="email"
                   required
+                  autoComplete="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="admin@filipem2.com"
+                  placeholder="seu-email@dominio.com"
                   className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-neutral-900 border border-neutral-700 text-white placeholder-neutral-500 text-sm focus:outline-none focus:border-red-500"
                 />
               </div>
@@ -105,6 +101,7 @@ export default function AdminLoginPage() {
                 <input
                   type="password"
                   required
+                  autoComplete="current-password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••••••"
@@ -131,21 +128,6 @@ export default function AdminLoginPage() {
               )}
             </button>
           </form>
-
-          {/* Quick Fill Helper */}
-          <div className="pt-4 border-t border-neutral-800/80 text-center space-y-2">
-            <button
-              type="button"
-              onClick={handleFillDemo}
-              className="text-xs text-neutral-400 hover:text-red-400 transition-colors flex items-center justify-center gap-1.5 mx-auto"
-            >
-              <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-              <span>Preencher credenciais padrão de administrador</span>
-            </button>
-            <p className="text-[11px] text-neutral-600">
-              admin@filipem2.com / admin123456
-            </p>
-          </div>
         </div>
       </div>
     </div>
