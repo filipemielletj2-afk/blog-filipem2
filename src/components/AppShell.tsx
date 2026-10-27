@@ -19,7 +19,8 @@ export default function AppShell({
   siteTitle = 'BLOG FILIPEM2',
   footerText
 }: AppShellProps) {
-  const pathname = usePathname();
+  const rawPathname = usePathname();
+  const pathname = rawPathname || '';
   const isAdmin = pathname.startsWith('/admin');
 
   // If inside admin, ensure admin uses its dedicated dark dashboard theme

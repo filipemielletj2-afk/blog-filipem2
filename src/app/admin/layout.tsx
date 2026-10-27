@@ -43,7 +43,8 @@ const navItems = [
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname();
+  const rawPathname = usePathname();
+  const pathname = rawPathname || '';
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [user, setUser] = useState<any>(null);
@@ -61,15 +62,18 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       try {
         const res = await fetch('/api/auth/me');
         if (!res.ok) {
-          router.push('/admin/login');
+          router.replace('/admin/login');
           return;
         }
         const data = await res.json();
+        if (!data.user) {
+          router.replace('/admin/login');
+          return;
+        }
         setUser(data.user);
-      } catch {
-        router.push('/admin/login');
-      } finally {
         setLoading(false);
+      } catch {
+        router.replace('/admin/login');
       }
     };
 
@@ -78,19 +82,21 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   const handleLogout = async () => {
     await fetch('/api/auth/logout', { method: 'POST' });
-    router.push('/admin/login');
+    router.replace('/admin/login');
   };
 
   if (isLoginPage) {
     return <>{children}</>;
   }
 
-  if (loading) {
+  if (loading || !user) {
     return (
       <div className="min-h-screen bg-[#0a0b0e] flex items-center justify-center text-white">
         <div className="flex flex-col items-center gap-3">
           <div className="w-10 h-10 border-4 border-red-600 border-t-transparent rounded-full animate-spin"></div>
-          <span className="text-xs font-mono text-neutral-400">Carregando Painel Administrativo...</span>
+          <span className="text-xs font-mono text-neutral-400">
+            {loading ? 'Carregando Painel Administrativo...' : 'Redirecionando para login seguro...'}
+          </span>
         </div>
       </div>
     );
