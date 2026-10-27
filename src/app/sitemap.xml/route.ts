@@ -4,7 +4,7 @@ export async function GET() {
   try {
     const db = getDb();
     const siteUrlSetting = db.prepare('SELECT value FROM site_settings WHERE key = ?').get('site_url') as any;
-    const baseUrl = siteUrlSetting?.value || 'https://blogfilipem2.com.br';
+    const baseUrl = siteUrlSetting?.value || 'https://blogfilipem2.site';
 
     const articles = db.prepare(`
       SELECT slug, updated_at, published_at FROM articles

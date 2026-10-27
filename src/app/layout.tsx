@@ -20,12 +20,12 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     description,
     keywords: ['games', 'notícias de jogos', 'playstation 5', 'xbox series x', 'nintendo switch', 'músicas', 'filmes', 'séries', 'streaming', 'cultura geek', 'tecnologia', 'inteligência artificial'],
-    authors: [{ name: 'Filipe M.', url: settings.site_url || 'https://blogfilipem2.com.br' }],
-    metadataBase: new URL(settings.site_url || 'https://blogfilipem2.com.br'),
+    authors: [{ name: 'Filipe M.', url: settings.site_url || 'https://blogfilipem2.site' }],
+    metadataBase: new URL(settings.site_url || 'https://blogfilipem2.site'),
     openGraph: {
       type: 'website',
       locale: 'pt_BR',
-      url: settings.site_url || 'https://blogfilipem2.com.br',
+      url: settings.site_url || 'https://blogfilipem2.site',
       siteName: title,
       title: `${title} — Games, Músicas, Cinema e Tecnologia`,
       description,
@@ -79,10 +79,10 @@ export default function RootLayout({
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     name: settings.site_title || 'BLOG FILIPEM2',
-    url: settings.site_url || 'https://blogfilipem2.com.br',
+    url: settings.site_url || 'https://blogfilipem2.site',
     potentialAction: {
       '@type': 'SearchAction',
-      target: `${settings.site_url || 'https://blogfilipem2.com.br'}/busca?q={search_term_string}`,
+      target: `${settings.site_url || 'https://blogfilipem2.site'}/busca?q={search_term_string}`,
       'query-input': 'required name=search_term_string'
     }
   };
@@ -91,8 +91,8 @@ export default function RootLayout({
     '@context': 'https://schema.org',
     '@type': 'Organization',
     name: settings.site_title || 'BLOG FILIPEM2',
-    url: settings.site_url || 'https://blogfilipem2.com.br',
-    logo: `${settings.site_url || 'https://blogfilipem2.com.br'}/logo.svg`,
+    url: settings.site_url || 'https://blogfilipem2.site',
+    logo: `${settings.site_url || 'https://blogfilipem2.site'}/logo.svg`,
     sameAs: [
       'https://youtube.com',
       'https://twitter.com',

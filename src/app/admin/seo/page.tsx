@@ -27,8 +27,8 @@ export default function AdminSeoPage() {
       const data = await res.json();
       setSiteTitle(data.site_title || 'BLOG FILIPEM2');
       setSiteDescription(data.site_description || '');
-      setSiteUrl(data.site_url || 'https://blogfilipem2.com.br');
-      setRobotsTxt(data.robots_txt_content || `User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /api/\n\nSitemap: https://blogfilipem2.com.br/sitemap.xml`);
+      setSiteUrl(data.site_url || 'https://blogfilipem2.site');
+      setRobotsTxt(data.robots_txt_content || `User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /api/\n\nSitemap: https://blogfilipem2.site/sitemap.xml`);
       setGoogleAnalyticsId(data.google_analytics_id || '');
       setGoogleSearchConsoleTag(data.google_search_console_tag || '');
     } catch (err) {
@@ -207,7 +207,7 @@ export default function AdminSeoPage() {
                 type="url"
                 value={siteUrl}
                 onChange={(e) => setSiteUrl(e.target.value)}
-                placeholder="https://blogfilipem2.com.br"
+                placeholder="https://blogfilipem2.site"
                 className="w-full px-3 py-2 rounded-xl bg-neutral-900 border border-neutral-700 text-white font-mono text-xs focus:outline-none focus:border-red-500"
               />
             </div>

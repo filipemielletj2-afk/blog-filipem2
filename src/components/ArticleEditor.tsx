@@ -480,7 +480,7 @@ export default function ArticleEditor({ initialData, articleId }: ArticleEditorP
                   Prévia nos Resultados do Google
                 </span>
                 <div className="text-xs text-emerald-400 font-mono truncate">
-                  https://blogfilipem2.com.br/artigo/{slug || 'slug-do-artigo'}
+                  https://blogfilipem2.site/artigo/{slug || 'slug-do-artigo'}
                 </div>
                 <div className="text-sm font-medium text-blue-400 line-clamp-1 hover:underline cursor-pointer">
                   {metaTitle || `${title || 'Título da Notícia'} | BLOG FILIPEM2`}

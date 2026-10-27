@@ -689,7 +689,7 @@ export default function VisualBuilderPage() {
                 <div className="w-2.5 h-2.5 rounded-full bg-emerald-600/80"></div>
               </div>
               <div className="px-3 py-0.5 rounded-md bg-neutral-900 border border-neutral-800 text-[10px] text-neutral-400 font-mono">
-                blogfilipem2.com.br
+                blogfilipem2.site
               </div>
               <div className="w-10"></div>
             </div>

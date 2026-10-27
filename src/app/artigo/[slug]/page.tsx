@@ -39,7 +39,7 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
 
   const metaTitle = article.meta_title || `${article.title} | BLOG FILIPEM2`;
   const metaDesc = article.meta_description || article.excerpt || article.title;
-  const url = `https://blogfilipem2.com.br/artigo/${article.slug}`;
+  const url = `https://blogfilipem2.site/artigo/${article.slug}`;
 
   return {
     title: metaTitle,
@@ -126,7 +126,7 @@ export default function ArticlePage({ params }: ArticlePageProps) {
     }
   } catch {}
 
-  const articleUrl = `https://blogfilipem2.com.br/artigo/${article.slug}`;
+  const articleUrl = `https://blogfilipem2.site/artigo/${article.slug}`;
 
   // Schema.org Structured Data (NewsArticle + BreadcrumbList)
   const schemaArticle = {
@@ -138,7 +138,7 @@ export default function ArticlePage({ params }: ArticlePageProps) {
     },
     headline: article.title,
     description: article.excerpt || article.subtitle,
-    image: [article.cover_image || 'https://blogfilipem2.com.br/logo.svg'],
+    image: [article.cover_image || 'https://blogfilipem2.site/logo.svg'],
     datePublished: article.published_at,
     dateModified: article.updated_at || article.published_at,
     author: {
@@ -150,7 +150,7 @@ export default function ArticlePage({ params }: ArticlePageProps) {
       name: 'BLOG FILIPEM2',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://blogfilipem2.com.br/logo.svg'
+        url: 'https://blogfilipem2.site/logo.svg'
       }
     }
   };
@@ -163,13 +163,13 @@ export default function ArticlePage({ params }: ArticlePageProps) {
         '@type': 'ListItem',
         position: 1,
         name: 'Início',
-        item: 'https://blogfilipem2.com.br'
+        item: 'https://blogfilipem2.site'
       },
       {
         '@type': 'ListItem',
         position: 2,
         name: article.category_name,
-        item: `https://blogfilipem2.com.br/categoria/${article.category_slug}`
+        item: `https://blogfilipem2.site/categoria/${article.category_slug}`
       },
       {
         '@type': 'ListItem',

@@ -5,7 +5,7 @@ export async function GET() {
     const db = getDb();
     const row = db.prepare('SELECT value FROM site_settings WHERE key = ?').get('robots_txt_content') as any;
 
-    const robotsContent = row?.value || `User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /api/\n\nSitemap: https://blogfilipem2.com.br/sitemap.xml`;
+    const robotsContent = row?.value || `User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /api/\n\nSitemap: https://blogfilipem2.site/sitemap.xml`;
 
     return new Response(robotsContent, {
       status: 200,

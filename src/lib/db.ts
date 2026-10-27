@@ -460,7 +460,7 @@ function seedArticles(db: DatabaseSync) {
       art.featured,
       `${art.title} | BLOG FILIPEM2`,
       art.excerpt,
-      `https://blogfilipem2.com.br/artigo/${art.slug}`,
+      `https://blogfilipem2.site/artigo/${art.slug}`,
       art.sources_json
     );
 
@@ -693,7 +693,7 @@ function seedSettings(db: DatabaseSync) {
     site_title: 'BLOG FILIPEM2',
     site_tagline: 'O Portal Definitivo de Games, Músicas, Filmes, Séries e Cultura Geek',
     site_description: 'Notícias diárias, análises aprofundadas, lançamentos e críticas sobre jogos, cinema, música, streaming e inovações tecnológicas.',
-    site_url: 'https://blogfilipem2.com.br',
+    site_url: 'https://blogfilipem2.site',
     theme_primary_color: '#DC2626',
     theme_font_heading: 'Space Grotesk',
     theme_font_body: 'Inter',
@@ -727,7 +727,7 @@ function seedSettings(db: DatabaseSync) {
     ad_article_code: '<div class="my-6 p-4 rounded-xl bg-neutral-900 border border-neutral-800 text-center text-xs text-neutral-400">Publicidade / Espaço Reservado para Anúncios</div>',
     ad_footer_enabled: '0',
     ad_footer_code: '',
-    robots_txt_content: `User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /api/\n\nSitemap: https://blogfilipem2.com.br/sitemap.xml`,
+    robots_txt_content: `User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /api/\n\nSitemap: https://blogfilipem2.site/sitemap.xml`,
     google_analytics_id: '',
     google_search_console_tag: ''
   };
