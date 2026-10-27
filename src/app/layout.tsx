@@ -5,6 +5,14 @@ import Footer from '@/components/Footer';
 import CookieBanner from '@/components/CookieBanner';
 import { getDb, toPlain } from '@/lib/db';
 
+function cleanGoogleCode(raw?: string): string | undefined {
+  if (!raw) return undefined;
+  const match = raw.match(/content=["']([^"']+)["']/i);
+  if (match && match[1]) return match[1].trim();
+  const cleaned = raw.replace(/<[^>]*>/g, '').replace(/["']/g, '').trim();
+  return cleaned || undefined;
+}
+
 export async function generateMetadata(): Promise<Metadata> {
   const db = getDb();
   const settingsRows = db.prepare('SELECT key, value FROM site_settings').all() as Array<{ key: string; value: string }>;
@@ -60,7 +68,7 @@ export async function generateMetadata(): Promise<Metadata> {
       apple: '/favicon.svg'
     },
     verification: {
-      google: settings.google_search_console_tag || undefined
+      google: cleanGoogleCode(settings.google_search_console_tag)
     }
   };
 }
@@ -106,9 +114,6 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <head>
-        {settings.google_search_console_tag && (
-          <meta name="google-site-verification" content={settings.google_search_console_tag} />
-        )}
         {settings.google_analytics_id && (
           <>
             <script async src={`https://www.googletagmanager.com/gtag/js?id=${settings.google_analytics_id}`} />

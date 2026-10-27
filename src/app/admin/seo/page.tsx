@@ -38,6 +38,13 @@ export default function AdminSeoPage() {
     }
   };
 
+  const cleanGoogleTag = (val: string) => {
+    if (!val) return '';
+    const match = val.match(/content=["']([^"']+)["']/i);
+    if (match && match[1]) return match[1].trim();
+    return val.replace(/<[^>]*>/g, '').replace(/["']/g, '').trim();
+  };
+
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
@@ -48,8 +55,8 @@ export default function AdminSeoPage() {
       site_description: siteDescription,
       site_url: siteUrl,
       robots_txt_content: robotsTxt,
-      google_analytics_id: googleAnalyticsId,
-      google_search_console_tag: googleSearchConsoleTag
+      google_analytics_id: googleAnalyticsId.trim(),
+      google_search_console_tag: cleanGoogleTag(googleSearchConsoleTag)
     };
 
     try {
@@ -228,12 +235,12 @@ export default function AdminSeoPage() {
               <input
                 type="text"
                 value={googleSearchConsoleTag}
-                onChange={(e) => setGoogleSearchConsoleTag(e.target.value)}
-                placeholder="Ex: google-site-verification=..."
+                onChange={(e) => setGoogleSearchConsoleTag(cleanGoogleTag(e.target.value))}
+                placeholder="Cole a tag <meta ...> ou apenas o código"
                 className="w-full px-3 py-2 rounded-xl bg-neutral-900 border border-neutral-700 text-white font-mono text-xs focus:outline-none focus:border-red-500"
               />
-              <span className="text-[11px] text-neutral-500 mt-0.5 block">
-                Insira o código fornecido pelo Search Console para validar a propriedade do domínio.
+              <span className="text-[11px] text-neutral-400 mt-1 block">
+                Você pode colar a tag inteira fornecida pelo Google (<code>&lt;meta name=&quot;google-site-verification&quot; content=&quot;...&quot; /&gt;</code>) ou apenas o código. O sistema formata automaticamente!
               </span>
             </div>
 
