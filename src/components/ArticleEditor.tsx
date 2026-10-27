@@ -382,9 +382,12 @@ export default function ArticleEditor({ initialData, articleId }: ArticleEditorP
               rows={16}
               value={content}
               onChange={(e) => setContent(e.target.value)}
-              placeholder="Escreva sua matéria jornalística aqui... Use parágrafos, subtítulos H2 e formatações semânticas."
-              className="w-full px-4 py-3 rounded-xl bg-neutral-900 border border-neutral-700 text-white font-mono text-sm focus:outline-none focus:border-red-500 leading-relaxed"
+              placeholder="Escreva sua matéria jornalística aqui... Pode escrever naturalmente dando Enter entre parágrafos, que o portal organizará o espaçamento perfeitamente!"
+              className="w-full px-4 py-3 rounded-xl bg-neutral-900 border border-neutral-700 text-white font-mono text-sm focus:outline-none focus:border-red-500 leading-relaxed whitespace-pre-wrap"
             />
+            <span className="text-[11px] text-neutral-400 mt-1.5 block">
+              💡 <strong>Dica de formatação:</strong> Escreva naturalmente! Cada quebra de linha com <em>Enter</em> será automaticamente exibida como parágrafos elegantes e espaçados na matéria.
+            </span>
           </div>
 
           {/* Sources and References (Prompt Requirement #8) */}

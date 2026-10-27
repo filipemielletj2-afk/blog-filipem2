@@ -20,6 +20,53 @@ import {
 
 export const revalidate = 0;
 
+function formatArticleContent(content?: string): string {
+  if (!content) return '';
+
+  // If content already contains rich HTML tags, return directly
+  const hasParagraphs = /<\/?(p|div|h[1-6]|ul|ol|li|blockquote|table|section|article)\b/i.test(content);
+  if (hasParagraphs) {
+    return content;
+  }
+
+  // Content was entered as raw text / newlines:
+  const rawLines = content.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+  const blocks: string[] = [];
+  let currentParagraphLines: string[] = [];
+
+  const flushParagraph = () => {
+    if (currentParagraphLines.length > 0) {
+      blocks.push(`<p>${currentParagraphLines.join(' ')}</p>`);
+      currentParagraphLines = [];
+    }
+  };
+
+  for (const line of rawLines) {
+    if (/^##\s+(.*)/.test(line)) {
+      flushParagraph();
+      blocks.push(`<h2>${line.replace(/^##\s+/, '')}</h2>`);
+      continue;
+    }
+    if (/^###\s+(.*)/.test(line)) {
+      flushParagraph();
+      blocks.push(`<h3>${line.replace(/^###\s+/, '')}</h3>`);
+      continue;
+    }
+
+    // Standalone headings (short lines under 85 chars, not ending with punctuation)
+    const isHeading = line.length < 85 && !/[.,;]$/.test(line) && !line.startsWith('http');
+    if (isHeading) {
+      flushParagraph();
+      blocks.push(`<h2>${line}</h2>`);
+    } else {
+      currentParagraphLines.push(line);
+    }
+  }
+
+  flushParagraph();
+  return blocks.join('\n');
+}
+
 interface ArticlePageProps {
   params: { slug: string };
 }
@@ -285,8 +332,8 @@ export default function ArticlePage({ params }: ArticlePageProps) {
       )}
 
       {/* Main Content Body */}
-      <div className="prose prose-invert max-w-none prose-lg prose-red prose-headings:font-black prose-headings:tracking-tight prose-a:text-red-400 prose-a:underline hover:prose-a:text-red-300 prose-blockquote:border-l-red-600 prose-blockquote:bg-neutral-900/50 prose-blockquote:p-4 prose-blockquote:rounded-r-xl leading-relaxed text-neutral-200">
-        <div dangerouslySetInnerHTML={{ __html: article.content }} />
+      <div className="article-content max-w-none">
+        <div dangerouslySetInnerHTML={{ __html: formatArticleContent(article.content) }} />
       </div>
 
       {/* Updated at notice if modified */}

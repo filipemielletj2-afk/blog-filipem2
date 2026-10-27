@@ -47,7 +47,7 @@ export default function DynamicPage({ params }: PageProps) {
 
       {/* Main Container */}
       <article className="p-6 sm:p-12 rounded-3xl bg-[#14161f] border border-neutral-800 shadow-2xl space-y-8">
-        <div className="prose prose-invert max-w-none prose-lg prose-red prose-headings:font-black prose-headings:tracking-tight prose-a:text-red-400 prose-a:underline hover:prose-a:text-red-300 leading-relaxed text-neutral-300">
+        <div className="article-content max-w-none leading-relaxed text-neutral-300">
           <div dangerouslySetInnerHTML={{ __html: page.content }} />
         </div>
 
