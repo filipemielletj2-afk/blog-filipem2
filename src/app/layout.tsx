@@ -3,6 +3,9 @@ import './globals.css';
 import AppShell from '@/components/AppShell';
 import { getDb, toPlain } from '@/lib/db';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 function cleanGoogleCode(raw?: string): string | undefined {
   if (!raw) return undefined;
   const match = raw.match(/content=["']([^"']+)["']/i);

@@ -568,6 +568,27 @@ export default function VisualBuilderPage() {
                         />
                       </div>
                     )}
+
+                    <div className="pt-3 border-t border-neutral-800 flex items-center justify-end">
+                      <button
+                        type="button"
+                        onClick={handleSaveAndPublish}
+                        disabled={saving}
+                        className="w-full py-2.5 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-red-600/30 transition-all disabled:opacity-50"
+                      >
+                        {saving ? (
+                          <>
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                            <span>Publicando Alterações...</span>
+                          </>
+                        ) : (
+                          <>
+                            <Save className="w-4 h-4" />
+                            <span>Salvar &amp; Publicar no Site</span>
+                          </>
+                        )}
+                      </button>
+                    </div>
                   </div>
                 </div>
               )}
