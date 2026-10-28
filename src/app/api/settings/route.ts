@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getDb } from '@/lib/db';
 import { getCurrentUser } from '@/lib/auth';
+import { triggerAutoBackupAsync } from '@/lib/auto-backup';
 
 export async function GET() {
   try {
@@ -42,6 +43,8 @@ export async function POST(request: Request) {
       'SETTINGS_UPDATE',
       `Configurações do site atualizadas (${Object.keys(updates).join(', ')})`
     );
+
+    triggerAutoBackupAsync(db);
 
     return NextResponse.json({ success: true, message: 'Configurações atualizadas com sucesso!' });
   } catch (error: any) {

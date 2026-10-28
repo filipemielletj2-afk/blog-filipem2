@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getDb } from '@/lib/db';
 import { getCurrentUser } from '@/lib/auth';
+import { triggerAutoBackupAsync } from '@/lib/auto-backup';
 
 export async function GET(request: Request) {
   try {
@@ -68,6 +69,8 @@ export async function POST(request: Request) {
         'BUILDER_PUBLISH',
         `Layout visual da página "${page}" publicado com ${sections.length} seções.`
       );
+
+      triggerAutoBackupAsync(db);
 
       return NextResponse.json({ success: true, message: 'Layout publicado no site com sucesso!' });
     }

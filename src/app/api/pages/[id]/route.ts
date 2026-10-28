@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { getDb } from '@/lib/db';
 import { getCurrentUser } from '@/lib/auth';
 import { slugify } from '@/lib/utils';
+import { triggerAutoBackupAsync } from '@/lib/auto-backup';
 
 export async function GET(request: Request, { params }: { params: { id: string } }) {
   try {
@@ -59,6 +60,8 @@ export async function PUT(request: Request, { params }: { params: { id: string }
       id
     );
 
+    triggerAutoBackupAsync(db);
+
     return NextResponse.json({ success: true });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
@@ -85,6 +88,8 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
     }
 
     db.prepare('DELETE FROM pages WHERE id = ?').run(id);
+
+    triggerAutoBackupAsync(db);
 
     return NextResponse.json({ success: true });
   } catch (error: any) {

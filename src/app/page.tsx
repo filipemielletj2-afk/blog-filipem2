@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { getDb, toPlain } from '@/lib/db';
+import { ensureAutoBackupSynced } from '@/lib/auto-backup';
 import ArticleCard from '@/components/ArticleCard';
 import BreakingTicker from '@/components/BreakingTicker';
 import AdBanner from '@/components/AdBanner';
@@ -10,8 +11,9 @@ import { formatDateBR, formatYouTubeEmbedUrl } from '@/lib/utils';
 
 export const revalidate = 0; // Always serve fresh dynamic content
 
-export default function HomePage() {
+export default async function HomePage() {
   const db = getDb();
+  await ensureAutoBackupSynced(db);
 
   // Fetch published builder sections
   const sections = toPlain(db.prepare(`

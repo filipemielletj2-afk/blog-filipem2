@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { getDb } from '@/lib/db';
 import { getCurrentUser } from '@/lib/auth';
 import { slugify } from '@/lib/utils';
+import { triggerAutoBackupAsync } from '@/lib/auto-backup';
 
 export async function GET() {
   try {
@@ -37,6 +38,8 @@ export async function POST(request: Request) {
       INSERT INTO pages (title, slug, content, meta_title, meta_description, is_system)
       VALUES (?, ?, ?, ?, ?, 0)
     `).run(title, slug, content, meta_title || `${title} | BLOG FILIPEM2`, meta_description || '');
+
+    triggerAutoBackupAsync(db);
 
     return NextResponse.json({ success: true, id: Number(result.lastInsertRowid) });
   } catch (error: any) {

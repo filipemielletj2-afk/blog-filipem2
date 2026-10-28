@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { getDb } from '@/lib/db';
 import { getCurrentUser } from '@/lib/auth';
 import { slugify, calculateReadingTime, sanitizeContent } from '@/lib/utils';
+import { ensureAutoBackupSynced, triggerAutoBackupAsync } from '@/lib/auto-backup';
 
 export async function GET(request: Request) {
   try {
@@ -16,6 +17,7 @@ export async function GET(request: Request) {
     const offset = (page - 1) * limit;
 
     const db = getDb();
+    await ensureAutoBackupSynced(db);
 
     let query = `
       SELECT 
@@ -198,6 +200,9 @@ export async function POST(request: Request) {
       'ARTICLE_CREATE',
       `Artigo criado: "${title}" (ID: ${articleId})`
     );
+
+    // Auto-backup to cloud if configured
+    triggerAutoBackupAsync(db);
 
     return NextResponse.json({
       success: true,

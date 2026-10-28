@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { getDb } from '@/lib/db';
 import { getCurrentUser } from '@/lib/auth';
 import { slugify, calculateReadingTime, sanitizeContent } from '@/lib/utils';
+import { triggerAutoBackupAsync } from '@/lib/auto-backup';
 
 export async function GET(request: Request, { params }: { params: { id: string } }) {
   try {
@@ -199,6 +200,8 @@ export async function PUT(request: Request, { params }: { params: { id: string }
       `Artigo atualizado: "${title || current.title}" (ID: ${id})`
     );
 
+    triggerAutoBackupAsync(db);
+
     return NextResponse.json({ success: true, slug: uniqueSlug });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
@@ -227,6 +230,8 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
       'ARTICLE_DELETE',
       `Artigo excluído: "${current.title}" (ID: ${id})`
     );
+
+    triggerAutoBackupAsync(db);
 
     return NextResponse.json({ success: true });
   } catch (error: any) {

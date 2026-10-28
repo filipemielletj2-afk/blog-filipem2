@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getDb, toPlain } from '@/lib/db';
+import { ensureAutoBackupSynced } from '@/lib/auto-backup';
 import { formatDateBR, formatDateTimeBR } from '@/lib/utils';
 import ArticleCard from '@/components/ArticleCard';
 import CommentsSection from './CommentsSection';
@@ -73,6 +74,7 @@ interface ArticlePageProps {
 
 export async function generateMetadata({ params }: ArticlePageProps): Promise<Metadata> {
   const db = getDb();
+  await ensureAutoBackupSynced(db);
   const article = db.prepare(`
     SELECT a.*, c.name as category_name
     FROM articles a
@@ -121,8 +123,9 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
   };
 }
 
-export default function ArticlePage({ params }: ArticlePageProps) {
+export default async function ArticlePage({ params }: ArticlePageProps) {
   const db = getDb();
+  await ensureAutoBackupSynced(db);
 
   // Increment view count
   db.prepare('UPDATE articles SET views = views + 1 WHERE slug = ?').run(params.slug);

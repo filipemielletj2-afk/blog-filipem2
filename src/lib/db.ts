@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import { hashPassword } from './auth';
 
 let dbInstance: DatabaseSync | null = null;
+let autoBackupStartupTriggered = false;
 
 export function toPlain<T>(obj: T): T {
   if (obj === null || obj === undefined) return obj;
@@ -26,6 +27,15 @@ export function getDb(): DatabaseSync {
   dbInstance.exec('PRAGMA foreign_keys = ON;');
 
   initDatabase(dbInstance);
+
+  if (!autoBackupStartupTriggered) {
+    autoBackupStartupTriggered = true;
+    import('./auto-backup')
+      .then(m => m.ensureAutoBackupSynced(dbInstance!))
+      .catch(err => {
+        console.error('[DB] Erro no auto-backup startup:', err);
+      });
+  }
 
   return dbInstance;
 }

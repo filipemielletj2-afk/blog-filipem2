@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { getDb } from '@/lib/db';
 import { getCurrentUser } from '@/lib/auth';
 import { slugify } from '@/lib/utils';
+import { triggerAutoBackupAsync } from '@/lib/auto-backup';
 
 export async function GET() {
   try {
@@ -52,6 +53,8 @@ export async function POST(request: Request) {
       parent_id || null,
       sort_order || 0
     );
+
+    triggerAutoBackupAsync(db);
 
     return NextResponse.json({ success: true, id: Number(result.lastInsertRowid) });
   } catch (error: any) {
