@@ -3,6 +3,9 @@ import { getDb } from '@/lib/db';
 import { getCurrentUser } from '@/lib/auth';
 import sanitizeHtml from 'sanitize-html';
 
+// In-memory rate limiting to protect against comment spam flood
+const commentRateLimits = new Map<string, { count: number; lastTime: number }>();
+
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
@@ -39,6 +42,27 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
+    const forwarded = request.headers.get('x-forwarded-for');
+    const ip = request.headers.get('cf-connecting-ip') ||
+               (forwarded ? forwarded.split(',')[0].trim() : null) ||
+               request.headers.get('x-real-ip') ||
+               '127.0.0.1';
+    const now = Date.now();
+
+    // Check rate limit: max 5 comments per 5 minutes per IP
+    const record = commentRateLimits.get(ip);
+    if (record) {
+      if (now - record.lastTime < 300000 && record.count >= 5) {
+        return NextResponse.json(
+          { error: 'Você enviou muitos comentários recentemente. Aguarde 5 minutos antes de comentar novamente.' },
+          { status: 429 }
+        );
+      }
+      if (now - record.lastTime >= 300000) {
+        commentRateLimits.delete(ip);
+      }
+    }
+
     const body = await request.json();
     const { article_id, author_name, author_email, content, honeypot } = body;
 
@@ -46,6 +70,10 @@ export async function POST(request: Request) {
     if (honeypot) {
       return NextResponse.json({ success: true, message: 'Comentário recebido.' }); // Silent drop for bots
     }
+
+    // Update rate limit count
+    const cur = commentRateLimits.get(ip) || { count: 0, lastTime: now };
+    commentRateLimits.set(ip, { count: cur.count + 1, lastTime: now });
 
     if (!article_id || !author_name || !author_email || !content) {
       return NextResponse.json({ error: 'Todos os campos são obrigatórios.' }, { status: 400 });
