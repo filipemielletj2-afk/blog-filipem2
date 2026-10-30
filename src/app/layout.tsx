@@ -70,6 +70,11 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     verification: {
       google: cleanGoogleCode(settings.google_search_console_tag)
+    },
+    alternates: {
+      types: {
+        'application/rss+xml': `${settings.site_url || 'https://blogfilipem2.site'}/feed.xml`
+      }
     }
   };
 }
@@ -131,6 +136,7 @@ export default function RootLayout({
           </>
         )}
         <link rel="manifest" href="/manifest.json" />
+        <link rel="alternate" type="application/rss+xml" title="BLOG FILIPEM2 RSS Feed" href="/feed.xml" />
         <meta name="theme-color" content="#dc2626" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
