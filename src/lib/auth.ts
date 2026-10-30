@@ -1,7 +1,36 @@
 import crypto from 'node:crypto';
 import { cookies } from 'next/headers';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'filipem2_super_secure_jwt_secret_key_2026_change_in_production_!';
+let cachedSecret: string | null = null;
+
+// Securely retrieve the JWT secret from environment or auto-generate a persistent 256-bit secret in SQLite
+export function getJwtSecret(): string {
+  if (cachedSecret) return cachedSecret;
+  if (process.env.JWT_SECRET && process.env.JWT_SECRET.trim().length >= 16) {
+    cachedSecret = process.env.JWT_SECRET.trim();
+    return cachedSecret;
+  }
+
+  try {
+    const { getDb } = require('./db');
+    const db = getDb();
+    const row = db.prepare('SELECT value FROM site_settings WHERE key = ?').get('dynamic_jwt_secret') as any;
+    if (row && row.value && row.value.length >= 32) {
+      cachedSecret = row.value;
+      return cachedSecret;
+    }
+    const newSecret = crypto.randomBytes(32).toString('hex');
+    db.prepare('INSERT OR REPLACE INTO site_settings (key, value) VALUES (?, ?)').run('dynamic_jwt_secret', newSecret);
+    cachedSecret = newSecret;
+    return cachedSecret;
+  } catch {
+    if (!cachedSecret) {
+      cachedSecret = crypto.randomBytes(32).toString('hex');
+    }
+    return cachedSecret;
+  }
+}
+
 const COOKIE_NAME = 'filipem2_admin_token';
 
 // Hash password with scrypt + salt
@@ -55,8 +84,9 @@ export function signJwt(payload: Record<string, any>, expiresInSeconds: number =
   const encodedPayload = base64UrlEncode(JSON.stringify(fullPayload));
   const data = `${encodedHeader}.${encodedPayload}`;
 
+  const secret = getJwtSecret();
   const signature = crypto
-    .createHmac('sha256', JWT_SECRET)
+    .createHmac('sha256', secret)
     .update(data)
     .digest('base64')
     .replace(/=/g, '')
@@ -75,8 +105,9 @@ export function verifyJwt<T = any>(token: string): T | null {
     const [encodedHeader, encodedPayload, signature] = parts;
     const data = `${encodedHeader}.${encodedPayload}`;
 
+    const secret = getJwtSecret();
     const expectedSignature = crypto
-      .createHmac('sha256', JWT_SECRET)
+      .createHmac('sha256', secret)
       .update(data)
       .digest('base64')
       .replace(/=/g, '')

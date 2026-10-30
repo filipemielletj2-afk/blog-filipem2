@@ -226,6 +226,24 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             </div>
           </header>
 
+          {/* Security Alert: Default credentials in use */}
+          {user?.isDefaultPassword && (
+            <div className="bg-amber-950/90 border-b border-amber-800/90 px-6 py-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-amber-200 text-xs shadow-lg">
+              <div className="flex items-center gap-2.5 font-medium">
+                <ShieldAlert className="w-5 h-5 text-amber-400 shrink-0" />
+                <span>
+                  <strong className="text-amber-300 font-bold">Aviso de Segurança Crítico:</strong> Sua conta ainda está utilizando a senha padrão. Para impedir qualquer tentativa de invasão, altere sua senha e e-mail agora!
+                </span>
+              </div>
+              <Link
+                href="/admin/usuarios"
+                className="px-3.5 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-xs uppercase tracking-wider shrink-0 transition-all shadow-md"
+              >
+                Trocar Senha Agora
+              </Link>
+            </div>
+          )}
+
           <div className="p-4 sm:p-8 flex-1">
             {children}
           </div>

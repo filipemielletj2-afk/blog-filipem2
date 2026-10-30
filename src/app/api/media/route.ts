@@ -73,10 +73,20 @@ export async function POST(request: Request) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    // Generate safe random filename
-    const ext = path.extname(file.name) || '.jpg';
+    // Generate safe random filename with strictly validated extension
+    const rawExt = path.extname(file.name).toLowerCase();
+    const safeExtMap: Record<string, string> = {
+      '.jpg': '.jpg',
+      '.jpeg': '.jpeg',
+      '.png': '.png',
+      '.webp': '.webp',
+      '.gif': '.gif',
+      '.avif': '.avif',
+      '.svg': '.svg'
+    };
+    const ext = safeExtMap[rawExt] || '.jpg';
     const randomHex = crypto.randomBytes(8).toString('hex');
-    const safeFilename = `${Date.now()}-${randomHex}${ext.toLowerCase()}`;
+    const safeFilename = `${Date.now()}-${randomHex}${ext}`;
 
     const uploadsDir = path.join(process.cwd(), 'public', 'uploads');
     if (!fs.existsSync(uploadsDir)) {

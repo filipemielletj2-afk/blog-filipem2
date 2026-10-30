@@ -47,6 +47,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'E-mail inválido.' }, { status: 400 });
     }
 
+    const cleanName = sanitizeHtml(name, { allowedTags: [] }).trim().slice(0, 80);
+    const cleanSubject = sanitizeHtml(subject || 'Geral', { allowedTags: [] }).trim().slice(0, 120);
     const cleanMsg = sanitizeHtml(message, { allowedTags: [], allowedAttributes: {} }).trim();
 
     const db = getDb();
@@ -55,7 +57,7 @@ export async function POST(request: Request) {
       VALUES (?, ?)
     `).run(
       'CONTACT_MESSAGE',
-      `Mensagem recebida de "${name}" (${email}) - Assunto: "${subject || 'Geral'}": ${cleanMsg.slice(0, 200)}...`
+      `Mensagem recebida de "${cleanName}" (${email}) - Assunto: "${cleanSubject}": ${cleanMsg.slice(0, 200)}...`
     );
 
     return NextResponse.json({

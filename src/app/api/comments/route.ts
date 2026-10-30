@@ -85,11 +85,18 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Por favor, informe um e-mail válido.' }, { status: 400 });
     }
 
+    // Sanitize comment author name (strict plain text only)
+    const cleanAuthorName = sanitizeHtml(author_name, { allowedTags: [] }).trim().slice(0, 50);
+
     // Sanitize comment content (only plain text with basic formatting)
     const cleanContent = sanitizeHtml(content, {
       allowedTags: ['b', 'i', 'em', 'strong', 'p'],
       allowedAttributes: {}
     }).trim();
+
+    if (cleanAuthorName.length < 2) {
+      return NextResponse.json({ error: 'Por favor, informe seu nome.' }, { status: 400 });
+    }
 
     if (cleanContent.length < 3) {
       return NextResponse.json({ error: 'O comentário deve conter pelo menos 3 caracteres.' }, { status: 400 });
@@ -108,7 +115,7 @@ export async function POST(request: Request) {
       VALUES (?, ?, ?, ?, 'approved')
     `).run(
       article_id,
-      author_name.trim(),
+      cleanAuthorName,
       author_email.trim().toLowerCase(),
       cleanContent
     );

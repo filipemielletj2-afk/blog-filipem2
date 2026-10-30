@@ -29,6 +29,20 @@ export async function POST(request: Request) {
       }
     }
 
+    const db = getDb();
+    // Persistent brute-force check across restarts
+    const recentFails = db.prepare(`
+      SELECT count(*) as cnt FROM audit_logs
+      WHERE action = 'LOGIN_FAILED' AND ip_address = ? AND created_at > datetime('now', '-15 minutes')
+    `).get(ip) as { cnt: number };
+
+    if (recentFails && recentFails.cnt >= 5) {
+      return NextResponse.json(
+        { error: 'Muitas tentativas incorretas registradas. Por segurança, o acesso deste IP foi bloqueado por 15 minutos.' },
+        { status: 429 }
+      );
+    }
+
     const { email, password } = await request.json();
 
     if (!email || !password) {
@@ -36,7 +50,6 @@ export async function POST(request: Request) {
     }
 
     const cleanEmail = String(email).toLowerCase().trim().slice(0, 100);
-    const db = getDb();
     const user = db.prepare('SELECT * FROM users WHERE email = ?').get(cleanEmail) as any;
 
     if (!user || !verifyPassword(password, user.password_hash)) {
