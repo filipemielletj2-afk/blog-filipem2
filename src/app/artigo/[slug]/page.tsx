@@ -417,11 +417,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
       {/* Specific Amazon Ad / Banner of this article if provided */}
       {article.amazon_ad_code && (
-        <div className="my-8 flex flex-col items-center justify-center p-4 rounded-2xl bg-[#0f1118] border border-amber-500/30 shadow-xl overflow-hidden">
-          <span className="text-[10px] tracking-widest text-amber-500/80 uppercase mb-2 font-mono flex items-center gap-1.5">
-            <ShoppingBag className="w-3.5 h-3.5" />
-            <span>Produto Patrocinado na Amazon</span>
-          </span>
+        <div className="my-8 flex items-center justify-center p-2 rounded-2xl bg-[#0f1118] border border-neutral-800 shadow-xl overflow-hidden">
           <div
             className="w-full flex items-center justify-center overflow-x-auto"
             dangerouslySetInnerHTML={{ __html: article.amazon_ad_code }}

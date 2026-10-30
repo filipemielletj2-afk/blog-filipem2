@@ -26,16 +26,25 @@ export default function AdBanner({ slot, enabled, code, className = '' }: AdBann
     });
   }, [code, enabled]);
 
-  if (!enabled || !code) return null;
+  if (!enabled || !code || !code.trim()) return null;
+
+  // Do not render empty or placeholder text boxes
+  const trimmed = code.trim();
+  if (
+    trimmed.includes('Espaço Reservado para Anúncios') ||
+    trimmed.includes('Espaço Publicitário Disponível') ||
+    trimmed.includes('Publicidade / Espaço Reservado') ||
+    trimmed === '<p></p>' ||
+    trimmed === '<div></div>'
+  ) {
+    return null;
+  }
 
   return (
-    <div className={`my-6 w-full flex flex-col items-center justify-center ${className}`}>
-      <span className="text-[10px] tracking-widest text-neutral-600 uppercase mb-1 font-mono">
-        Publicidade Patrocinada
-      </span>
+    <div className={`my-4 w-full flex items-center justify-center ${className}`}>
       <div
         ref={containerRef}
-        className="w-full overflow-hidden flex items-center justify-center min-h-[50px]"
+        className="w-full overflow-hidden flex items-center justify-center"
         dangerouslySetInnerHTML={{ __html: code }}
       />
     </div>
