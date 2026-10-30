@@ -69,8 +69,7 @@ export default function LanguageSelector({ compact = false }: LanguageSelectorPr
         new (window as any).google.translate.TranslateElement(
           {
             pageLanguage: 'pt',
-            autoDisplay: false,
-            layout: (window as any).google.translate.TranslateElement.InlineLayout?.SIMPLE
+            autoDisplay: false
           },
           'google_translate_element'
         );
@@ -89,6 +88,30 @@ export default function LanguageSelector({ compact = false }: LanguageSelectorPr
       document.body.appendChild(script);
     }
 
+    // Aggressive anti-banner suppression to keep header 100% clean
+    const enforceNoBanner = () => {
+      if (document.body) {
+        if (document.body.style.top && document.body.style.top !== '0px') {
+          document.body.style.top = '0px';
+        }
+        if (document.body.style.position === 'relative') {
+          document.body.style.position = 'static';
+        }
+      }
+      const banners = document.querySelectorAll<HTMLElement>(
+        '.goog-te-banner-frame, iframe.skiptranslate, body > .skiptranslate, #goog-gt-tt'
+      );
+      banners.forEach((el) => {
+        el.style.setProperty('display', 'none', 'important');
+        el.style.setProperty('visibility', 'hidden', 'important');
+        el.style.setProperty('height', '0px', 'important');
+        el.style.setProperty('opacity', '0', 'important');
+        el.style.setProperty('pointer-events', 'none', 'important');
+      });
+    };
+
+    const bannerInterval = setInterval(enforceNoBanner, 150);
+
     // Close dropdown when clicking outside
     const handleClickOutside = (e: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
@@ -97,7 +120,10 @@ export default function LanguageSelector({ compact = false }: LanguageSelectorPr
     };
 
     document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    return () => {
+      clearInterval(bannerInterval);
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
   }, []);
 
   const handleSelectLanguage = (langCode: string) => {

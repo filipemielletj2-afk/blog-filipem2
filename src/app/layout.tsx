@@ -155,6 +155,26 @@ export default function RootLayout({
               --primary: ${primaryColor};
               --radius: ${borderRadius};
             }
+            .goog-te-banner-frame,
+            .goog-te-banner-frame.skiptranslate,
+            iframe.goog-te-banner-frame,
+            iframe.skiptranslate,
+            body > .skiptranslate,
+            body > iframe.skiptranslate,
+            #goog-gt-tt {
+              display: none !important;
+              visibility: hidden !important;
+              height: 0 !important;
+              width: 0 !important;
+              opacity: 0 !important;
+              position: absolute !important;
+              top: -9999px !important;
+              left: -9999px !important;
+            }
+            body {
+              top: 0px !important;
+              position: static !important;
+            }
           `
         }} />
         <script

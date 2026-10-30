@@ -434,10 +434,25 @@ body.light-theme {
    ========================================================================== */
 .goog-te-banner-frame,
 .goog-te-banner-frame.skiptranslate,
+iframe.goog-te-banner-frame,
+iframe.skiptranslate,
+body > .skiptranslate,
+body > iframe.skiptranslate,
 #goog-gt-tt,
-.goog-te-balloon-frame {
+.goog-te-balloon-frame,
+.goog-te-menu-frame,
+#\:1\.container,
+#\:2\.container {
   display: none !important;
   visibility: hidden !important;
+  opacity: 0 !important;
+  height: 0 !important;
+  width: 0 !important;
+  pointer-events: none !important;
+  position: absolute !important;
+  top: -9999px !important;
+  left: -9999px !important;
+  z-index: -9999 !important;
 }
 
 body {
