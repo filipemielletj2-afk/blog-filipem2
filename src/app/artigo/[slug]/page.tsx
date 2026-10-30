@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getDb, toPlain } from '@/lib/db';
 import { ensureAutoBackupSynced } from '@/lib/auto-backup';
-import { formatDateBR, formatDateTimeBR } from '@/lib/utils';
+import { formatDateBR, formatDateTimeBR, formatYouTubeEmbedUrl } from '@/lib/utils';
 import ArticleCard from '@/components/ArticleCard';
 import CommentsSection from './CommentsSection';
 import ShareButtons from './ShareButtons';
@@ -21,17 +21,58 @@ import {
 
 export const revalidate = 0;
 
+function renderYouTubePlayer(embedUrl: string): string {
+  return `<div class="my-6 aspect-video w-full rounded-2xl overflow-hidden shadow-2xl border border-neutral-800 bg-black">
+  <iframe src="${embedUrl}" class="w-full h-full" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+</div>`;
+}
+
+function isYouTubeUrl(str: string): boolean {
+  return /(?:youtube\.com\/(?:watch\?|shorts\/|live\/|embed\/)|youtu\.be\/)/i.test(str);
+}
+
 function formatArticleContent(content?: string): string {
   if (!content) return '';
 
-  // If content already contains rich HTML tags, return directly
-  const hasParagraphs = /<\/?(p|div|h[1-6]|ul|ol|li|blockquote|table|section|article)\b/i.test(content);
-  if (hasParagraphs) {
-    return content;
+  let processed = content;
+
+  // 1. Clean up malformed "URL + empty iframe" or empty iframes
+  processed = processed.replace(
+    /(https?:\/\/(?:www\.)?(?:youtube\.com|youtu\.be)[^\s<"']+)\s*<iframe[^>]*src=["']\s*["'][^>]*>.*?<\/iframe>/gi,
+    (_, url) => {
+      return `\n${url.trim()}\n`;
+    }
+  );
+
+  // Remove any stray empty iframes
+  processed = processed.replace(/<iframe[^>]*src=["']\s*["'][^>]*>.*?<\/iframe>/gi, '');
+
+  // 2. Convert markdown bold and italic
+  processed = processed.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+  processed = processed.replace(/(?<!\*)\*([^*]+)\*(?!\*)/g, '<em>$1</em>');
+
+  // Check if original content was authored in rich HTML (<p>, <div>, etc.)
+  const isRichHtml = /<\/?(p|h[1-6]|ul|ol|li|blockquote|table|section|article)\b/i.test(processed);
+
+  if (isRichHtml) {
+    // Convert <p>https://youtu.be/...</p> into player
+    processed = processed.replace(/<p>\s*(https?:\/\/(?:www\.)?(?:youtube\.com|youtu\.be)[^\s<"']+)\s*<\/p>/gi, (_, url) => {
+      return renderYouTubePlayer(formatYouTubeEmbedUrl(url));
+    });
+
+    // Convert raw standalone iframes
+    processed = processed.replace(/(?<!aspect-video[^>]*>)<iframe[^>]*src=["']([^"']+)["'][^>]*>.*?<\/iframe>/gi, (match, src) => {
+      if (isYouTubeUrl(src)) {
+        return renderYouTubePlayer(formatYouTubeEmbedUrl(src));
+      }
+      return match;
+    });
+
+    return processed;
   }
 
-  // Content was entered as raw text / newlines:
-  const rawLines = content.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+  // 3. For natural text / markdown articles:
+  const rawLines = processed.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
   const blocks: string[] = [];
   let currentParagraphLines: string[] = [];
 
@@ -43,19 +84,29 @@ function formatArticleContent(content?: string): string {
   };
 
   for (const line of rawLines) {
+    // Standalone YouTube URL
+    if (isYouTubeUrl(line) && /^https?:\/\//i.test(line)) {
+      flushParagraph();
+      blocks.push(renderYouTubePlayer(formatYouTubeEmbedUrl(line)));
+      continue;
+    }
+
+    // Markdown H2
     if (/^##\s+(.*)/.test(line)) {
       flushParagraph();
       blocks.push(`<h2>${line.replace(/^##\s+/, '')}</h2>`);
       continue;
     }
+
+    // Markdown H3
     if (/^###\s+(.*)/.test(line)) {
       flushParagraph();
       blocks.push(`<h3>${line.replace(/^###\s+/, '')}</h3>`);
       continue;
     }
 
-    // Standalone headings (short lines under 85 chars, not ending with punctuation)
-    const isHeading = line.length < 85 && !/[.,;]$/.test(line) && !line.startsWith('http');
+    // Standalone headings (short lines under 85 chars, not ending with punctuation, not starting with http or <)
+    const isHeading = line.length < 85 && !/[.,;!?]$/.test(line) && !line.startsWith('http') && !line.startsWith('<');
     if (isHeading) {
       flushParagraph();
       blocks.push(`<h2>${line}</h2>`);

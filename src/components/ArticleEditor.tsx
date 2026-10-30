@@ -191,6 +191,18 @@ export default function ArticleEditor({ initialData, articleId }: ArticleEditorP
     }
   };
 
+  const handleInsertVideo = () => {
+    const rawUrl = prompt('Cole aqui o link do vídeo do YouTube (ex: https://youtu.be/... ou https://youtube.com/watch?v=...):');
+    if (!rawUrl || !rawUrl.trim()) return;
+
+    const trimmed = rawUrl.trim();
+    insertFormatting(`\n\n${trimmed}\n\n`);
+    setNotification({
+      type: 'success',
+      text: 'Vídeo do YouTube inserido! Ele será exibido automaticamente como player interativo no artigo.'
+    });
+  };
+
   const handleSelectMedia = (item: any) => {
     if (modalMode === 'content') {
       insertFormatting(
@@ -523,11 +535,12 @@ export default function ArticleEditor({ initialData, articleId }: ArticleEditorP
                 </button>
                 <button
                   type="button"
-                  onClick={() => insertFormatting('<iframe width="100%" height="380" src="', '" frameborder="0" allowfullscreen></iframe>')}
-                  className="p-1 hover:bg-neutral-800 rounded text-neutral-300"
+                  onClick={handleInsertVideo}
+                  className="px-2 py-1 hover:bg-neutral-800 rounded text-xs text-neutral-300 font-bold flex items-center gap-1 border border-neutral-700"
                   title="Incorporar Vídeo do YouTube"
                 >
-                  <Video className="w-3.5 h-3.5" />
+                  <Video className="w-3.5 h-3.5 text-red-500" />
+                  <span>+ Vídeo</span>
                 </button>
                 <button
                   type="button"
