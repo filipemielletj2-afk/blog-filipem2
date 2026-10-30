@@ -9,6 +9,7 @@ import ArticleCard from '@/components/ArticleCard';
 import CommentsSection from './CommentsSection';
 import ShareButtons from './ShareButtons';
 import AdBanner from '@/components/AdBanner';
+import SafeImage from '@/components/SafeImage';
 import {
   Calendar,
   Clock,
@@ -392,7 +393,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
       {/* Cover Image */}
       {article.cover_image && (
         <figure className="space-y-2 rounded-2xl overflow-hidden border border-neutral-800 bg-neutral-950">
-          <img
+          <SafeImage
             src={article.cover_image}
             alt={article.title}
             className="w-full max-h-[520px] object-cover"

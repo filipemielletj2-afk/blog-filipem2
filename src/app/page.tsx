@@ -6,6 +6,7 @@ import ArticleCard from '@/components/ArticleCard';
 import BreakingTicker from '@/components/BreakingTicker';
 import AdBanner from '@/components/AdBanner';
 import NewsletterBox from '@/components/NewsletterBox';
+import SafeImage from '@/components/SafeImage';
 import { ArrowRight, Flame, Play, Mail, CheckCircle2, TrendingUp, Sparkles } from 'lucide-react';
 import { formatDateBR, formatYouTubeEmbedUrl } from '@/lib/utils';
 
@@ -75,7 +76,7 @@ export default async function HomePage() {
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
                   {/* Big Hero Card */}
                   <div className="lg:col-span-8 group relative rounded-3xl overflow-hidden bg-neutral-900 border border-neutral-800 shadow-2xl min-h-[420px] sm:min-h-[500px] flex flex-col justify-end p-6 sm:p-10">
-                    <img
+                    <SafeImage
                       src={heroMain.cover_image || 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1200&q=80'}
                       alt={heroMain.title}
                       className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 brightness-[0.75] group-hover:brightness-[0.85]"
@@ -128,7 +129,7 @@ export default async function HomePage() {
                         key={sec.id}
                         className="group relative rounded-3xl overflow-hidden bg-neutral-900 border border-neutral-800 shadow-xl flex-1 min-h-[220px] flex flex-col justify-end p-5"
                       >
-                        <img
+                        <SafeImage
                           src={sec.cover_image}
                           alt={sec.title}
                           className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 brightness-[0.7]"

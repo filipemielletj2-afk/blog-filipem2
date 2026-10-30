@@ -57,6 +57,37 @@ export async function GET(request: Request, { params }: { params: { filename: st
       });
     }
 
+    // 3. Fallback for known assets (Doctor-X, GTA 6) if an older random upload hash was stored
+    const lowerFilename = filename.toLowerCase();
+    if (
+      lowerFilename.includes('doctor-x') ||
+      lowerFilename.includes('doctorx') ||
+      lowerFilename.startsWith('1793391958980') ||
+      lowerFilename.startsWith('1793392495814')
+    ) {
+      const fallbackPath = path.join(uploadsDir, 'doctor-x-cover.png');
+      if (fs.existsSync(fallbackPath)) {
+        return new Response(fs.readFileSync(fallbackPath), {
+          headers: {
+            'Content-Type': 'image/png',
+            'Cache-Control': 'public, max-age=86400'
+          }
+        });
+      }
+    }
+
+    if (lowerFilename.includes('gta-6') || lowerFilename.includes('gta6')) {
+      const fallbackPath = path.join(uploadsDir, 'gta-6-cover.png');
+      if (fs.existsSync(fallbackPath)) {
+        return new Response(fs.readFileSync(fallbackPath), {
+          headers: {
+            'Content-Type': 'image/png',
+            'Cache-Control': 'public, max-age=86400'
+          }
+        });
+      }
+    }
+
     return new Response('Arquivo não encontrado.', { status: 404 });
   } catch (error: any) {
     return new Response('Erro ao carregar mídia: ' + error.message, { status: 500 });

@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Clock, Eye, Calendar, ArrowUpRight } from 'lucide-react';
 import { formatDateBR } from '@/lib/utils';
+import SafeImage from './SafeImage';
 
 interface ArticleCardProps {
   article: {
@@ -33,7 +34,7 @@ export default function ArticleCard({ article, layout = 'standard' }: ArticleCar
           className="sm:w-5/12 h-44 sm:h-auto rounded-xl overflow-hidden relative shrink-0 bg-neutral-900 block"
         >
           {article.cover_image ? (
-            <img
+            <SafeImage
               src={article.cover_image}
               alt={article.title}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
@@ -100,7 +101,7 @@ export default function ArticleCard({ article, layout = 'standard' }: ArticleCar
         className="w-full h-48 sm:h-52 overflow-hidden relative bg-neutral-900 block"
       >
         {article.cover_image ? (
-          <img
+          <SafeImage
             src={article.cover_image}
             alt={article.title}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
