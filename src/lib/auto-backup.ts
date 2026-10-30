@@ -251,11 +251,13 @@ export function restoreBackupSnapshot(db: DatabaseSync, data: any): { articles: 
  */
 export function getAutoBackupConfig(db: DatabaseSync): {
   enabled: boolean;
-  provider: 'pantry' | 'jsonbin' | 'custom' | 'none';
+  provider: 'gdrive' | 'pantry' | 'jsonbin' | 'custom' | 'none';
   pantryId?: string;
   jsonbinKey?: string;
   jsonbinBinId?: string;
   customUrl?: string;
+  gdriveUrl?: string;
+  gdriveRetention?: number;
   lastSync?: string;
 } {
   try {
@@ -266,9 +268,11 @@ export function getAutoBackupConfig(db: DatabaseSync): {
     const envProvider = process.env.AUTO_BACKUP_PROVIDER?.trim();
     const envEnabled = process.env.AUTO_BACKUP_ENABLED?.trim();
 
+    const gdriveUrl = settings.auto_backup_gdrive_url || process.env.AUTO_BACKUP_GDRIVE_URL || '';
+    const gdriveRetention = parseInt(settings.auto_backup_gdrive_retention || '7', 10);
     const pantryId = settings.auto_backup_pantry_id || envPantry || '';
-    const provider = (settings.auto_backup_provider || envProvider || (pantryId ? 'pantry' : 'none')) as any;
-    const enabled = settings.auto_backup_enabled === '1' || envEnabled === '1' || (Boolean(pantryId) && settings.auto_backup_enabled !== '0');
+    const provider = (settings.auto_backup_provider || envProvider || (gdriveUrl ? 'gdrive' : (pantryId ? 'pantry' : 'none'))) as any;
+    const enabled = settings.auto_backup_enabled === '1' || envEnabled === '1' || (Boolean(pantryId || gdriveUrl) && settings.auto_backup_enabled !== '0');
     const jsonbinKey = settings.auto_backup_jsonbin_key || process.env.AUTO_BACKUP_JSONBIN_KEY || '';
     const jsonbinBinId = settings.auto_backup_jsonbin_bin_id || process.env.AUTO_BACKUP_JSONBIN_BIN_ID || '';
     const customUrl = settings.auto_backup_custom_url || process.env.AUTO_BACKUP_CUSTOM_URL || '';
@@ -281,6 +285,8 @@ export function getAutoBackupConfig(db: DatabaseSync): {
       jsonbinKey,
       jsonbinBinId,
       customUrl,
+      gdriveUrl,
+      gdriveRetention,
       lastSync
     };
   } catch {
@@ -300,7 +306,22 @@ export async function pushAutoBackup(db: DatabaseSync): Promise<{ success: boole
   const snapshot = generateBackupSnapshot(db);
 
   try {
-    if (config.provider === 'pantry' && config.pantryId) {
+    if (config.provider === 'gdrive' && config.gdriveUrl) {
+      const res = await fetch(config.gdriveUrl.trim(), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'backup',
+          retention_days: config.gdriveRetention || 7,
+          timestamp: new Date().toISOString(),
+          snapshot: snapshot
+        }),
+        signal: AbortSignal.timeout(15000)
+      });
+      if (!res.ok) throw new Error(`Google Drive Webhook HTTP ${res.status}`);
+      const data = await res.json().catch(() => ({}));
+      if (data.success === false) throw new Error(`Google Drive: ${data.error || 'Erro desconhecido'}`);
+    } else if (config.provider === 'pantry' && config.pantryId) {
       const url = `https://getpantry.cloud/apiv1/pantry/${config.pantryId.trim()}/basket/blogfilipem2`;
       const res = await fetch(url, {
         method: 'POST',
@@ -356,7 +377,14 @@ export async function pullAutoBackupOnStartup(db: DatabaseSync): Promise<void> {
   try {
     let remoteData: any = null;
 
-    if (config.provider === 'pantry' && config.pantryId) {
+    if (config.provider === 'gdrive' && config.gdriveUrl) {
+      const sep = config.gdriveUrl.includes('?') ? '&' : '?';
+      const res = await fetch(`${config.gdriveUrl.trim()}${sep}action=get_latest`, { signal: AbortSignal.timeout(6000) });
+      if (res.ok) {
+        const json = await res.json();
+        remoteData = json?.snapshot || json;
+      }
+    } else if (config.provider === 'pantry' && config.pantryId) {
       const url = `https://getpantry.cloud/apiv1/pantry/${config.pantryId.trim()}/basket/blogfilipem2`;
       const res = await fetch(url, { signal: AbortSignal.timeout(5000) });
       if (res.ok) {

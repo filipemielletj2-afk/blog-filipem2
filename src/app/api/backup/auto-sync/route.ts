@@ -26,20 +26,22 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    const { action, enabled, provider, pantryId, jsonbinKey, jsonbinBinId, customUrl } = body;
+    const { action, enabled, provider, pantryId, jsonbinKey, jsonbinBinId, customUrl, gdriveUrl, gdriveRetention } = body;
 
     const db = getDb();
 
     // Action: Trigger immediate test sync
     if (action === 'test_sync') {
-      if (pantryId || customUrl || jsonbinKey) {
+      if (pantryId || customUrl || jsonbinKey || gdriveUrl) {
         const updates: Record<string, string> = {
           auto_backup_enabled: enabled !== undefined ? (enabled ? '1' : '0') : '1',
-          auto_backup_provider: provider || (pantryId ? 'pantry' : 'none'),
+          auto_backup_provider: provider || (gdriveUrl ? 'gdrive' : (pantryId ? 'pantry' : 'none')),
           auto_backup_pantry_id: pantryId || '',
           auto_backup_jsonbin_key: jsonbinKey || '',
           auto_backup_jsonbin_bin_id: jsonbinBinId || '',
-          auto_backup_custom_url: customUrl || ''
+          auto_backup_custom_url: customUrl || '',
+          auto_backup_gdrive_url: gdriveUrl || '',
+          auto_backup_gdrive_retention: String(gdriveRetention || '7')
         };
 
         const upsertStmt = db.prepare(`
@@ -66,7 +68,9 @@ export async function POST(request: Request) {
       auto_backup_pantry_id: pantryId || '',
       auto_backup_jsonbin_key: jsonbinKey || '',
       auto_backup_jsonbin_bin_id: jsonbinBinId || '',
-      auto_backup_custom_url: customUrl || ''
+      auto_backup_custom_url: customUrl || '',
+      auto_backup_gdrive_url: gdriveUrl || '',
+      auto_backup_gdrive_retention: String(gdriveRetention || '7')
     };
 
     const upsertStmt = db.prepare(`
@@ -80,7 +84,7 @@ export async function POST(request: Request) {
 
     // If enabled, attempt an initial sync immediately
     let initialSyncMessage = '';
-    if (enabled && (pantryId || customUrl || (jsonbinKey && jsonbinBinId))) {
+    if (enabled && (pantryId || customUrl || gdriveUrl || (jsonbinKey && jsonbinBinId))) {
       const syncResult = await pushAutoBackup(db);
       initialSyncMessage = syncResult.success
         ? ' e backup inicial salvo na nuvem!'

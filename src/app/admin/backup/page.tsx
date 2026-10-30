@@ -19,8 +19,77 @@ import {
   Clock,
   Sparkles,
   Zap,
-  Lock
+  Lock,
+  HardDrive,
+  Copy,
+  Trash2
 } from 'lucide-react';
+
+const GDRIVE_APPS_SCRIPT_CODE = `function doPost(e) {
+  try {
+    var data = JSON.parse(e.postData.contents);
+    var retentionDays = data.retention_days || 7;
+    var folderName = "BLOG_FILIPEM2_BACKUPS";
+    var folders = DriveApp.getFoldersByName(folderName);
+    var folder = folders.hasNext() ? folders.next() : DriveApp.createFolder(folderName);
+    
+    var now = new Date();
+    var timeStr = Utilities.formatDate(now, "America/Sao_Paulo", "yyyy-MM-dd_HH-mm-ss");
+    var fileName = "backup-" + timeStr + ".json";
+    folder.createFile(fileName, JSON.stringify(data.snapshot, null, 2), MimeType.PLAIN_TEXT);
+    
+    // Purga automatica de backups mais antigos que 7 dias (ou retentionDays)
+    var cutoff = new Date(now.getTime() - (retentionDays * 24 * 60 * 60 * 1000));
+    var files = folder.getFiles();
+    var purgedCount = 0;
+    while (files.hasNext()) {
+      var f = files.next();
+      if (f.getName().startsWith("backup-") && f.getDateCreated() < cutoff) {
+        f.setTrashed(true);
+        purgedCount++;
+      }
+    }
+    
+    return ContentService.createTextOutput(JSON.stringify({
+      success: true,
+      message: "Backup salvo no Google Drive!",
+      file: fileName,
+      purged_old_backups: purgedCount
+    })).setMimeType(ContentService.MimeType.JSON);
+  } catch (err) {
+    return ContentService.createTextOutput(JSON.stringify({
+      success: false,
+      error: err.toString()
+    })).setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+function doGet(e) {
+  try {
+    var folderName = "BLOG_FILIPEM2_BACKUPS";
+    var folders = DriveApp.getFoldersByName(folderName);
+    if (!folders.hasNext()) {
+      return ContentService.createTextOutput(JSON.stringify({ error: "Nenhum backup encontrado" })).setMimeType(ContentService.MimeType.JSON);
+    }
+    var folder = folders.next();
+    var files = folder.getFiles();
+    var latestFile = null;
+    var latestDate = 0;
+    while (files.hasNext()) {
+      var f = files.next();
+      if (f.getName().startsWith("backup-") && f.getDateCreated().getTime() > latestDate) {
+        latestDate = f.getDateCreated().getTime();
+        latestFile = f;
+      }
+    }
+    if (!latestFile) {
+      return ContentService.createTextOutput(JSON.stringify({ error: "Nenhum arquivo" })).setMimeType(ContentService.MimeType.JSON);
+    }
+    return ContentService.createTextOutput(latestFile.getBlob().getDataAsString()).setMimeType(ContentService.MimeType.JSON);
+  } catch (err) {
+    return ContentService.createTextOutput(JSON.stringify({ error: err.toString() })).setMimeType(ContentService.MimeType.JSON);
+  }
+}`;
 
 export default function AdminBackupPage() {
   const [downloading, setDownloading] = useState(false);
@@ -29,9 +98,12 @@ export default function AdminBackupPage() {
 
   // Cloud Auto-Sync State
   const [autoBackupEnabled, setAutoBackupEnabled] = useState(false);
-  const [autoBackupProvider, setAutoBackupProvider] = useState<'pantry' | 'custom'>('pantry');
+  const [autoBackupProvider, setAutoBackupProvider] = useState<'gdrive' | 'pantry' | 'custom'>('gdrive');
   const [pantryId, setPantryId] = useState('');
   const [customUrl, setCustomUrl] = useState('');
+  const [gdriveUrl, setGdriveUrl] = useState('');
+  const [gdriveRetention, setGdriveRetention] = useState(7);
+  const [copiedScript, setCopiedScript] = useState(false);
   const [lastSync, setLastSync] = useState<string | null>(null);
   const [loadingConfig, setLoadingConfig] = useState(true);
   const [savingConfig, setSavingConfig] = useState(false);
@@ -48,9 +120,11 @@ export default function AdminBackupPage() {
       if (res.ok) {
         const data = await res.json();
         setAutoBackupEnabled(Boolean(data.enabled));
-        setAutoBackupProvider(data.provider === 'custom' ? 'custom' : 'pantry');
+        setAutoBackupProvider(data.provider === 'custom' ? 'custom' : (data.provider === 'pantry' ? 'pantry' : 'gdrive'));
         setPantryId(data.pantryId || '');
         setCustomUrl(data.customUrl || '');
+        setGdriveUrl(data.gdriveUrl || '');
+        setGdriveRetention(data.gdriveRetention || 7);
         setLastSync(data.lastSync || null);
       }
     } catch (err) {
@@ -146,7 +220,9 @@ export default function AdminBackupPage() {
           enabled: autoBackupEnabled,
           provider: autoBackupProvider,
           pantryId: pantryId.trim(),
-          customUrl: customUrl.trim()
+          customUrl: customUrl.trim(),
+          gdriveUrl: gdriveUrl.trim(),
+          gdriveRetention
         })
       });
 
@@ -166,6 +242,10 @@ export default function AdminBackupPage() {
   };
 
   const handleTestSync = async () => {
+    if (autoBackupProvider === 'gdrive' && !gdriveUrl.trim()) {
+      setNotification({ type: 'error', text: 'Por favor, insira a URL do Webhook do Google Apps Script antes de testar a sincronização.' });
+      return;
+    }
     if (autoBackupProvider === 'pantry' && !pantryId.trim()) {
       setNotification({ type: 'error', text: 'Por favor, insira o seu Pantry ID antes de testar a sincronização.' });
       return;
@@ -182,7 +262,9 @@ export default function AdminBackupPage() {
           enabled: true,
           provider: autoBackupProvider,
           pantryId: pantryId.trim(),
-          customUrl: customUrl.trim()
+          customUrl: customUrl.trim(),
+          gdriveUrl: gdriveUrl.trim(),
+          gdriveRetention
         })
       });
 
@@ -250,12 +332,12 @@ export default function AdminBackupPage() {
                   </h2>
                   <span
                     className={`px-2.5 py-0.5 rounded-full text-[10px] font-black tracking-wider uppercase border ${
-                      autoBackupEnabled && (pantryId || customUrl)
+                      autoBackupEnabled && (gdriveUrl || pantryId || customUrl)
                         ? 'bg-emerald-500/10 border-emerald-500/40 text-emerald-400'
                         : 'bg-neutral-800 border-neutral-700 text-neutral-400'
                     }`}
                   >
-                    {autoBackupEnabled && (pantryId || customUrl) ? 'Ativo & Protegido' : 'Desativado'}
+                    {autoBackupEnabled && (gdriveUrl || pantryId || customUrl) ? 'Ativo & Protegido' : 'Desativado'}
                   </span>
                 </div>
                 <p className="text-xs text-neutral-400 mt-1 max-w-2xl leading-relaxed">
@@ -289,7 +371,31 @@ export default function AdminBackupPage() {
                 <label className="text-xs font-bold text-neutral-300 uppercase tracking-wider block">
                   Provedor de Armazenamento em Nuvem
                 </label>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-xl">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setAutoBackupProvider('gdrive')}
+                    className={`p-3.5 rounded-2xl border text-left transition-all flex items-center justify-between ${
+                      autoBackupProvider === 'gdrive'
+                        ? 'bg-red-950/40 border-red-600/80 text-white shadow-lg shadow-red-950/50'
+                        : 'bg-neutral-900/60 border-neutral-800 text-neutral-400 hover:border-neutral-700'
+                    }`}
+                  >
+                    <div>
+                      <div className="font-bold text-xs flex items-center gap-1.5 text-white">
+                        <HardDrive className="w-4 h-4 text-emerald-400" />
+                        <span>Google Drive</span>
+                        <span className="text-[10px] bg-emerald-600/20 text-emerald-400 px-1.5 py-0.5 rounded font-black">
+                          Recomendado
+                        </span>
+                      </div>
+                      <div className="text-[11px] text-neutral-400 mt-0.5">
+                        Salva no seu Drive e apaga backups antigos após 7 dias
+                      </div>
+                    </div>
+                    {autoBackupProvider === 'gdrive' && <Check className="w-4 h-4 text-red-500 shrink-0" />}
+                  </button>
+
                   <button
                     type="button"
                     onClick={() => setAutoBackupProvider('pantry')}
@@ -301,10 +407,8 @@ export default function AdminBackupPage() {
                   >
                     <div>
                       <div className="font-bold text-xs flex items-center gap-1.5 text-white">
+                        <Cloud className="w-4 h-4 text-amber-400" />
                         <span>Pantry Cloud</span>
-                        <span className="text-[10px] bg-red-600/20 text-red-400 px-1.5 py-0.5 rounded font-black">
-                          Recomendado
-                        </span>
                       </div>
                       <div className="text-[11px] text-neutral-400 mt-0.5">
                         100% Grátis, sem cartão, setup em 10 segundos
@@ -332,6 +436,100 @@ export default function AdminBackupPage() {
                   </button>
                 </div>
               </div>
+
+              {/* Google Drive Form */}
+              {autoBackupProvider === 'gdrive' && (
+                <div className="space-y-5 max-w-3xl bg-neutral-950/50 p-6 rounded-2xl border border-neutral-800/80">
+                  <div className="space-y-4">
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-bold text-white flex items-center gap-2">
+                        <span>URL do Webhook do Google Apps Script</span>
+                        <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="url"
+                        value={gdriveUrl}
+                        onChange={e => setGdriveUrl(e.target.value)}
+                        placeholder="https://script.google.com/macros/s/AKfycbx.../exec"
+                        className="w-full bg-[#0d0e14] border border-neutral-800 rounded-xl px-4 py-2.5 text-xs text-white placeholder-neutral-600 focus:outline-none focus:border-red-500 font-mono transition-colors"
+                      />
+                      <p className="text-[11px] text-neutral-400">
+                        O endereço gerado após implantar o script abaixo no seu Google Apps Script pessoal.
+                      </p>
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-bold text-white flex items-center gap-2">
+                        <Trash2 className="w-3.5 h-3.5 text-red-400" />
+                        <span>Período de retenção automática (dias)</span>
+                      </label>
+                      <div className="flex items-center gap-3">
+                        <input
+                          type="number"
+                          min="1"
+                          max="90"
+                          value={gdriveRetention}
+                          onChange={e => setGdriveRetention(Math.max(1, parseInt(e.target.value) || 7))}
+                          className="w-28 bg-[#0d0e14] border border-neutral-800 rounded-xl px-4 py-2.5 text-xs text-white placeholder-neutral-600 focus:outline-none focus:border-red-500 font-mono transition-colors"
+                        />
+                        <span className="text-xs text-neutral-400">
+                          dias (backups com mais de 7 dias serão movidos para a lixeira automaticamente)
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Step-by-step Tutorial for Google Drive */}
+                  <div className="p-4 rounded-xl bg-neutral-900/70 border border-neutral-800 text-[11px] text-neutral-400 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <p className="font-bold text-white text-xs flex items-center gap-1.5">
+                        <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
+                        <span>Como conectar com seu Google Drive (100% Grátis):</span>
+                      </p>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          navigator.clipboard.writeText(GDRIVE_APPS_SCRIPT_CODE);
+                          setCopiedScript(true);
+                          setTimeout(() => setCopiedScript(false), 2500);
+                        }}
+                        className="px-3 py-1.5 rounded-lg bg-emerald-950/60 border border-emerald-800/80 hover:bg-emerald-900/60 text-emerald-400 text-xs font-bold flex items-center gap-1.5 transition-all"
+                      >
+                        {copiedScript ? <Check className="w-3.5 h-3.5 text-emerald-300" /> : <Copy className="w-3.5 h-3.5" />}
+                        <span>{copiedScript ? 'Código Copiado!' : 'Copiar Script Google Apps'}</span>
+                      </button>
+                    </div>
+
+                    <ol className="list-decimal list-inside space-y-1.5 text-neutral-300">
+                      <li>
+                        Acesse{' '}
+                        <a
+                          href="https://script.google.com"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-emerald-400 underline font-semibold inline-flex items-center gap-1"
+                        >
+                          script.google.com
+                          <ExternalLink className="w-3 h-3" />
+                        </a>{' '}
+                        com sua conta do Google (Drive).
+                      </li>
+                      <li>Clique no botão azul <strong>&quot;Novo projeto&quot;</strong>.</li>
+                      <li>Apague o código de exemplo e cole o código abaixo.</li>
+                      <li>Clique no botão azul superior <strong>&quot;Implantar&quot;</strong> &gt; <strong>&quot;Nova implantação&quot;</strong>.</li>
+                      <li>Clique no ícone de engrenagem ⚙️ (Selecionar tipo) e escolha <strong>&quot;App da Web&quot;</strong>.</li>
+                      <li>Em <em>&quot;Quem pode acessar&quot;</em>, selecione <strong>&quot;Qualquer pessoa&quot;</strong> (Anyone).</li>
+                      <li>Clique em <strong>&quot;Implantar&quot;</strong>, autorize as permissões de acesso ao seu Drive e copie o <strong>URL do app da Web</strong> para o campo acima!</li>
+                    </ol>
+
+                    <div className="relative mt-2">
+                      <pre className="p-3.5 rounded-xl bg-black/60 border border-neutral-800 text-[10px] text-neutral-300 font-mono overflow-x-auto max-h-48 leading-relaxed">
+                        {GDRIVE_APPS_SCRIPT_CODE}
+                      </pre>
+                    </div>
+                  </div>
+                </div>
+              )}
 
               {/* Pantry Form */}
               {autoBackupProvider === 'pantry' && (
