@@ -287,6 +287,16 @@ function seedDefaults(db: DatabaseSync) {
   const settingsCount = db.prepare('SELECT count(*) as cnt FROM site_settings').get() as { cnt: number };
   if (settingsCount.cnt === 0) {
     seedSettings(db);
+  } else {
+    // Ensure Google AdSense and ads.txt defaults are present
+    db.prepare(`
+      INSERT INTO site_settings (key, value) VALUES ('ads_txt', 'google.com, pub-2978439169182708, DIRECT, f08c47fec0942fa0')
+      ON CONFLICT(key) DO UPDATE SET value = excluded.value WHERE site_settings.value IS NULL OR site_settings.value = ''
+    `).run();
+    db.prepare(`
+      INSERT INTO site_settings (key, value) VALUES ('google_adsense_id', 'ca-pub-2978439169182708')
+      ON CONFLICT(key) DO UPDATE SET value = excluded.value WHERE site_settings.value IS NULL OR site_settings.value = ''
+    `).run();
   }
 
   // Check visual builder sections
@@ -744,7 +754,9 @@ function seedSettings(db: DatabaseSync) {
     ad_footer_code: '',
     robots_txt_content: `User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /api/\n\nSitemap: https://blogfilipem2.site/sitemap.xml`,
     google_analytics_id: '',
-    google_search_console_tag: ''
+    google_search_console_tag: '',
+    google_adsense_id: 'ca-pub-2978439169182708',
+    ads_txt: 'google.com, pub-2978439169182708, DIRECT, f08c47fec0942fa0'
   };
 
   const insertSetting = db.prepare('INSERT INTO site_settings (key, value) VALUES (?, ?)');

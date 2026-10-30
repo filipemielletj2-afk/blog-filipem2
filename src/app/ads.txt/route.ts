@@ -7,11 +7,7 @@ export async function GET() {
     
     let content = row?.value?.trim();
     if (!content) {
-      content = `# ads.txt - BLOG FILIPEM2 (https://blogfilipem2.site)
-# Adicione suas linhas de autorização de publicidade no Painel Admin (/admin/monetizacao).
-# Exemplo Google AdSense:
-# google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0
-`;
+      content = 'google.com, pub-2978439169182708, DIRECT, f08c47fec0942fa0';
     }
 
     return new Response(content, {
