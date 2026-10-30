@@ -102,6 +102,9 @@ export async function PUT(request: Request, { params }: { params: { id: string }
       og_image,
       sources_json,
       allow_comments,
+      amazon_ad_code,
+      amazon_product_title,
+      amazon_product_url,
       tags
     } = body;
 
@@ -149,7 +152,10 @@ export async function PUT(request: Request, { params }: { params: { id: string }
         canonical_url = ?,
         og_image = ?,
         sources_json = ?,
-        allow_comments = ?
+        allow_comments = ?,
+        amazon_ad_code = ?,
+        amazon_product_title = ?,
+        amazon_product_url = ?
       WHERE id = ?
     `).run(
       title !== undefined ? title : current.title,
@@ -171,6 +177,9 @@ export async function PUT(request: Request, { params }: { params: { id: string }
       og_image !== undefined ? og_image : current.og_image,
       sources_json !== undefined ? (typeof sources_json === 'string' ? sources_json : JSON.stringify(sources_json)) : current.sources_json,
       allow_comments !== undefined ? (allow_comments ? 1 : 0) : current.allow_comments,
+      amazon_ad_code !== undefined ? amazon_ad_code : current.amazon_ad_code,
+      amazon_product_title !== undefined ? amazon_product_title : current.amazon_product_title,
+      amazon_product_url !== undefined ? amazon_product_url : current.amazon_product_url,
       id
     );
 

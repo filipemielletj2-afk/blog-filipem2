@@ -113,6 +113,9 @@ export async function POST(request: Request) {
       og_image,
       sources_json,
       allow_comments = 1,
+      amazon_ad_code,
+      amazon_product_title,
+      amazon_product_url,
       tags = []
     } = body;
 
@@ -143,11 +146,13 @@ export async function POST(request: Request) {
       INSERT INTO articles (
         title, subtitle, slug, content, excerpt, cover_image, cover_caption, cover_source,
         author_id, category_id, status, published_at, updated_at, reading_time, views, featured,
-        meta_title, meta_description, canonical_url, og_image, sources_json, allow_comments
+        meta_title, meta_description, canonical_url, og_image, sources_json, allow_comments,
+        amazon_ad_code, amazon_product_title, amazon_product_url
       ) VALUES (
         ?, ?, ?, ?, ?, ?, ?, ?,
         ?, ?, ?, ?, CURRENT_TIMESTAMP, ?, 0, ?,
-        ?, ?, ?, ?, ?, ?
+        ?, ?, ?, ?, ?, ?,
+        ?, ?, ?
       )
     `);
 
@@ -171,7 +176,10 @@ export async function POST(request: Request) {
       canonical_url || null,
       og_image || cover_image || null,
       typeof sources_json === 'string' ? sources_json : JSON.stringify(sources_json || []),
-      allow_comments ? 1 : 0
+      allow_comments ? 1 : 0,
+      amazon_ad_code || null,
+      amazon_product_title || null,
+      amazon_product_url || null
     );
 
     const articleId = Number(result.lastInsertRowid);

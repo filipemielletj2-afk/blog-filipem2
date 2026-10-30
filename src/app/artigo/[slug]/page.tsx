@@ -415,8 +415,60 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         <div dangerouslySetInnerHTML={{ __html: formatArticleContent(article.content, amazonAffiliateTag) }} />
       </div>
 
-      {/* Amazon Associates Recommended Box */}
-      {amazonBoxEnabled && (
+      {/* Specific Amazon Ad / Banner of this article if provided */}
+      {article.amazon_ad_code && (
+        <div className="my-8 flex flex-col items-center justify-center p-4 rounded-2xl bg-[#0f1118] border border-amber-500/30 shadow-xl overflow-hidden">
+          <span className="text-[10px] tracking-widest text-amber-500/80 uppercase mb-2 font-mono flex items-center gap-1.5">
+            <ShoppingBag className="w-3.5 h-3.5" />
+            <span>Produto Patrocinado na Amazon</span>
+          </span>
+          <div
+            className="w-full flex items-center justify-center overflow-x-auto"
+            dangerouslySetInnerHTML={{ __html: article.amazon_ad_code }}
+          />
+        </div>
+      )}
+
+      {/* Specific Amazon Product Card of this article if provided */}
+      {article.amazon_product_url && (
+        <div className="my-8 p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-[#11131a] via-[#1a1f2c] to-[#11131a] border border-amber-500/50 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-3.5">
+            <div className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0">
+              <ShoppingBag className="w-6 h-6" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold text-amber-400 uppercase tracking-wider">Destaque de Compra na Amazon</span>
+                <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-mono">Parceiro Oficial</span>
+              </div>
+              <h4 className="text-base sm:text-lg font-bold text-white mt-0.5">
+                {article.amazon_product_title || 'Confira este produto oficial na Amazon'}
+              </h4>
+              <p className="text-xs text-neutral-400 mt-0.5">
+                Garanta o seu com entrega Prime rápida e segura pelo link de parceiro oficial.
+              </p>
+            </div>
+          </div>
+          <a
+            href={
+              article.amazon_product_url.startsWith('http')
+                ? (article.amazon_product_url.includes('tag=')
+                    ? article.amazon_product_url
+                    : `${article.amazon_product_url}${article.amazon_product_url.includes('?') ? '&' : '?'}tag=${amazonAffiliateTag}`)
+                : `https://www.amazon.com.br/s?k=${encodeURIComponent(article.amazon_product_url)}&tag=${amazonAffiliateTag}`
+            }
+            target="_blank"
+            rel="sponsored noopener noreferrer"
+            className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shrink-0 transition-all shadow-xl shadow-amber-500/25 hover:scale-105"
+          >
+            <span>Comprar na Amazon</span>
+            <ExternalLink className="w-4 h-4" />
+          </a>
+        </div>
+      )}
+
+      {/* Global Amazon Associates Recommended Box (if specific ad not provided) */}
+      {!article.amazon_ad_code && !article.amazon_product_url && amazonBoxEnabled && (
         <div className="my-8 p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-[#11131a] via-[#161a24] to-[#11131a] border border-amber-500/30 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3.5">
             <div className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0">

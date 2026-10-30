@@ -68,7 +68,7 @@ export function sanitizeContent(html: string): string {
       ...sanitizeHtml.defaults.allowedAttributes,
       '*': ['class', 'style', 'id', 'data-*'],
       'img': ['src', 'alt', 'title', 'width', 'height', 'loading'],
-      'iframe': ['src', 'width', 'height', 'frameborder', 'allow', 'allowfullscreen', 'title'],
+      'iframe': ['src', 'width', 'height', 'frameborder', 'allow', 'allowfullscreen', 'title', 'scrolling', 'marginwidth', 'marginheight'],
       'a': ['href', 'name', 'target', 'rel', 'title']
     },
     allowedIframeHostnames: [
@@ -78,7 +78,13 @@ export function sanitizeContent(html: string): string {
       'open.spotify.com',
       'clips.twitch.tv',
       'player.twitch.tv',
-      'store.steampowered.com'
+      'store.steampowered.com',
+      'rcm-na.amazon-adsystem.com',
+      'ws-na.amazon-adsystem.com',
+      'rcm-eu.amazon-adsystem.com',
+      'amazon-adsystem.com',
+      'www.amazon.com.br',
+      'amazon.com.br'
     ]
   });
 }

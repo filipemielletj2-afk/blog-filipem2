@@ -86,8 +86,9 @@ export function restoreBackupSnapshot(db: DatabaseSync, data: any): { articles: 
         INSERT INTO articles (
           id, title, subtitle, slug, content, excerpt, cover_image, cover_caption, cover_source,
           author_id, category_id, status, published_at, updated_at, created_at, reading_time,
-          views, featured, meta_title, meta_description, canonical_url, og_image, sources_json, allow_comments
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+          views, featured, meta_title, meta_description, canonical_url, og_image, sources_json, allow_comments,
+          amazon_ad_code, amazon_product_title, amazon_product_url
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ON CONFLICT(id) DO UPDATE SET
           title = excluded.title,
           subtitle = excluded.subtitle,
@@ -109,7 +110,10 @@ export function restoreBackupSnapshot(db: DatabaseSync, data: any): { articles: 
           canonical_url = excluded.canonical_url,
           og_image = excluded.og_image,
           sources_json = excluded.sources_json,
-          allow_comments = excluded.allow_comments
+          allow_comments = excluded.allow_comments,
+          amazon_ad_code = excluded.amazon_ad_code,
+          amazon_product_title = excluded.amazon_product_title,
+          amazon_product_url = excluded.amazon_product_url
       `);
 
       for (const a of data.articles) {
@@ -137,7 +141,10 @@ export function restoreBackupSnapshot(db: DatabaseSync, data: any): { articles: 
           a.canonical_url,
           a.og_image,
           a.sources_json,
-          a.allow_comments !== undefined ? a.allow_comments : 1
+          a.allow_comments !== undefined ? a.allow_comments : 1,
+          a.amazon_ad_code || null,
+          a.amazon_product_title || null,
+          a.amazon_product_url || null
         );
         restoredArticles++;
       }

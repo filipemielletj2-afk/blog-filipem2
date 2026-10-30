@@ -106,6 +106,9 @@ function initDatabase(db: DatabaseSync) {
       og_image TEXT,
       sources_json TEXT,
       allow_comments INTEGER DEFAULT 1,
+      amazon_ad_code TEXT,
+      amazon_product_title TEXT,
+      amazon_product_url TEXT,
       FOREIGN KEY (author_id) REFERENCES users(id) ON DELETE CASCADE,
       FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE RESTRICT
     );
@@ -194,6 +197,15 @@ function initDatabase(db: DatabaseSync) {
 
   try {
     db.exec(`ALTER TABLE media ADD COLUMN data_base64 TEXT;`);
+  } catch {}
+  try {
+    db.exec(`ALTER TABLE articles ADD COLUMN amazon_ad_code TEXT;`);
+  } catch {}
+  try {
+    db.exec(`ALTER TABLE articles ADD COLUMN amazon_product_title TEXT;`);
+  } catch {}
+  try {
+    db.exec(`ALTER TABLE articles ADD COLUMN amazon_product_url TEXT;`);
   } catch {}
 
   // 11. Audit Logs

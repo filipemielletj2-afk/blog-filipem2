@@ -25,7 +25,9 @@ import {
   Upload,
   X,
   Check,
-  FolderOpen
+  FolderOpen,
+  ShoppingBag,
+  Sparkles
 } from 'lucide-react';
 import { slugify } from '@/lib/utils';
 
@@ -71,6 +73,18 @@ export default function ArticleEditor({ initialData, articleId }: ArticleEditorP
   const [metaDescription, setMetaDescription] = useState(initialData?.meta_description || '');
   const [canonicalUrl, setCanonicalUrl] = useState(initialData?.canonical_url || '');
   const [ogImage, setOgImage] = useState(initialData?.og_image || '');
+
+  // Amazon Ads & Product Showcase
+  const [amazonProductTitle, setAmazonProductTitle] = useState(initialData?.amazon_product_title || '');
+  const [amazonProductUrl, setAmazonProductUrl] = useState(initialData?.amazon_product_url || '');
+  const [amazonAdCode, setAmazonAdCode] = useState(initialData?.amazon_ad_code || '');
+
+  // Amazon Inline Insertion Modal
+  const [amazonModalOpen, setAmazonModalOpen] = useState(false);
+  const [modalProductTitle, setModalProductTitle] = useState('');
+  const [modalProductUrl, setModalProductUrl] = useState('');
+  const [modalAdCode, setModalAdCode] = useState('');
+  const [modalTab, setModalTab] = useState<'card' | 'code'>('card');
 
   // UI state
   const [categories, setCategories] = useState<any[]>([]);
@@ -220,6 +234,35 @@ export default function ArticleEditor({ initialData, articleId }: ArticleEditorP
     }
   };
 
+  const handleInsertInlineAmazon = () => {
+    let snippet = '';
+    if (modalTab === 'card') {
+      const prodTitle = modalProductTitle.trim() || 'Confira Ofertas na Amazon';
+      const cleanUrl = modalProductUrl.trim();
+      let prodUrl = '';
+      if (!cleanUrl) {
+        prodUrl = `https://www.amazon.com.br/s?k=${encodeURIComponent(prodTitle)}&tag=blogfilipem2-20`;
+      } else if (cleanUrl.startsWith('http://') || cleanUrl.startsWith('https://')) {
+        const sep = cleanUrl.includes('?') ? '&' : '?';
+        prodUrl = cleanUrl.includes('tag=') ? cleanUrl : `${cleanUrl}${sep}tag=blogfilipem2-20`;
+      } else {
+        prodUrl = `https://www.amazon.com.br/s?k=${encodeURIComponent(cleanUrl)}&tag=blogfilipem2-20`;
+      }
+
+      snippet = `\n<div class="my-6 p-5 rounded-2xl bg-[#0f1118] border border-amber-500/40 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4">\n  <div class="space-y-1">\n    <span class="text-[10px] font-bold text-amber-400 uppercase tracking-wider bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">Recomendado na Amazon</span>\n    <h4 class="text-sm sm:text-base font-bold text-white">${prodTitle}</h4>\n    <p class="text-xs text-neutral-400">Entrega rápida Prime e garantia oficial pela Amazon.</p>\n  </div>\n  <a href="${prodUrl}" target="_blank" rel="sponsored noopener noreferrer" class="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-xs uppercase tracking-wider shrink-0 transition-all shadow-md">\n    Comprar na Amazon &rarr;\n  </a>\n</div>\n`;
+    } else {
+      if (!modalAdCode.trim()) return;
+      snippet = `\n<div class="my-6 flex justify-center overflow-x-auto">\n${modalAdCode.trim()}\n</div>\n`;
+    }
+
+    insertFormatting(snippet);
+    setAmazonModalOpen(false);
+    setModalProductTitle('');
+    setModalProductUrl('');
+    setModalAdCode('');
+    setNotification({ type: 'success', text: 'Anúncio da Amazon inserido no artigo com sucesso!' });
+  };
+
   const handleContentPaste = async (e: React.ClipboardEvent<HTMLTextAreaElement>) => {
     const files = e.clipboardData?.files;
     if (files && files.length > 0) {
@@ -324,7 +367,10 @@ export default function ArticleEditor({ initialData, articleId }: ArticleEditorP
       meta_title: metaTitle || `${title} | BLOG FILIPEM2`,
       meta_description: metaDescription || excerpt || title,
       canonical_url: canonicalUrl,
-      og_image: ogImage || coverImage
+      og_image: ogImage || coverImage,
+      amazon_ad_code: amazonAdCode,
+      amazon_product_title: amazonProductTitle,
+      amazon_product_url: amazonProductUrl
     };
 
     try {
@@ -551,6 +597,15 @@ export default function ArticleEditor({ initialData, articleId }: ArticleEditorP
                   <ImageIcon className="w-3.5 h-3.5" />
                   <span>+ Imagem</span>
                 </button>
+                <button
+                  type="button"
+                  onClick={() => setAmazonModalOpen(true)}
+                  className="px-2.5 py-1 hover:bg-amber-950/40 rounded text-xs text-amber-400 hover:text-amber-300 font-bold flex items-center gap-1 border border-amber-500/50 bg-amber-500/10 transition-colors"
+                  title="Inserir Anúncio ou Produto da Amazon no Texto"
+                >
+                  <ShoppingBag className="w-3.5 h-3.5 text-amber-400" />
+                  <span>+ Anúncio Amazon</span>
+                </button>
               </div>
             </div>
 
@@ -619,6 +674,69 @@ export default function ArticleEditor({ initialData, articleId }: ArticleEditorP
                 <Plus className="w-3.5 h-3.5" />
                 <span>Adicionar</span>
               </button>
+            </div>
+          </div>
+
+          {/* Amazon Ad & Products Box for this Article */}
+          <div className="p-6 rounded-2xl bg-gradient-to-br from-[#12141c] to-[#181d27] border border-amber-500/40 space-y-4 shadow-xl">
+            <div className="flex items-center justify-between pb-3 border-b border-neutral-800">
+              <div className="flex items-center gap-2">
+                <ShoppingBag className="w-4 h-4 text-amber-400" />
+                <h3 className="text-xs font-bold uppercase tracking-wider text-white">
+                  Anúncio &amp; Produtos da Amazon Desta Matéria
+                </h3>
+              </div>
+              <span className="text-[10px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-mono font-bold">
+                Afiliados Amazon
+              </span>
+            </div>
+
+            <p className="text-xs text-neutral-400">
+              Personalize o anúncio ou produto da Amazon exibido nesta matéria (ex: Jogo GTA 6, Console PS5, periféricos ou colecionáveis).
+            </p>
+
+            <div className="space-y-3">
+              <div>
+                <label className="block text-xs font-semibold text-neutral-300 mb-1">
+                  Nome do Produto em Destaque
+                </label>
+                <input
+                  type="text"
+                  value={amazonProductTitle}
+                  onChange={(e) => setAmazonProductTitle(e.target.value)}
+                  placeholder="Ex: Jogo Grand Theft Auto VI (PS5 / Xbox Series) ou Console PlayStation 5"
+                  className="w-full px-3 py-2 rounded-xl bg-neutral-900 border border-neutral-700 text-white text-xs focus:outline-none focus:border-amber-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-neutral-300 mb-1">
+                  Link ou Termo de Busca na Amazon
+                </label>
+                <input
+                  type="text"
+                  value={amazonProductUrl}
+                  onChange={(e) => setAmazonProductUrl(e.target.value)}
+                  placeholder="Cole o link da Amazon (ex: https://www.amazon.com.br/dp/...) ou digite 'GTA 6'"
+                  className="w-full px-3 py-2 rounded-xl bg-neutral-900 border border-neutral-700 text-white font-mono text-xs focus:outline-none focus:border-amber-500"
+                />
+                <p className="text-[11px] text-neutral-500 mt-1">
+                  Sua tag de afiliado <code className="text-amber-400 font-mono">blogfilipem2-20</code> é aplicada automaticamente.
+                </p>
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-neutral-300 mb-1">
+                  Ou Código de Banner / iframe do SiteStripe da Amazon (Opcional)
+                </label>
+                <textarea
+                  rows={3}
+                  value={amazonAdCode}
+                  onChange={(e) => setAmazonAdCode(e.target.value)}
+                  placeholder="<iframe src='https://rcm-na.amazon-adsystem.com/...' ...></iframe> ou código de banner oficial da Amazon"
+                  className="w-full px-3 py-2 rounded-xl bg-neutral-900 border border-neutral-700 text-white font-mono text-xs focus:outline-none focus:border-amber-500"
+                />
+              </div>
             </div>
           </div>
 
@@ -1026,6 +1144,130 @@ export default function ArticleEditor({ initialData, articleId }: ArticleEditorP
                 className="px-4 py-1.5 rounded-xl bg-neutral-900 hover:bg-neutral-800 text-neutral-300 font-semibold"
               >
                 Fechar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Amazon Insertion Modal */}
+      {amazonModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
+          <div className="bg-[#12141c] border border-neutral-800 rounded-3xl w-full max-w-lg shadow-2xl overflow-hidden flex flex-col">
+            {/* Modal Header */}
+            <div className="p-5 border-b border-neutral-800 flex items-center justify-between bg-neutral-950/40">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400">
+                  <ShoppingBag className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold text-white">Inserir Anúncio / Produto da Amazon</h3>
+                  <p className="text-[11px] text-neutral-400">Adicione ao corpo da sua matéria</p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setAmazonModalOpen(false)}
+                className="p-1.5 rounded-xl hover:bg-neutral-800 text-neutral-400 hover:text-white transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Modal Tabs */}
+            <div className="flex border-b border-neutral-800 px-5 pt-3 gap-4">
+              <button
+                type="button"
+                onClick={() => setModalTab('card')}
+                className={`pb-2.5 text-xs font-bold transition-colors border-b-2 ${
+                  modalTab === 'card'
+                    ? 'border-amber-500 text-amber-400'
+                    : 'border-transparent text-neutral-400 hover:text-white'
+                }`}
+              >
+                Card de Produto (Recomendado)
+              </button>
+              <button
+                type="button"
+                onClick={() => setModalTab('code')}
+                className={`pb-2.5 text-xs font-bold transition-colors border-b-2 ${
+                  modalTab === 'code'
+                    ? 'border-amber-500 text-amber-400'
+                    : 'border-transparent text-neutral-400 hover:text-white'
+                }`}
+              >
+                Código / Banner SiteStripe (iframe)
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="p-5 space-y-4">
+              {modalTab === 'card' ? (
+                <>
+                  <div>
+                    <label className="block text-xs font-semibold text-neutral-300 mb-1">
+                      Nome do Produto (Ex: Grand Theft Auto VI para PlayStation 5)
+                    </label>
+                    <input
+                      type="text"
+                      value={modalProductTitle}
+                      onChange={(e) => setModalProductTitle(e.target.value)}
+                      placeholder="Ex: Jogo GTA 6 ou Console Sem Fio DualSense"
+                      className="w-full px-3 py-2 rounded-xl bg-neutral-900 border border-neutral-700 text-white text-xs focus:outline-none focus:border-amber-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-neutral-300 mb-1">
+                      Link ou Palavra de Busca na Amazon
+                    </label>
+                    <input
+                      type="text"
+                      value={modalProductUrl}
+                      onChange={(e) => setModalProductUrl(e.target.value)}
+                      placeholder="Cole o link do produto na Amazon ou termo de busca"
+                      className="w-full px-3 py-2 rounded-xl bg-neutral-900 border border-neutral-700 text-white font-mono text-xs focus:outline-none focus:border-amber-500"
+                    />
+                    <p className="text-[11px] text-neutral-500 mt-1">
+                      Tag oficial <code className="text-amber-400">blogfilipem2-20</code> adicionada automaticamente.
+                    </p>
+                  </div>
+                </>
+              ) : (
+                <div>
+                  <label className="block text-xs font-semibold text-neutral-300 mb-1">
+                    Código HTML / iframe do SiteStripe da Amazon
+                  </label>
+                  <textarea
+                    rows={5}
+                    value={modalAdCode}
+                    onChange={(e) => setModalAdCode(e.target.value)}
+                    placeholder="<iframe src='https://rcm-na.amazon-adsystem.com/...' ...></iframe>"
+                    className="w-full px-3 py-2 rounded-xl bg-neutral-900 border border-neutral-700 text-white font-mono text-xs focus:outline-none focus:border-amber-500"
+                  />
+                  <p className="text-[11px] text-neutral-500 mt-1">
+                    Cole o código gerado pela barra SiteStripe no topo da página de qualquer produto da Amazon.
+                  </p>
+                </div>
+              )}
+            </div>
+
+            {/* Modal Footer */}
+            <div className="p-4 border-t border-neutral-800 flex items-center justify-end gap-2 bg-neutral-950/40">
+              <button
+                type="button"
+                onClick={() => setAmazonModalOpen(false)}
+                className="px-4 py-2 rounded-xl bg-neutral-900 hover:bg-neutral-800 text-neutral-300 text-xs font-semibold"
+              >
+                Cancelar
+              </button>
+              <button
+                type="button"
+                onClick={handleInsertInlineAmazon}
+                className="px-5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-xs uppercase tracking-wider flex items-center gap-1.5 shadow-md shadow-amber-500/20"
+              >
+                <Plus className="w-3.5 h-3.5" />
+                <span>Inserir no Artigo</span>
               </button>
             </div>
           </div>
