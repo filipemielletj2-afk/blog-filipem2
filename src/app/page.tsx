@@ -41,6 +41,10 @@ export default async function HomePage() {
   // Fetch ad settings
   const adHeader = db.prepare('SELECT value FROM site_settings WHERE key = ?').get('ad_header_enabled') as any;
   const adHeaderCode = db.prepare('SELECT value FROM site_settings WHERE key = ?').get('ad_header_code') as any;
+  const adSidebar = db.prepare('SELECT value FROM site_settings WHERE key = ?').get('ad_sidebar_enabled') as any;
+  const adSidebarCode = db.prepare('SELECT value FROM site_settings WHERE key = ?').get('ad_sidebar_code') as any;
+  const adFooter = db.prepare('SELECT value FROM site_settings WHERE key = ?').get('ad_footer_enabled') as any;
+  const adFooterCode = db.prepare('SELECT value FROM site_settings WHERE key = ?').get('ad_footer_code') as any;
 
   return (
     <div className="space-y-12 sm:space-y-16 pb-16">
@@ -331,18 +335,23 @@ export default async function HomePage() {
             </div>
 
             {/* Sidebar Ad Widget */}
-            <div className="p-4 rounded-2xl bg-neutral-900 border border-neutral-800 text-center">
-              <span className="text-[10px] uppercase tracking-widest text-neutral-500 font-mono">
-                Espaço Patrocinado
-              </span>
-              <div className="mt-2 h-60 rounded-xl bg-[#0c0d10] border border-dashed border-neutral-800 flex flex-col items-center justify-center p-4 text-neutral-500">
-                <span className="text-xs font-semibold text-neutral-400">Banner Responsivo</span>
-                <span className="text-[11px] text-neutral-600 mt-1">Configurável no Painel Administrativo</span>
-              </div>
-            </div>
+            <AdBanner
+              slot="sidebar"
+              enabled={adSidebar?.value === '1'}
+              code={adSidebarCode?.value}
+            />
           </aside>
         </div>
       </section>
+
+      {/* Footer Ad Slot if enabled */}
+      <div className="max-w-7xl mx-auto px-4">
+        <AdBanner
+          slot="footer"
+          enabled={adFooter?.value === '1'}
+          code={adFooterCode?.value}
+        />
+      </div>
     </div>
   );
 }

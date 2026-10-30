@@ -135,6 +135,13 @@ export default function RootLayout({
             />
           </>
         )}
+        {settings.google_adsense_id && (
+          <script
+            async
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${settings.google_adsense_id.trim()}`}
+            crossOrigin="anonymous"
+          />
+        )}
         <link rel="manifest" href="/manifest.json" />
         <link rel="alternate" type="application/rss+xml" title="BLOG FILIPEM2 RSS Feed" href="/feed.xml" />
         <meta name="theme-color" content="#dc2626" />

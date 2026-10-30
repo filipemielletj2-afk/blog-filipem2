@@ -8,6 +8,7 @@ import { formatDateBR, formatDateTimeBR, formatYouTubeEmbedUrl } from '@/lib/uti
 import ArticleCard from '@/components/ArticleCard';
 import CommentsSection from './CommentsSection';
 import ShareButtons from './ShareButtons';
+import AdBanner from '@/components/AdBanner';
 import {
   Calendar,
   Clock,
@@ -227,6 +228,10 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     }
   } catch {}
 
+  // Fetch ad settings for article
+  const adArticle = db.prepare('SELECT value FROM site_settings WHERE key = ?').get('ad_article_enabled') as any;
+  const adArticleCode = db.prepare('SELECT value FROM site_settings WHERE key = ?').get('ad_article_code') as any;
+
   const articleUrl = `https://blogfilipem2.site/artigo/${article.slug}`;
 
   // Schema.org Structured Data (NewsArticle + BreadcrumbList)
@@ -389,6 +394,13 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
       <div className="article-content max-w-none">
         <div dangerouslySetInnerHTML={{ __html: formatArticleContent(article.content) }} />
       </div>
+
+      {/* In-Article Ad Slot if enabled */}
+      <AdBanner
+        slot="article"
+        enabled={adArticle?.value === '1'}
+        code={adArticleCode?.value}
+      />
 
       {/* Updated at notice if modified */}
       {article.updated_at && article.updated_at !== article.published_at && (
