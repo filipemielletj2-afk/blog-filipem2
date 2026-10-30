@@ -31,7 +31,7 @@ export function generateBackupSnapshot(db: DatabaseSync): BackupData {
     comments: db.prepare('SELECT * FROM comments').all(),
     site_settings: db.prepare('SELECT * FROM site_settings').all(),
     visual_builder_sections: db.prepare('SELECT * FROM visual_builder_sections').all(),
-    media: db.prepare('SELECT * FROM media').all()
+    media: db.prepare('SELECT id, filename, original_name, mime_type, size, url, alt_text, credit, created_at FROM media').all()
   };
 }
 
@@ -205,6 +205,35 @@ export function restoreBackupSnapshot(db: DatabaseSync, data: any): { articles: 
           s.sort_order || 0,
           s.is_active !== undefined ? (s.is_active ? 1 : 0) : 1,
           s.version_state || 'published'
+        );
+      }
+    }
+
+    // 8. Media metadata
+    if (Array.isArray(data.media) && data.media.length > 0) {
+      const insMedia = db.prepare(`
+        INSERT INTO media (id, filename, original_name, mime_type, size, url, alt_text, credit, created_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ON CONFLICT(id) DO UPDATE SET
+          filename = excluded.filename,
+          original_name = excluded.original_name,
+          mime_type = excluded.mime_type,
+          size = excluded.size,
+          url = excluded.url,
+          alt_text = excluded.alt_text,
+          credit = excluded.credit
+      `);
+      for (const m of data.media) {
+        insMedia.run(
+          m.id,
+          m.filename,
+          m.original_name,
+          m.mime_type,
+          m.size || 0,
+          m.url,
+          m.alt_text || null,
+          m.credit || null,
+          m.created_at || new Date().toISOString()
         );
       }
     }
