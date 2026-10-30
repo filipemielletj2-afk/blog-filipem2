@@ -297,6 +297,14 @@ function seedDefaults(db: DatabaseSync) {
       INSERT INTO site_settings (key, value) VALUES ('google_adsense_id', 'ca-pub-2978439169182708')
       ON CONFLICT(key) DO UPDATE SET value = excluded.value WHERE site_settings.value IS NULL OR site_settings.value = ''
     `).run();
+    db.prepare(`
+      INSERT INTO site_settings (key, value) VALUES ('amazon_affiliate_tag', 'blogfilipem2-20')
+      ON CONFLICT(key) DO UPDATE SET value = excluded.value WHERE site_settings.value IS NULL OR site_settings.value = ''
+    `).run();
+    db.prepare(`
+      INSERT INTO site_settings (key, value) VALUES ('amazon_box_enabled', '1')
+      ON CONFLICT(key) DO UPDATE SET value = excluded.value WHERE site_settings.value IS NULL OR site_settings.value = ''
+    `).run();
   }
 
   // Check visual builder sections
@@ -756,7 +764,9 @@ function seedSettings(db: DatabaseSync) {
     google_analytics_id: '',
     google_search_console_tag: '',
     google_adsense_id: 'ca-pub-2978439169182708',
-    ads_txt: 'google.com, pub-2978439169182708, DIRECT, f08c47fec0942fa0'
+    ads_txt: 'google.com, pub-2978439169182708, DIRECT, f08c47fec0942fa0',
+    amazon_affiliate_tag: 'blogfilipem2-20',
+    amazon_box_enabled: '1'
   };
 
   const insertSetting = db.prepare('INSERT INTO site_settings (key, value) VALUES (?, ?)');

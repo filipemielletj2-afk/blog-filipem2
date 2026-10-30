@@ -15,7 +15,10 @@ import {
   HelpCircle,
   ShoppingBag,
   Globe,
-  Flame
+  Flame,
+  Copy,
+  Check,
+  Tag
 } from 'lucide-react';
 
 export default function AdminMonetizacaoPage() {
@@ -26,6 +29,12 @@ export default function AdminMonetizacaoPage() {
   // Google AdSense auto ads state
   const [googleAdsenseId, setGoogleAdsenseId] = useState('');
   const [adsTxt, setAdsTxt] = useState('');
+
+  // Amazon Associates state
+  const [amazonAffiliateTag, setAmazonAffiliateTag] = useState('blogfilipem2-20');
+  const [amazonBoxEnabled, setAmazonBoxEnabled] = useState(true);
+  const [amazonQuery, setAmazonQuery] = useState('');
+  const [copiedLink, setCopiedLink] = useState(false);
 
   // Ad slot states
   const [adHeaderEnabled, setAdHeaderEnabled] = useState(false);
@@ -51,6 +60,8 @@ export default function AdminMonetizacaoPage() {
       const data = await res.json();
       setGoogleAdsenseId(data.google_adsense_id || '');
       setAdsTxt(data.ads_txt || '');
+      setAmazonAffiliateTag(data.amazon_affiliate_tag || 'blogfilipem2-20');
+      setAmazonBoxEnabled(data.amazon_box_enabled !== '0');
       setAdHeaderEnabled(data.ad_header_enabled === '1');
       setAdHeaderCode(data.ad_header_code || '');
       setAdSidebarEnabled(data.ad_sidebar_enabled === '1');
@@ -80,6 +91,8 @@ export default function AdminMonetizacaoPage() {
     const payload = {
       google_adsense_id: cleanedAdsense,
       ads_txt: adsTxt,
+      amazon_affiliate_tag: amazonAffiliateTag.trim() || 'blogfilipem2-20',
+      amazon_box_enabled: amazonBoxEnabled ? '1' : '0',
       ad_header_enabled: adHeaderEnabled ? '1' : '0',
       ad_header_code: adHeaderCode,
       ad_sidebar_enabled: adSidebarEnabled ? '1' : '0',
@@ -99,13 +112,35 @@ export default function AdminMonetizacaoPage() {
 
       if (!res.ok) throw new Error('Erro ao salvar configurações de monetização.');
 
-      setNotification({ type: 'success', text: 'Monetização, Google AdSense e banners atualizados com sucesso!' });
+      setNotification({ type: 'success', text: 'Monetização, Amazon Afiliados e Google AdSense atualizados com sucesso!' });
       setTimeout(() => setNotification(null), 4000);
     } catch (err: any) {
       setNotification({ type: 'error', text: err.message });
     } finally {
       setSaving(false);
     }
+  };
+
+  // Generate Amazon affiliate link on the fly
+  const generateAmazonLink = (input: string) => {
+    const tag = amazonAffiliateTag.trim() || 'blogfilipem2-20';
+    if (!input.trim()) {
+      return `https://www.amazon.com.br/?tag=${tag}`;
+    }
+    const clean = input.trim();
+    if (clean.startsWith('http://') || clean.startsWith('https://')) {
+      const separator = clean.includes('?') ? '&' : '?';
+      return `${clean}${separator}tag=${tag}`;
+    }
+    return `https://www.amazon.com.br/s?k=${encodeURIComponent(clean)}&tag=${tag}`;
+  };
+
+  const generatedLink = generateAmazonLink(amazonQuery);
+
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(generatedLink);
+    setCopiedLink(true);
+    setTimeout(() => setCopiedLink(false), 2500);
   };
 
   if (loading) {
@@ -127,7 +162,7 @@ export default function AdminMonetizacaoPage() {
             <span>Monetização &amp; Publicidade</span>
           </h1>
           <p className="text-xs sm:text-sm text-neutral-400 mt-1">
-            Ganhe dinheiro com seu blog através do Google AdSense, programas de afiliados e banners patrocinados.
+            Configure Google AdSense, Amazon Associados e banners patrocinados para gerar receita com seu público.
           </p>
         </div>
 
@@ -154,11 +189,103 @@ export default function AdminMonetizacaoPage() {
         </div>
       )}
 
-      {/* Seção 1: Google AdSense Integrado */}
+      {/* Seção 1: Amazon Associados (Oficial) */}
+      <div className="p-6 rounded-2xl bg-gradient-to-br from-[#12141c] via-[#161a24] to-[#12141c] border border-amber-500/40 space-y-5 shadow-2xl relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/5 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-neutral-800">
+          <div className="flex items-center gap-3">
+            <div className="w-11 h-11 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0">
+              <ShoppingBag className="w-6 h-6" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h2 className="text-base font-bold text-white">Amazon Associados (Brasil)</h2>
+                <span className="text-[10px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-mono font-bold">
+                  Ativo no Site
+                </span>
+              </div>
+              <p className="text-xs text-neutral-400 mt-0.5">
+                Ganhe comissões de até 15% por cada produto, jogo ou console comprado por recomendação do seu blog.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <span className="text-xs text-neutral-300 font-semibold">Box nos Artigos:</span>
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                checked={amazonBoxEnabled}
+                onChange={(e) => setAmazonBoxEnabled(e.target.checked)}
+                className="sr-only peer"
+              />
+              <div className="w-10 h-5 bg-neutral-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-amber-500"></div>
+            </label>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Tracking ID Configuration */}
+          <div className="space-y-3">
+            <div>
+              <label className="block text-xs font-bold text-neutral-200 mb-1 flex items-center gap-1.5">
+                <Tag className="w-3.5 h-3.5 text-amber-400" />
+                <span>Seu ID de Associado Amazon (Tracking Tag)</span>
+              </label>
+              <input
+                type="text"
+                value={amazonAffiliateTag}
+                onChange={(e) => setAmazonAffiliateTag(e.target.value)}
+                placeholder="Ex: blogfilipem2-20"
+                className="w-full px-4 py-2.5 rounded-xl bg-neutral-900 border border-neutral-700 text-amber-300 font-mono text-xs focus:outline-none focus:border-amber-500 transition-colors"
+              />
+            </div>
+            <div className="p-3.5 rounded-xl bg-amber-950/30 border border-amber-900/50 text-[11px] text-amber-300/90 leading-relaxed">
+              ✨ <strong>Automação Ativa:</strong> Qualquer link da Amazon colocado dentro das suas matérias receberá automaticamente sua tag <code className="text-white font-mono bg-black/40 px-1 py-0.5 rounded">tag={amazonAffiliateTag}</code>, garantindo que você nunca perca uma comissão!
+            </div>
+          </div>
+
+          {/* Gerador Instantâneo de Link */}
+          <div className="space-y-3">
+            <label className="block text-xs font-bold text-neutral-200 flex items-center gap-1.5">
+              <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+              <span>Gerador Rápido de Link Afiliado</span>
+            </label>
+            <div className="space-y-2">
+              <input
+                type="text"
+                value={amazonQuery}
+                onChange={(e) => setAmazonQuery(e.target.value)}
+                placeholder="Digite o nome do produto ou cole um link (Ex: PlayStation 5)"
+                className="w-full px-3 py-2 rounded-xl bg-neutral-900 border border-neutral-700 text-white text-xs focus:outline-none focus:border-amber-500 transition-colors"
+              />
+              <div className="flex items-center gap-2">
+                <input
+                  type="text"
+                  readOnly
+                  value={generatedLink}
+                  className="flex-1 px-3 py-2 rounded-xl bg-black/60 border border-neutral-800 text-[11px] text-neutral-400 font-mono select-all"
+                />
+                <button
+                  type="button"
+                  onClick={copyToClipboard}
+                  className="px-3 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-bold text-xs flex items-center gap-1.5 shrink-0 transition-all shadow-md"
+                >
+                  {copiedLink ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                  <span>{copiedLink ? 'Copiado!' : 'Copiar'}</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Seção 2: Google AdSense Integrado */}
       <div className="p-6 rounded-2xl bg-[#12141c] border border-neutral-800 space-y-5 shadow-xl">
         <div className="flex items-center justify-between pb-3 border-b border-neutral-800">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
+            <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400">
               <Globe className="w-5 h-5" />
             </div>
             <div>
@@ -177,9 +304,9 @@ export default function AdminMonetizacaoPage() {
             href="https://adsense.google.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-xs text-amber-400 hover:text-amber-300 flex items-center gap-1 font-semibold"
+            className="text-xs text-blue-400 hover:text-blue-300 flex items-center gap-1 font-semibold"
           >
-            <span>Criar Conta AdSense</span>
+            <span>Painel AdSense</span>
             <ExternalLink className="w-3.5 h-3.5" />
           </a>
         </div>
@@ -194,12 +321,12 @@ export default function AdminMonetizacaoPage() {
                 type="text"
                 value={googleAdsenseId}
                 onChange={(e) => setGoogleAdsenseId(e.target.value)}
-                placeholder="Ex: ca-pub-1234567890123456"
-                className="w-full px-4 py-2.5 rounded-xl bg-neutral-900 border border-neutral-700 text-white font-mono text-xs focus:outline-none focus:border-amber-500 transition-colors"
+                placeholder="Ex: ca-pub-2978439169182708"
+                className="w-full px-4 py-2.5 rounded-xl bg-neutral-900 border border-neutral-700 text-white font-mono text-xs focus:outline-none focus:border-blue-500 transition-colors"
               />
             </div>
             <p className="text-[11px] text-neutral-400 mt-1.5 leading-relaxed">
-              Encontrado no painel do AdSense em <strong>Conta &gt; Configurações &gt; Informações da conta</strong>. Quando preenchido, o script oficial é injetado automaticamente em todas as páginas do site.
+              Seu ID oficial atual: <code className="text-blue-400 font-mono font-bold">ca-pub-2978439169182708</code>. O script oficial do Google já está injetado no cabeçalho de todas as páginas.
             </p>
           </div>
 
@@ -212,7 +339,7 @@ export default function AdminMonetizacaoPage() {
                 href="/ads.txt"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[11px] text-neutral-400 hover:text-white flex items-center gap-1"
+                className="text-[11px] text-emerald-400 hover:text-emerald-300 flex items-center gap-1 font-semibold"
               >
                 <span>Ver /ads.txt online</span>
                 <ExternalLink className="w-3 h-3" />
@@ -222,17 +349,17 @@ export default function AdminMonetizacaoPage() {
               rows={3}
               value={adsTxt}
               onChange={(e) => setAdsTxt(e.target.value)}
-              placeholder="google.com, pub-1234567890123456, DIRECT, f08c47fec0942fa0"
-              className="w-full px-3 py-2 rounded-xl bg-neutral-900 border border-neutral-700 text-white font-mono text-xs focus:outline-none focus:border-amber-500 transition-colors"
+              placeholder="google.com, pub-2978439169182708, DIRECT, f08c47fec0942fa0"
+              className="w-full px-3 py-2 rounded-xl bg-neutral-900 border border-neutral-700 text-white font-mono text-xs focus:outline-none focus:border-blue-500 transition-colors"
             />
             <p className="text-[11px] text-neutral-500 mt-1">
-              Cole a linha fornecida pelo Google AdSense ou pela sua rede publicitária. Fica disponível publicamente em <code className="text-amber-400">https://blogfilipem2.site/ads.txt</code>.
+              Linha ativa em <code className="text-emerald-400">https://blogfilipem2.site/ads.txt</code> pronta para verificação pelo Google.
             </p>
           </div>
         </div>
       </div>
 
-      {/* Seção 2: Banners Manuais (HTML / Imagens / Scripts) */}
+      {/* Seção 3: Banners Manuais (HTML / Imagens / Scripts) */}
       <div className="space-y-4">
         <div>
           <h2 className="text-lg font-bold text-white flex items-center gap-2">
@@ -375,33 +502,17 @@ export default function AdminMonetizacaoPage() {
         </div>
       </div>
 
-      {/* Seção 3: Programas de Afiliados (Dinheiro Rápido) */}
-      <div className="p-6 rounded-2xl bg-gradient-to-br from-[#12141c] to-[#181d27] border border-neutral-800 space-y-4">
+      {/* Seção 4: Outros Programas de Afiliados */}
+      <div className="p-6 rounded-2xl bg-[#12141c] border border-neutral-800 space-y-4">
         <h3 className="text-base font-bold text-white flex items-center gap-2">
-          <ShoppingBag className="w-5 h-5 text-emerald-400" />
-          <span>Ganhe Dinheiro com Programas de Afiliados (Sem depender do AdSense)</span>
+          <Sparkles className="w-5 h-5 text-emerald-400" />
+          <span>Outros Programas de Afiliados Recomendados</span>
         </h3>
         <p className="text-xs text-neutral-300 leading-relaxed">
-          Você pode começar a faturar hoje mesmo recomendando produtos nos seus artigos sobre Games, Séries e Filmes:
+          Você também pode cadastrar parcerias diretas nestas plataformas:
         </p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
-          <div className="p-4 rounded-xl bg-neutral-900/80 border border-neutral-800 space-y-2">
-            <span className="text-xs font-black text-amber-400 uppercase tracking-wider block">Amazon Associados</span>
-            <p className="text-[11px] text-neutral-400">
-              Indique consoles (PS5, Switch), jogos físicos, fones de ouvido, mangás e colecionáveis. Ganhe até 15% de comissão por venda.
-            </p>
-            <a
-              href="https://associados.amazon.com.br"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-[11px] font-bold text-amber-400 hover:text-amber-300"
-            >
-              <span>Cadastrar na Amazon</span>
-              <ExternalLink className="w-3 h-3" />
-            </a>
-          </div>
-
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
           <div className="p-4 rounded-xl bg-neutral-900/80 border border-neutral-800 space-y-2">
             <span className="text-xs font-black text-orange-400 uppercase tracking-wider block">Shopee / Mercado Livre</span>
             <p className="text-[11px] text-neutral-400">

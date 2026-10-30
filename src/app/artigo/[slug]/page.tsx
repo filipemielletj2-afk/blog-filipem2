@@ -17,7 +17,8 @@ import {
   User,
   ExternalLink,
   ShieldCheck,
-  BookmarkCheck
+  BookmarkCheck,
+  ShoppingBag
 } from 'lucide-react';
 
 export const revalidate = 0;
@@ -32,7 +33,20 @@ function isYouTubeUrl(str: string): boolean {
   return /(?:youtube\.com\/(?:watch\?|shorts\/|live\/|embed\/)|youtu\.be\/)/i.test(str);
 }
 
-function formatArticleContent(content?: string): string {
+function enrichAmazonLinks(html: string, tag: string = 'blogfilipem2-20'): string {
+  if (!tag) return html;
+  return html.replace(/https?:\/\/(?:www\.)?amazon\.com\.br\/[^\s"'<>]+/gi, (url) => {
+    try {
+      if (url.includes('tag=')) return url;
+      const separator = url.includes('?') ? '&' : '?';
+      return `${url}${separator}tag=${encodeURIComponent(tag)}`;
+    } catch {
+      return url;
+    }
+  });
+}
+
+function formatArticleContent(content?: string, amazonTag?: string): string {
   if (!content) return '';
 
   let processed = content;
@@ -69,7 +83,7 @@ function formatArticleContent(content?: string): string {
       return match;
     });
 
-    return processed;
+    return enrichAmazonLinks(processed, amazonTag);
   }
 
   // 3. For natural text / markdown articles:
@@ -117,7 +131,7 @@ function formatArticleContent(content?: string): string {
   }
 
   flushParagraph();
-  return blocks.join('\n');
+  return enrichAmazonLinks(blocks.join('\n'), amazonTag);
 }
 
 interface ArticlePageProps {
@@ -231,6 +245,12 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   // Fetch ad settings for article
   const adArticle = db.prepare('SELECT value FROM site_settings WHERE key = ?').get('ad_article_enabled') as any;
   const adArticleCode = db.prepare('SELECT value FROM site_settings WHERE key = ?').get('ad_article_code') as any;
+
+  // Fetch Amazon affiliate settings
+  const amazonTagRow = db.prepare('SELECT value FROM site_settings WHERE key = ?').get('amazon_affiliate_tag') as any;
+  const amazonBoxRow = db.prepare('SELECT value FROM site_settings WHERE key = ?').get('amazon_box_enabled') as any;
+  const amazonAffiliateTag = amazonTagRow?.value || 'blogfilipem2-20';
+  const amazonBoxEnabled = amazonBoxRow?.value !== '0';
 
   const articleUrl = `https://blogfilipem2.site/artigo/${article.slug}`;
 
@@ -392,8 +412,40 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
       {/* Main Content Body */}
       <div className="article-content max-w-none">
-        <div dangerouslySetInnerHTML={{ __html: formatArticleContent(article.content) }} />
+        <div dangerouslySetInnerHTML={{ __html: formatArticleContent(article.content, amazonAffiliateTag) }} />
       </div>
+
+      {/* Amazon Associates Recommended Box */}
+      {amazonBoxEnabled && (
+        <div className="my-8 p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-[#11131a] via-[#161a24] to-[#11131a] border border-amber-500/30 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-3.5">
+            <div className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0">
+              <ShoppingBag className="w-6 h-6" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold text-amber-400 uppercase tracking-wider">Parceiro Oficial Amazon</span>
+                <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-mono">Ofertas</span>
+              </div>
+              <h4 className="text-sm sm:text-base font-bold text-white mt-0.5">
+                Gostou da leitura? Encontre produtos, jogos e colecionáveis na Amazon
+              </h4>
+              <p className="text-xs text-neutral-400 mt-0.5">
+                Compre com entrega rápida Prime e apoie a produção independente do BLOG FILIPEM2.
+              </p>
+            </div>
+          </div>
+          <a
+            href={`https://www.amazon.com.br/?tag=${amazonAffiliateTag}`}
+            target="_blank"
+            rel="sponsored noopener noreferrer"
+            className="w-full sm:w-auto px-5 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shrink-0 transition-all shadow-lg shadow-amber-500/20"
+          >
+            <span>Ver Ofertas na Amazon</span>
+            <ExternalLink className="w-4 h-4" />
+          </a>
+        </div>
+      )}
 
       {/* In-Article Ad Slot if enabled */}
       <AdBanner
