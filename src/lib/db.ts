@@ -187,9 +187,14 @@ function initDatabase(db: DatabaseSync) {
       url TEXT NOT NULL,
       alt_text TEXT,
       credit TEXT,
+      data_base64 TEXT,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     );
   `);
+
+  try {
+    db.exec(`ALTER TABLE media ADD COLUMN data_base64 TEXT;`);
+  } catch {}
 
   // 11. Audit Logs
   db.exec(`

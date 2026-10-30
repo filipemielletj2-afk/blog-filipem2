@@ -21,7 +21,11 @@ import {
   Italic,
   Quote,
   List,
-  ExternalLink
+  ExternalLink,
+  Upload,
+  X,
+  Check,
+  FolderOpen
 } from 'lucide-react';
 import { slugify } from '@/lib/utils';
 
@@ -73,6 +77,15 @@ export default function ArticleEditor({ initialData, articleId }: ArticleEditorP
   const [loading, setLoading] = useState(false);
   const [notification, setNotification] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
+  // Media & File Upload state
+  const [imageError, setImageError] = useState(false);
+  const [uploadingCover, setUploadingCover] = useState(false);
+  const [mediaModalOpen, setMediaModalOpen] = useState(false);
+  const [mediaItems, setMediaItems] = useState<any[]>([]);
+  const [loadingMedia, setLoadingMedia] = useState(false);
+  const [uploadingInModal, setUploadingInModal] = useState(false);
+  const [modalMode, setModalMode] = useState<'cover' | 'content'>('cover');
+
   useEffect(() => {
     fetch('/api/categories')
       .then((res) => res.json())
@@ -83,6 +96,148 @@ export default function ArticleEditor({ initialData, articleId }: ArticleEditorP
         }
       });
   }, [initialData]);
+
+  const loadMedia = async () => {
+    setLoadingMedia(true);
+    try {
+      const res = await fetch('/api/media');
+      const data = await res.json();
+      setMediaItems(data || []);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoadingMedia(false);
+    }
+  };
+
+  const openMediaModal = (mode: 'cover' | 'content') => {
+    setModalMode(mode);
+    setMediaModalOpen(true);
+    loadMedia();
+  };
+
+  const handleCoverFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploadingCover(true);
+    setNotification(null);
+    setImageError(false);
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('alt_text', coverCaption || title || file.name);
+      formData.append('credit', coverSource || '');
+
+      const res = await fetch('/api/media', {
+        method: 'POST',
+        body: formData
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Erro ao enviar imagem.');
+
+      setCoverImage(data.media.url);
+      setNotification({
+        type: 'success',
+        text: `Arquivo "${file.name}" enviado e definido como Imagem de Capa com sucesso!`
+      });
+    } catch (err: any) {
+      setNotification({ type: 'error', text: err.message || 'Falha no envio do arquivo.' });
+    } finally {
+      setUploadingCover(false);
+      e.target.value = '';
+    }
+  };
+
+  const handleModalFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploadingInModal(true);
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('alt_text', file.name);
+
+      const res = await fetch('/api/media', {
+        method: 'POST',
+        body: formData
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Erro ao enviar arquivo.');
+
+      loadMedia();
+
+      if (modalMode === 'content') {
+        insertFormatting(
+          `\n<figure class="my-6">\n  <img src="${data.media.url}" alt="${file.name}" class="rounded-2xl w-full shadow-lg" />\n  <figcaption class="text-xs text-neutral-400 text-center mt-2">${file.name}</figcaption>\n</figure>\n`
+        );
+        setMediaModalOpen(false);
+        setNotification({ type: 'success', text: `Imagem "${file.name}" inserida no corpo da matéria!` });
+      } else {
+        setCoverImage(data.media.url);
+        setImageError(false);
+        setMediaModalOpen(false);
+        setNotification({ type: 'success', text: `Imagem "${file.name}" definida como Capa com sucesso!` });
+      }
+    } catch (err: any) {
+      alert(err.message || 'Erro ao enviar arquivo.');
+    } finally {
+      setUploadingInModal(false);
+      e.target.value = '';
+    }
+  };
+
+  const handleSelectMedia = (item: any) => {
+    if (modalMode === 'content') {
+      insertFormatting(
+        `\n<figure class="my-6">\n  <img src="${item.url}" alt="${item.alt_text || item.original_name || 'Imagem'}" class="rounded-2xl w-full shadow-lg" />\n  ${item.alt_text ? `<figcaption class="text-xs text-neutral-400 text-center mt-2">${item.alt_text}</figcaption>` : ''}\n</figure>\n`
+      );
+      setMediaModalOpen(false);
+      setNotification({ type: 'success', text: `Imagem inserida no corpo da matéria!` });
+    } else {
+      setCoverImage(item.url);
+      setImageError(false);
+      if (item.alt_text && !coverCaption) setCoverCaption(item.alt_text);
+      if (item.credit && !coverSource) setCoverSource(item.credit);
+      setMediaModalOpen(false);
+      setNotification({ type: 'success', text: `Imagem definida como Capa com sucesso!` });
+    }
+  };
+
+  const handleContentPaste = async (e: React.ClipboardEvent<HTMLTextAreaElement>) => {
+    const files = e.clipboardData?.files;
+    if (files && files.length > 0) {
+      const file = files[0];
+      if (file.type.startsWith('image/')) {
+        e.preventDefault();
+        setNotification({ type: 'success', text: 'Enviando imagem colada da área de transferência...' });
+
+        try {
+          const formData = new FormData();
+          formData.append('file', file);
+          formData.append('alt_text', 'Imagem anexada');
+
+          const res = await fetch('/api/media', {
+            method: 'POST',
+            body: formData
+          });
+          const data = await res.json();
+          if (res.ok && data.media?.url) {
+            insertFormatting(
+              `\n<figure class="my-6">\n  <img src="${data.media.url}" alt="Imagem" class="rounded-2xl w-full shadow-lg" />\n</figure>\n`
+            );
+            setNotification({ type: 'success', text: 'Imagem colada enviada e inserida no texto com sucesso!' });
+          }
+        } catch (err) {
+          console.error(err);
+        }
+      }
+    }
+  };
 
   const handleTitleChange = (val: string) => {
     setTitle(val);
@@ -374,6 +529,15 @@ export default function ArticleEditor({ initialData, articleId }: ArticleEditorP
                 >
                   <Video className="w-3.5 h-3.5" />
                 </button>
+                <button
+                  type="button"
+                  onClick={() => openMediaModal('content')}
+                  className="px-2 py-1 hover:bg-neutral-800 rounded text-xs text-red-400 hover:text-red-300 font-bold flex items-center gap-1 border border-red-900/60"
+                  title="Inserir Imagem / Arquivo no Texto"
+                >
+                  <ImageIcon className="w-3.5 h-3.5" />
+                  <span>+ Imagem</span>
+                </button>
               </div>
             </div>
 
@@ -382,7 +546,8 @@ export default function ArticleEditor({ initialData, articleId }: ArticleEditorP
               rows={16}
               value={content}
               onChange={(e) => setContent(e.target.value)}
-              placeholder="Escreva sua matéria jornalística aqui... Pode escrever naturalmente dando Enter entre parágrafos, que o portal organizará o espaçamento perfeitamente!"
+              onPaste={handleContentPaste}
+              placeholder="Escreva sua matéria jornalística aqui... Pode escrever naturalmente dando Enter entre parágrafos, que o portal organizará o espaçamento perfeitamente! Você também pode colar imagens (Ctrl+V) ou usar o botão '+ Imagem' acima."
               className="w-full px-4 py-3 rounded-xl bg-neutral-900 border border-neutral-700 text-white font-mono text-sm focus:outline-none focus:border-red-500 leading-relaxed whitespace-pre-wrap"
             />
             <span className="text-[11px] text-neutral-400 mt-1.5 block">
@@ -556,26 +721,122 @@ export default function ArticleEditor({ initialData, articleId }: ArticleEditorP
           </div>
 
           {/* Cover Image Box */}
-          <div className="p-5 rounded-2xl bg-[#12141c] border border-neutral-800 space-y-3">
-            <span className="text-xs font-bold uppercase tracking-wider text-white block pb-2 border-b border-neutral-800">
-              Imagem de Capa
-            </span>
+          <div className="p-5 rounded-2xl bg-[#12141c] border border-neutral-800 space-y-4">
+            <div className="flex items-center justify-between pb-2 border-b border-neutral-800">
+              <span className="text-xs font-bold uppercase tracking-wider text-white">
+                Imagem de Capa
+              </span>
+              {coverImage && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setCoverImage('');
+                    setImageError(false);
+                  }}
+                  className="text-[11px] text-neutral-400 hover:text-red-400 flex items-center gap-1 transition-colors"
+                  title="Remover Capa"
+                >
+                  <Trash2 className="w-3 h-3" />
+                  <span>Remover Capa</span>
+                </button>
+              )}
+            </div>
 
+            {/* Image Preview */}
             {coverImage && (
-              <div className="rounded-xl overflow-hidden border border-neutral-800 bg-black aspect-video relative">
-                <img src={coverImage} alt="Capa" className="w-full h-full object-cover" />
+              <div className="rounded-xl overflow-hidden border border-neutral-800 bg-black aspect-video relative group">
+                <img
+                  src={coverImage}
+                  alt="Capa"
+                  className="w-full h-full object-cover"
+                  onError={() => setImageError(true)}
+                  onLoad={() => setImageError(false)}
+                />
+                {imageError && (
+                  <div className="absolute inset-0 bg-neutral-950/95 flex flex-col items-center justify-center p-4 text-center">
+                    <AlertCircle className="w-7 h-7 text-red-500 mb-1.5" />
+                    <span className="text-xs font-bold text-white">Não foi possível carregar a imagem</span>
+                    <p className="text-[11px] text-neutral-400 mt-1 max-w-xs leading-relaxed">
+                      {coverImage.startsWith('blob:')
+                        ? 'Links "blob:" são temporários da memória do navegador e não funcionam na internet. Por favor, envie o arquivo diretamente do seu computador no botão abaixo!'
+                        : 'Verifique se o link está acessível ou selecione um arquivo do computador.'}
+                    </p>
+                  </div>
+                )}
               </div>
             )}
 
+            {/* Direct File Upload from Computer */}
             <div>
-              <label className="block text-xs font-semibold text-neutral-300 mb-1">URL da Imagem</label>
+              <label className="block text-xs font-semibold text-neutral-300 mb-1.5">
+                Enviar Arquivo do Computador
+              </label>
+              <label className="flex flex-col items-center justify-center p-4 border-2 border-dashed border-neutral-700 hover:border-red-500 rounded-xl cursor-pointer bg-neutral-900/60 hover:bg-neutral-900 transition-all text-center group">
+                {uploadingCover ? (
+                  <div className="flex items-center gap-2 py-2 text-neutral-300 text-xs font-medium">
+                    <Loader2 className="w-4 h-4 animate-spin text-red-500" />
+                    <span>Enviando arquivo para o site...</span>
+                  </div>
+                ) : (
+                  <>
+                    <Upload className="w-5 h-5 text-red-500 mb-1.5 group-hover:scale-110 transition-transform" />
+                    <span className="text-xs font-bold text-white">Escolher Arquivo do Computador</span>
+                    <span className="text-[11px] text-neutral-400 mt-0.5">JPG, PNG, WebP, GIF ou AVIF (até 10MB)</span>
+                  </>
+                )}
+                <input
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp,image/gif,image/svg+xml,image/avif"
+                  disabled={uploadingCover}
+                  onChange={handleCoverFileUpload}
+                  className="hidden"
+                />
+              </label>
+            </div>
+
+            {/* Media Library Selector Button */}
+            <div>
+              <button
+                type="button"
+                onClick={() => openMediaModal('cover')}
+                className="w-full py-2.5 px-3 rounded-xl bg-neutral-900 hover:bg-neutral-800 border border-neutral-700 hover:border-neutral-600 text-neutral-200 text-xs font-bold flex items-center justify-center gap-2 transition-colors shadow-sm"
+              >
+                <FolderOpen className="w-4 h-4 text-blue-400" />
+                <span>Escolher da Biblioteca de Mídia</span>
+              </button>
+            </div>
+
+            {/* External URL Option */}
+            <div className="pt-2 border-t border-neutral-800/80">
+              <label className="block text-xs font-semibold text-neutral-300 mb-1">
+                Ou cole uma URL / Link da Imagem
+              </label>
               <input
                 type="text"
                 value={coverImage}
-                onChange={(e) => setCoverImage(e.target.value)}
+                onChange={(e) => {
+                  setCoverImage(e.target.value);
+                  setImageError(false);
+                }}
                 placeholder="https://images.unsplash.com/... ou /uploads/..."
-                className="w-full px-3 py-2 rounded-xl bg-neutral-900 border border-neutral-700 text-white font-mono text-xs focus:outline-none focus:border-red-500"
+                className={`w-full px-3 py-2 rounded-xl bg-neutral-900 border text-white font-mono text-xs focus:outline-none ${
+                  coverImage.startsWith('blob:')
+                    ? 'border-red-500 text-red-400'
+                    : 'border-neutral-700 focus:border-red-500'
+                }`}
               />
+              {coverImage.startsWith('blob:') && (
+                <div className="mt-2 p-2.5 rounded-xl bg-red-950/80 border border-red-800 text-[11px] text-red-300 leading-relaxed space-y-1">
+                  <div className="font-bold flex items-center gap-1.5 text-red-200">
+                    <AlertCircle className="w-3.5 h-3.5 shrink-0 text-red-400" />
+                    <span>Atenção: Link do tipo "blob:" detectado!</span>
+                  </div>
+                  <p>
+                    Esse link temporário só existe na memória do seu navegador e ficará quebrado para os leitores. 
+                    <strong> Salve a foto no seu computador e use o botão acima &quot;Escolher Arquivo do Computador&quot;!</strong>
+                  </p>
+                </div>
+              )}
             </div>
 
             <div>
@@ -645,6 +906,118 @@ export default function ArticleEditor({ initialData, articleId }: ArticleEditorP
           </div>
         </div>
       </div>
+
+      {/* Media Selection Modal */}
+      {mediaModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-[#12141c] border border-neutral-800 rounded-3xl w-full max-w-3xl max-h-[85vh] flex flex-col shadow-2xl overflow-hidden">
+            {/* Modal Header */}
+            <div className="p-5 border-b border-neutral-800 flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-xl bg-red-600/20 text-red-500 flex items-center justify-center">
+                  <ImageIcon className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-white">
+                    {modalMode === 'cover' ? 'Selecionar Imagem de Capa' : 'Inserir Imagem no Conteúdo'}
+                  </h3>
+                  <p className="text-xs text-neutral-400">
+                    Selecione uma imagem já enviada ou faça o upload de um novo arquivo do seu computador.
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setMediaModalOpen(false)}
+                className="p-2 rounded-xl text-neutral-400 hover:text-white bg-neutral-900 border border-neutral-800 hover:border-neutral-700"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Modal Upload Bar */}
+            <div className="p-4 bg-neutral-950/60 border-b border-neutral-800 flex items-center justify-between gap-3">
+              <span className="text-xs text-neutral-300 font-medium">
+                Deseja enviar outra imagem agora?
+              </span>
+              <label className="py-2 px-4 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-xs flex items-center gap-2 cursor-pointer shadow-md transition-all">
+                {uploadingInModal ? (
+                  <>
+                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                    <span>Enviando arquivo...</span>
+                  </>
+                ) : (
+                  <>
+                    <Upload className="w-3.5 h-3.5" />
+                    <span>Upload de Novo Arquivo</span>
+                  </>
+                )}
+                <input
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp,image/gif,image/svg+xml,image/avif"
+                  disabled={uploadingInModal}
+                  onChange={handleModalFileUpload}
+                  className="hidden"
+                />
+              </label>
+            </div>
+
+            {/* Modal Media Grid */}
+            <div className="flex-1 overflow-y-auto p-5">
+              {loadingMedia ? (
+                <div className="py-12 flex flex-col items-center justify-center text-neutral-400 text-xs gap-2">
+                  <Loader2 className="w-6 h-6 animate-spin text-red-500" />
+                  <span>Carregando biblioteca de mídia...</span>
+                </div>
+              ) : mediaItems.length === 0 ? (
+                <div className="py-12 flex flex-col items-center justify-center text-center p-6 rounded-2xl border border-dashed border-neutral-800">
+                  <ImageIcon className="w-10 h-10 text-neutral-600 mb-2" />
+                  <span className="text-xs font-bold text-white">Nenhuma imagem na biblioteca ainda</span>
+                  <p className="text-[11px] text-neutral-500 mt-1 max-w-xs">
+                    Use o botão &quot;Upload de Novo Arquivo&quot; acima para enviar suas fotos e ilustrações!
+                  </p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                  {mediaItems.map((item) => (
+                    <div
+                      key={item.id}
+                      onClick={() => handleSelectMedia(item)}
+                      className="group relative rounded-xl overflow-hidden border border-neutral-800 hover:border-red-500 bg-neutral-900 cursor-pointer transition-all aspect-video flex items-center justify-center"
+                    >
+                      <img
+                        src={item.url}
+                        alt={item.alt_text || item.original_name}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-2">
+                        <span className="text-[10px] font-bold text-white truncate block">
+                          {item.original_name || 'Imagem'}
+                        </span>
+                        <span className="text-[9px] text-red-400 font-semibold mt-0.5">
+                          {modalMode === 'cover' ? 'Clique para usar como Capa' : 'Clique para inserir no Texto'}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Modal Footer */}
+            <div className="p-4 border-t border-neutral-800 flex items-center justify-between text-xs text-neutral-500 bg-neutral-950/40">
+              <span>{mediaItems.length} arquivo(s) disponível(is)</span>
+              <button
+                type="button"
+                onClick={() => setMediaModalOpen(false)}
+                className="px-4 py-1.5 rounded-xl bg-neutral-900 hover:bg-neutral-800 text-neutral-300 font-semibold"
+              >
+                Fechar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

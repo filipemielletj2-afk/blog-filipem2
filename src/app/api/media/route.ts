@@ -87,11 +87,12 @@ export async function POST(request: Request) {
     fs.writeFileSync(filePath, buffer);
 
     const fileUrl = `/uploads/${safeFilename}`;
+    const base64Data = buffer.toString('base64');
     const db = getDb();
 
     const result = db.prepare(`
-      INSERT INTO media (filename, original_name, mime_type, size, url, alt_text, credit)
-      VALUES (?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO media (filename, original_name, mime_type, size, url, alt_text, credit, data_base64)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `).run(
       safeFilename,
       file.name,
@@ -99,7 +100,8 @@ export async function POST(request: Request) {
       file.size,
       fileUrl,
       altText,
-      credit
+      credit,
+      base64Data
     );
 
     db.prepare('INSERT INTO audit_logs (user_id, action, details) VALUES (?, ?, ?)').run(
