@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { Shield, ArrowUp, Heart } from 'lucide-react';
+import LanguageSelector from './LanguageSelector';
 
 interface FooterProps {
   categories?: Array<{ name: string; slug: string }>;
@@ -117,7 +118,11 @@ export default function Footer({ categories = [], footerText }: FooterProps) {
           <p>
             {footerText || '© 2026 BLOG FILIPEM2. Todos os direitos reservados.'}
           </p>
-          <div className="flex items-center space-x-2">
+          <div className="flex flex-wrap items-center gap-4">
+            <div className="flex items-center gap-2">
+              <span className="text-[11px] text-neutral-400">Idioma:</span>
+              <LanguageSelector compact />
+            </div>
             <span>Desenvolvido com excelência técnica para a comunidade geek.</span>
           </div>
         </div>

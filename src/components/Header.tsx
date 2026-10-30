@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Search, Moon, Sun, Menu, X, Shield, ChevronRight } from 'lucide-react';
 import SearchModal from './SearchModal';
+import LanguageSelector from './LanguageSelector';
 
 interface HeaderProps {
   categories?: Array<{ name: string; slug: string; color?: string }>;
@@ -146,6 +147,9 @@ export default function Header({ categories = [], siteTitle = 'BLOG FILIPEM2' }:
 
             {/* Right Action Icons */}
             <div className="flex items-center space-x-2 sm:space-x-3">
+              {/* Language Selector */}
+              <LanguageSelector />
+
               {/* Search button */}
               <button
                 onClick={() => setSearchOpen(true)}
@@ -218,6 +222,13 @@ export default function Header({ categories = [], siteTitle = 'BLOG FILIPEM2' }:
                 <ChevronRight className="w-4 h-4 text-neutral-500" />
               </Link>
             ))}
+            <div className={`pt-3 pb-2 px-3 border-t flex items-center justify-between ${isLightMode ? 'border-slate-200' : 'border-neutral-800'}`}>
+              <span className={`text-xs font-bold uppercase tracking-wider ${isLightMode ? 'text-slate-600' : 'text-neutral-400'}`}>
+                Idioma de Leitura:
+              </span>
+              <LanguageSelector compact />
+            </div>
+
             <div className={`pt-4 border-t flex flex-col space-y-2 ${isLightMode ? 'border-slate-200' : 'border-neutral-800'}`}>
               <Link
                 href="/sobre"
