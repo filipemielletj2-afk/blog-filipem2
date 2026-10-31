@@ -40,10 +40,10 @@ export async function generateMetadata(): Promise<Metadata> {
       description,
       images: [
         {
-          url: '/logo.svg',
-          width: 1200,
-          height: 630,
-          alt: 'BLOG FILIPEM2 Portal'
+          url: '/logo.png',
+          width: 512,
+          height: 512,
+          alt: 'BLOG FILIPEM2 Logo'
         }
       ]
     },
@@ -65,8 +65,18 @@ export async function generateMetadata(): Promise<Metadata> {
       }
     },
     icons: {
-      icon: '/favicon.svg',
-      apple: '/favicon.svg'
+      icon: [
+        { url: '/favicon.ico', sizes: 'any' },
+        { url: '/icon-48x48.png', sizes: '48x48', type: 'image/png' },
+        { url: '/icon-96x96.png', sizes: '96x96', type: 'image/png' },
+        { url: '/icon-192x192.png', sizes: '192x192', type: 'image/png' },
+        { url: '/icon.png', sizes: '512x512', type: 'image/png' },
+        { url: '/favicon.svg', type: 'image/svg+xml' }
+      ],
+      shortcut: '/favicon.ico',
+      apple: [
+        { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }
+      ]
     },
     verification: {
       google: cleanGoogleCode(settings.google_search_console_tag)
@@ -109,7 +119,8 @@ export default function RootLayout({
     '@type': 'Organization',
     name: settings.site_title || 'BLOG FILIPEM2',
     url: settings.site_url || 'https://blogfilipem2.site',
-    logo: `${settings.site_url || 'https://blogfilipem2.site'}/logo.svg`,
+    logo: `${settings.site_url || 'https://blogfilipem2.site'}/logo.png`,
+    image: `${settings.site_url || 'https://blogfilipem2.site'}/logo.png`,
     sameAs: [
       'https://youtube.com',
       'https://twitter.com',
@@ -142,6 +153,13 @@ export default function RootLayout({
             crossOrigin="anonymous"
           />
         )}
+        {/* Google Search & Browser Favicons */}
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" type="image/png" sizes="48x48" href="/icon-48x48.png" />
+        <link rel="icon" type="image/png" sizes="96x96" href="/icon-96x96.png" />
+        <link rel="icon" type="image/png" sizes="192x192" href="/icon-192x192.png" />
+        <link rel="icon" type="image/png" sizes="512x512" href="/icon.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.json" />
         <link rel="alternate" type="application/rss+xml" title="BLOG FILIPEM2 RSS Feed" href="/feed.xml" />
         <meta name="theme-color" content="#dc2626" />
