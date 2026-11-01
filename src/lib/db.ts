@@ -231,6 +231,30 @@ function initDatabase(db: DatabaseSync) {
     );
   `);
 
+  // 13. Contact Messages
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS contact_messages (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL,
+      email TEXT NOT NULL,
+      subject TEXT,
+      message TEXT NOT NULL,
+      ip TEXT,
+      is_read INTEGER DEFAULT 0,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    );
+  `);
+
+  // 14. Newsletter Subscribers
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS newsletter_subscribers (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      email TEXT UNIQUE NOT NULL,
+      status TEXT DEFAULT 'active',
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    );
+  `);
+
   // Seed default data if empty
   seedDefaults(db);
 }
@@ -245,7 +269,7 @@ function seedDefaults(db: DatabaseSync) {
       VALUES (?, ?, ?, 'superadmin', ?, ?)
     `).run(
       'Filipe M.',
-      'admin@filipem2.com',
+      'filipemielletj2@gmail.com',
       adminPass,
       'Criador e editor-chefe do BLOG FILIPEM2. Apaixonado por tecnologia, games competitivos, cinema e trilhas sonoras épicas.',
       'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80'
@@ -315,6 +339,26 @@ function seedDefaults(db: DatabaseSync) {
     `).run();
     db.prepare(`
       INSERT INTO site_settings (key, value) VALUES ('amazon_box_enabled', '1')
+      ON CONFLICT(key) DO UPDATE SET value = excluded.value WHERE site_settings.value IS NULL OR site_settings.value = ''
+    `).run();
+    db.prepare(`
+      INSERT INTO site_settings (key, value) VALUES ('admin_notification_email', 'filipemielletj2@gmail.com')
+      ON CONFLICT(key) DO UPDATE SET value = excluded.value WHERE site_settings.value IS NULL OR site_settings.value = ''
+    `).run();
+    db.prepare(`
+      INSERT INTO site_settings (key, value) VALUES ('email_notifications_enabled', '1')
+      ON CONFLICT(key) DO UPDATE SET value = excluded.value WHERE site_settings.value IS NULL OR site_settings.value = ''
+    `).run();
+    db.prepare(`
+      INSERT INTO site_settings (key, value) VALUES ('notify_on_contact', '1')
+      ON CONFLICT(key) DO UPDATE SET value = excluded.value WHERE site_settings.value IS NULL OR site_settings.value = ''
+    `).run();
+    db.prepare(`
+      INSERT INTO site_settings (key, value) VALUES ('notify_on_comment', '1')
+      ON CONFLICT(key) DO UPDATE SET value = excluded.value WHERE site_settings.value IS NULL OR site_settings.value = ''
+    `).run();
+    db.prepare(`
+      INSERT INTO site_settings (key, value) VALUES ('notify_on_newsletter', '1')
       ON CONFLICT(key) DO UPDATE SET value = excluded.value WHERE site_settings.value IS NULL OR site_settings.value = ''
     `).run();
   }
@@ -778,7 +822,14 @@ function seedSettings(db: DatabaseSync) {
     google_adsense_id: 'ca-pub-2978439169182708',
     ads_txt: 'google.com, pub-2978439169182708, DIRECT, f08c47fec0942fa0',
     amazon_affiliate_tag: 'blogfilipem2-20',
-    amazon_box_enabled: '1'
+    amazon_box_enabled: '1',
+    admin_notification_email: 'filipemielletj2@gmail.com',
+    email_notifications_enabled: '1',
+    notify_on_contact: '1',
+    notify_on_comment: '1',
+    notify_on_newsletter: '1',
+    auto_backup_provider: 'gdrive',
+    auto_backup_gdrive_retention: '7'
   };
 
   const insertSetting = db.prepare('INSERT INTO site_settings (key, value) VALUES (?, ?)');

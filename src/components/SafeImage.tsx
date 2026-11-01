@@ -28,14 +28,7 @@ export default function SafeImage({
       onError={() => {
         if (!hasFailed) {
           setHasFailed(true);
-          // If original was a relative /uploads URL with a random hash, try doctor-x or fallback
-          if (src.includes('1793391958980') || src.includes('doctor')) {
-            setCurrentSrc('/uploads/doctor-x-cover.png');
-          } else if (src.includes('gta')) {
-            setCurrentSrc('/uploads/gta-6-cover.png');
-          } else {
-            setCurrentSrc(fallbackSrc);
-          }
+          setCurrentSrc(fallbackSrc);
         }
       }}
     />

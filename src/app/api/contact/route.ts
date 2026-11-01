@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getDb } from '@/lib/db';
+import { sendSiteNotification } from '@/lib/email-notifications';
 import sanitizeHtml from 'sanitize-html';
 
 // In-memory rate limiting to protect contact form against spam
@@ -52,6 +53,27 @@ export async function POST(request: Request) {
     const cleanMsg = sanitizeHtml(message, { allowedTags: [], allowedAttributes: {} }).trim();
 
     const db = getDb();
+
+    // 1. Ensure contact_messages table exists and store message
+    db.exec(`
+      CREATE TABLE IF NOT EXISTS contact_messages (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        email TEXT NOT NULL,
+        subject TEXT,
+        message TEXT NOT NULL,
+        ip TEXT,
+        is_read INTEGER DEFAULT 0,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      );
+    `);
+
+    db.prepare(`
+      INSERT INTO contact_messages (name, email, subject, message, ip)
+      VALUES (?, ?, ?, ?, ?)
+    `).run(cleanName, email, cleanSubject, cleanMsg, ip);
+
+    // 2. Log in audit logs
     db.prepare(`
       INSERT INTO audit_logs (action, details)
       VALUES (?, ?)
@@ -59,6 +81,25 @@ export async function POST(request: Request) {
       'CONTACT_MESSAGE',
       `Mensagem recebida de "${cleanName}" (${email}) - Assunto: "${cleanSubject}": ${cleanMsg.slice(0, 200)}...`
     );
+
+    // 3. Dispatch automated email notification to filipemielletj2@gmail.com
+    sendSiteNotification({
+      type: 'contact_message',
+      subject: `Nova Mensagem: ${cleanSubject}`,
+      badge: 'Mensagem de Contato',
+      badgeColor: '#DC2626',
+      headline: `Nova mensagem recebida de ${cleanName}`,
+      summary: `Um leitor enviou uma mensagem através do formulário de contato do BLOG FILIPEM2:`,
+      fields: [
+        { label: 'Nome do Remetente', value: cleanName },
+        { label: 'E-mail para Resposta', value: email },
+        { label: 'Assunto', value: cleanSubject },
+        { label: 'Mensagem Completa', value: cleanMsg },
+        { label: 'Data e Hora', value: new Date().toLocaleString('pt-BR') }
+      ],
+      actionUrl: 'https://blogfilipem2.site/admin',
+      actionText: 'Acessar Painel do Blog'
+    }).catch((err) => console.error('[Contact] Erro ao disparar e-mail de notificação:', err));
 
     return NextResponse.json({
       success: true,

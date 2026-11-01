@@ -329,6 +329,10 @@ export async function pushAutoBackup(db: DatabaseSync): Promise<{ success: boole
         body: JSON.stringify(snapshot),
         signal: AbortSignal.timeout(8000)
       });
+      if (res.status === 413) {
+        const kbSize = (Buffer.byteLength(JSON.stringify(snapshot)) / 1024).toFixed(0);
+        throw new Error(`Pantry HTTP 413: O conteúdo do seu blog (${kbSize} KB) excedeu o limite máximo do Pantry gratuito (100 KB). Recomendamos alternar para o 'Google Drive' na aba Backup, que não possui limite!`);
+      }
       if (!res.ok) throw new Error(`Pantry HTTP ${res.status}`);
     } else if (config.provider === 'jsonbin' && config.jsonbinKey && config.jsonbinBinId) {
       const url = `https://api.jsonbin.io/v3/b/${config.jsonbinBinId.trim()}`;

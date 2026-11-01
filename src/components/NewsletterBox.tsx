@@ -18,11 +18,31 @@ export default function NewsletterBox({
 }: NewsletterBoxProps) {
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) return;
-    setSubscribed(true);
+
+    setLoading(true);
+    setErrorMessage('');
+    try {
+      const res = await fetch('/api/newsletter', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.trim() })
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Erro ao realizar inscrição.');
+
+      setSubscribed(true);
+    } catch (err: any) {
+      setErrorMessage(err.message || 'Falha ao processar inscrição.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -45,22 +65,29 @@ export default function NewsletterBox({
               <span>Inscrição confirmada com sucesso! Em breve você receberá as novidades.</span>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="pt-4 flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-              <input
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder={placeholder}
-                className="flex-1 px-4 py-3 rounded-xl bg-neutral-900 border border-neutral-700 text-white placeholder-neutral-500 text-sm focus:outline-none focus:border-red-500"
-              />
-              <button
-                type="submit"
-                className="px-6 py-3 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-xs uppercase tracking-wider shadow-lg shadow-red-600/30 transition-all shrink-0"
-              >
-                {buttonText}
-              </button>
-            </form>
+            <div className="space-y-3">
+              <form onSubmit={handleSubmit} className="pt-2 flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+                <input
+                  type="email"
+                  required
+                  disabled={loading}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder={placeholder}
+                  className="flex-1 px-4 py-3 rounded-xl bg-neutral-900 border border-neutral-700 text-white placeholder-neutral-500 text-sm focus:outline-none focus:border-red-500 disabled:opacity-60"
+                />
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="px-6 py-3 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-xs uppercase tracking-wider shadow-lg shadow-red-600/30 transition-all shrink-0 disabled:opacity-60"
+                >
+                  {loading ? 'Cadastrando...' : buttonText}
+                </button>
+              </form>
+              {errorMessage && (
+                <p className="text-xs text-red-400 font-semibold">{errorMessage}</p>
+              )}
+            </div>
           )}
 
           <p className="text-[11px] text-neutral-500 flex items-center justify-center gap-1.5 pt-2">

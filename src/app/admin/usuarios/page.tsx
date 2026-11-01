@@ -171,33 +171,98 @@ export default function AdminUsersPage() {
         </div>
 
         {/* Users List Column */}
-        <div className="lg:col-span-6 p-6 rounded-2xl bg-[#12141c] border border-neutral-800 shadow-xl space-y-4">
-          <h3 className="text-sm font-bold uppercase tracking-wider text-white border-b border-neutral-800 pb-2">
-            Equipe com Acesso ao Painel ({users.length})
-          </h3>
+        <div className="lg:col-span-6 space-y-6">
+          <div className="p-6 rounded-2xl bg-[#12141c] border border-neutral-800 shadow-xl space-y-4">
+            <h3 className="text-sm font-bold uppercase tracking-wider text-white border-b border-neutral-800 pb-2">
+              Equipe com Acesso ao Painel ({users.length})
+            </h3>
 
-          <div className="space-y-3">
-            {users.map((u) => (
-              <div key={u.id} className="p-3.5 rounded-xl bg-neutral-900 border border-neutral-800 flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  {u.avatar ? (
-                    <img src={u.avatar} alt={u.name} className="w-10 h-10 rounded-full object-cover border border-neutral-700" />
-                  ) : (
-                    <div className="w-10 h-10 rounded-full bg-neutral-800 flex items-center justify-center text-white text-xs font-bold">
-                      <User className="w-5 h-5" />
+            <div className="space-y-3">
+              {users.map((u) => (
+                <div key={u.id} className="p-3.5 rounded-xl bg-neutral-900 border border-neutral-800 flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    {u.avatar ? (
+                      <img src={u.avatar} alt={u.name} className="w-10 h-10 rounded-full object-cover border border-neutral-700" />
+                    ) : (
+                      <div className="w-10 h-10 rounded-full bg-neutral-800 flex items-center justify-center text-white text-xs font-bold">
+                        <User className="w-5 h-5" />
+                      </div>
+                    )}
+                    <div>
+                      <strong className="text-white text-xs block">{u.name}</strong>
+                      <span className="text-[11px] text-neutral-400 font-mono">{u.email}</span>
                     </div>
-                  )}
-                  <div>
-                    <strong className="text-white text-xs block">{u.name}</strong>
-                    <span className="text-[11px] text-neutral-400 font-mono">{u.email}</span>
                   </div>
-                </div>
 
-                <span className="px-2.5 py-1 rounded bg-red-950/80 border border-red-800 text-red-400 text-[10px] font-mono font-bold uppercase">
-                  {u.role}
-                </span>
+                  <span className="px-2.5 py-1 rounded bg-red-950/80 border border-red-800 text-red-400 text-[10px] font-mono font-bold uppercase">
+                    {u.role}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Email Notifications Status Card */}
+          <div className="p-6 rounded-2xl bg-gradient-to-br from-[#12141c] to-[#1c1825] border border-neutral-800 shadow-xl space-y-4">
+            <div className="flex items-center justify-between border-b border-neutral-800 pb-3">
+              <div className="flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                <h3 className="text-sm font-bold uppercase tracking-wider text-white">
+                  Notificações do Site por E-mail
+                </h3>
               </div>
-            ))}
+              <span className="px-2.5 py-0.5 rounded-full bg-emerald-950 border border-emerald-700 text-emerald-400 text-[10px] font-bold uppercase">
+                Ativado
+              </span>
+            </div>
+
+            <p className="text-xs text-neutral-300 leading-relaxed">
+              O portal está configurado para enviar alertas imediatos para <strong className="text-white font-mono">filipemielletj2@gmail.com</strong> sempre que houver novas interações.
+            </p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs text-neutral-300">
+              <div className="p-2.5 rounded-xl bg-neutral-900/80 border border-neutral-800 flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                <span>Mensagens de Contato</span>
+              </div>
+              <div className="p-2.5 rounded-xl bg-neutral-900/80 border border-neutral-800 flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                <span>Comentários em Matérias</span>
+              </div>
+              <div className="p-2.5 rounded-xl bg-neutral-900/80 border border-neutral-800 flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                <span>Novos Assinantes Newsletter</span>
+              </div>
+              <div className="p-2.5 rounded-xl bg-neutral-900/80 border border-neutral-800 flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                <span>Backups &amp; Segurança</span>
+              </div>
+            </div>
+
+            <div className="pt-2 flex items-center justify-between">
+              <span className="text-[11px] text-neutral-400">
+                Entrega automática via Google Apps Script ou API.
+              </span>
+              <button
+                type="button"
+                onClick={async () => {
+                  try {
+                    const res = await fetch('/api/notifications/test', { method: 'POST' });
+                    const d = await res.json();
+                    if (d.success) {
+                      alert('E-mail de teste disparado com sucesso para filipemielletj2@gmail.com!');
+                    } else {
+                      alert('Resultado: ' + (d.message || d.error || 'Verifique as configurações.'));
+                    }
+                  } catch (err: any) {
+                    alert('Erro ao disparar teste: ' + err.message);
+                  }
+                }}
+                className="px-3.5 py-1.5 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-white font-bold text-xs transition-colors flex items-center gap-1.5 border border-neutral-700"
+              >
+                <span>Enviar Teste Agora</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>

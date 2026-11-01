@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getDb } from '@/lib/db';
 import { getCurrentUser } from '@/lib/auth';
+import { sendSiteNotification } from '@/lib/email-notifications';
 import sanitizeHtml from 'sanitize-html';
 
 // In-memory rate limiting to protect against comment spam flood
@@ -105,7 +106,7 @@ export async function POST(request: Request) {
     const db = getDb();
 
     // Verify article exists and allows comments
-    const article = db.prepare('SELECT allow_comments FROM articles WHERE id = ?').get(article_id) as any;
+    const article = db.prepare('SELECT id, title, slug, allow_comments FROM articles WHERE id = ?').get(article_id) as any;
     if (!article || article.allow_comments === 0) {
       return NextResponse.json({ error: 'Os comentários estão desativados para esta publicação.' }, { status: 403 });
     }
@@ -119,6 +120,25 @@ export async function POST(request: Request) {
       author_email.trim().toLowerCase(),
       cleanContent
     );
+
+    // Send email notification to filipemielletj2@gmail.com
+    sendSiteNotification({
+      type: 'new_comment',
+      badge: 'Novo Comentário',
+      badgeColor: '#8B5CF6',
+      subject: `Novo Comentário em "${article.title}"`,
+      headline: `Um leitor comentou na matéria "${article.title}"`,
+      summary: `Confira o novo comentário deixado por ${cleanAuthorName}:`,
+      fields: [
+        { label: 'Publicação', value: article.title },
+        { label: 'Autor do Comentário', value: cleanAuthorName },
+        { label: 'E-mail do Autor', value: author_email.trim().toLowerCase() },
+        { label: 'Comentário', value: cleanContent },
+        { label: 'Data e Hora', value: new Date().toLocaleString('pt-BR') }
+      ],
+      actionUrl: `https://blogfilipem2.site/artigo/${article.slug}`,
+      actionText: 'Ver Comentário no Artigo'
+    }).catch((err) => console.error('[Comment] Erro ao disparar e-mail de notificação:', err));
 
     return NextResponse.json({
       success: true,

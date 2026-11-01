@@ -28,6 +28,27 @@ import {
 const GDRIVE_APPS_SCRIPT_CODE = `function doPost(e) {
   try {
     var data = JSON.parse(e.postData.contents);
+
+    // 1. Envio de Notificações Oficiais por E-mail (100% Grátis e Seguro)
+    if (data.action === "send_email" || data.action === "notification") {
+      var recipient = data.to || "filipemielletj2@gmail.com";
+      var subject = data.subject || "[BLOG FILIPEM2] Notificação do Portal";
+      var htmlBody = data.html || data.text || "Nova notificação do blog";
+      
+      MailApp.sendEmail({
+        to: recipient,
+        subject: subject,
+        htmlBody: htmlBody,
+        name: "BLOG FILIPEM2"
+      });
+      
+      return ContentService.createTextOutput(JSON.stringify({
+        success: true,
+        message: "E-mail de notificação enviado para " + recipient
+      })).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    // 2. Backup Automático no Google Drive com Retenção Configurável
     var retentionDays = data.retention_days || 7;
     var folderName = "BLOG_FILIPEM2_BACKUPS";
     var folders = DriveApp.getFoldersByName(folderName);
