@@ -1,7 +1,84 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Users, Lock, Save, CheckCircle2, AlertCircle, Loader2, ShieldCheck, User } from 'lucide-react';
+import {
+  Users,
+  Lock,
+  Save,
+  CheckCircle2,
+  AlertCircle,
+  Loader2,
+  ShieldCheck,
+  User,
+  Mail,
+  Send,
+  Copy,
+  Check,
+  ExternalLink,
+  HelpCircle,
+  Key,
+  Link2,
+  Sparkles
+} from 'lucide-react';
+
+const APPS_SCRIPT_SNIPPET = `function doPost(e) {
+  try {
+    var data = JSON.parse(e.postData.contents);
+
+    // 1. Envio de Notificacoes Oficiais por E-mail (100% Gratis e Seguro)
+    if (data.action === "send_email" || data.action === "notification") {
+      var recipient = data.to || "filipemielletj2@gmail.com";
+      var subject = data.subject || "[BLOG FILIPEM2] Notificacao do Portal";
+      var htmlBody = data.html || data.text || "Nova notificacao do blog";
+      
+      MailApp.sendEmail({
+        to: recipient,
+        subject: subject,
+        htmlBody: htmlBody,
+        name: "BLOG FILIPEM2"
+      });
+      
+      return ContentService.createTextOutput(JSON.stringify({
+        success: true,
+        message: "E-mail de notificacao enviado para " + recipient
+      })).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    // 2. Backup Automatico no Google Drive
+    var retentionDays = data.retention_days || 7;
+    var folderName = "BLOG_FILIPEM2_BACKUPS";
+    var folders = DriveApp.getFoldersByName(folderName);
+    var folder = folders.hasNext() ? folders.next() : DriveApp.createFolder(folderName);
+    
+    var now = new Date();
+    var timeStr = Utilities.formatDate(now, "America/Sao_Paulo", "yyyy-MM-dd_HH-mm-ss");
+    var fileName = "backup-" + timeStr + ".json";
+    folder.createFile(fileName, JSON.stringify(data.snapshot, null, 2), MimeType.PLAIN_TEXT);
+    
+    var cutoff = new Date(now.getTime() - (retentionDays * 24 * 60 * 60 * 1000));
+    var files = folder.getFiles();
+    var purgedCount = 0;
+    while (files.hasNext()) {
+      var f = files.next();
+      if (f.getName().startsWith("backup-") && f.getDateCreated() < cutoff) {
+        f.setTrashed(true);
+        purgedCount++;
+      }
+    }
+    
+    return ContentService.createTextOutput(JSON.stringify({
+      success: true,
+      message: "Backup salvo no Google Drive!",
+      file: fileName,
+      purged_old_backups: purgedCount
+    })).setMimeType(ContentService.MimeType.JSON);
+  } catch (err) {
+    return ContentService.createTextOutput(JSON.stringify({
+      success: false,
+      error: err.toString()
+    })).setMimeType(ContentService.MimeType.JSON);
+  }
+}`;
 
 export default function AdminUsersPage() {
   const [users, setUsers] = useState<any[]>([]);
@@ -15,8 +92,19 @@ export default function AdminUsersPage() {
   const [saving, setSaving] = useState(false);
   const [notification, setNotification] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
+  // Email notification channels state
+  const [notificationEmail, setNotificationEmail] = useState('filipemielletj2@gmail.com');
+  const [gdriveUrl, setGdriveUrl] = useState('');
+  const [resendApiKey, setResendApiKey] = useState('');
+  const [savingEmailConfig, setSavingEmailConfig] = useState(false);
+  const [testingEmail, setTestingEmail] = useState(false);
+  const [emailTestFeedback, setEmailTestFeedback] = useState<{ type: 'success' | 'error' | 'warning'; text: string } | null>(null);
+  const [copiedScript, setCopiedScript] = useState(false);
+  const [showTutorial, setShowTutorial] = useState(false);
+
   useEffect(() => {
     loadUsers();
+    loadEmailSettings();
   }, []);
 
   const loadUsers = async () => {
@@ -39,6 +127,20 @@ export default function AdminUsersPage() {
       console.error(err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadEmailSettings = async () => {
+    try {
+      const res = await fetch('/api/settings');
+      if (res.ok) {
+        const data = await res.json();
+        if (data.admin_notification_email) setNotificationEmail(data.admin_notification_email);
+        if (data.auto_backup_gdrive_url) setGdriveUrl(data.auto_backup_gdrive_url);
+        if (data.resend_api_key) setResendApiKey(data.resend_api_key);
+      }
+    } catch (err) {
+      console.error('Erro ao carregar settings:', err);
     }
   };
 
@@ -67,15 +169,84 @@ export default function AdminUsersPage() {
     }
   };
 
+  const handleSaveEmailConfig = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSavingEmailConfig(true);
+    setEmailTestFeedback(null);
+
+    try {
+      const res = await fetch('/api/settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          admin_notification_email: notificationEmail.trim(),
+          auto_backup_gdrive_url: gdriveUrl.trim(),
+          resend_api_key: resendApiKey.trim(),
+          email_notifications_enabled: '1'
+        })
+      });
+
+      if (!res.ok) throw new Error('Falha ao salvar configurações de e-mail.');
+
+      setEmailTestFeedback({
+        type: 'success',
+        text: 'Configurações de canal de e-mail salvas com sucesso! Agora você pode testar o envio.'
+      });
+    } catch (err: any) {
+      setEmailTestFeedback({ type: 'error', text: err.message });
+    } finally {
+      setSavingEmailConfig(false);
+    }
+  };
+
+  const handleTestEmail = async () => {
+    setTestingEmail(true);
+    setEmailTestFeedback(null);
+
+    try {
+      const res = await fetch('/api/notifications/test', { method: 'POST' });
+      const data = await res.json();
+
+      if (data.success) {
+        setEmailTestFeedback({
+          type: 'success',
+          text: `E-mail de teste enviado com sucesso! Verifique sua caixa de entrada e spam em ${notificationEmail}.`
+        });
+      } else {
+        setEmailTestFeedback({
+          type: 'warning',
+          text: data.message || data.error || 'Aviso no envio. Conecte a URL do Google Apps Script ou chave Resend.'
+        });
+      }
+    } catch (err: any) {
+      setEmailTestFeedback({
+        type: 'error',
+        text: 'Erro ao tentar disparar o teste: ' + err.message
+      });
+    } finally {
+      setTestingEmail(false);
+    }
+  };
+
+  const handleCopyScript = () => {
+    navigator.clipboard.writeText(APPS_SCRIPT_SNIPPET);
+    setCopiedScript(true);
+    setTimeout(() => setCopiedScript(false), 3000);
+  };
+
+  const isChannelConnected = Boolean(
+    (gdriveUrl && gdriveUrl.startsWith('https://script.google.com/macros/s/')) || resendApiKey
+  );
+
   return (
     <div className="space-y-6">
       <div className="pb-6 border-b border-neutral-800">
         <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight flex items-center gap-2.5">
           <Users className="w-7 h-7 text-red-500" />
-          <span>Usuários, Redação &amp; Segurança</span>
+          <span>Usuários, Redação &amp; Notificações</span>
         </h1>
         <p className="text-xs sm:text-sm text-neutral-400 mt-1">
-          Gerencie acessos ao painel administrativo e atualize suas credenciais com criptografia forte.
+          Gerencie acessos ao painel e configure o canal de envio para receber notificações no seu Gmail.
         </p>
       </div>
 
@@ -170,8 +341,192 @@ export default function AdminUsersPage() {
           </form>
         </div>
 
-        {/* Users List Column */}
+        {/* Right Column: Email Notifications & Team */}
         <div className="lg:col-span-6 space-y-6">
+          {/* Email Notifications Configuration Card */}
+          <div className="p-6 rounded-2xl bg-gradient-to-br from-[#12141c] via-[#161824] to-[#1a1528] border border-neutral-800 shadow-2xl space-y-5">
+            <div className="flex items-center justify-between border-b border-neutral-800 pb-3">
+              <div className="flex items-center gap-2.5">
+                <Mail className="w-5 h-5 text-red-500" />
+                <h3 className="text-sm font-bold uppercase tracking-wider text-white">
+                  Notificações do Site por E-mail
+                </h3>
+              </div>
+              <span
+                className={`px-3 py-1 rounded-full text-[11px] font-bold uppercase flex items-center gap-1.5 ${
+                  isChannelConnected
+                    ? 'bg-emerald-950 border border-emerald-600 text-emerald-400'
+                    : 'bg-amber-950 border border-amber-600 text-amber-300'
+                }`}
+              >
+                <span
+                  className={`w-2 h-2 rounded-full ${
+                    isChannelConnected ? 'bg-emerald-500 animate-pulse' : 'bg-amber-400'
+                  }`}
+                />
+                {isChannelConnected ? 'Canal Conectado' : 'Aguardando Conexão'}
+              </span>
+            </div>
+
+            {/* Explanation banner */}
+            {!isChannelConnected ? (
+              <div className="p-3.5 rounded-xl bg-amber-950/40 border border-amber-800/80 text-amber-200 text-xs leading-relaxed space-y-2">
+                <div className="font-bold flex items-center gap-1.5 text-amber-300">
+                  <AlertCircle className="w-4 h-4 shrink-0" />
+                  <span>Por que você ainda não recebeu os e-mails?</span>
+                </div>
+                <p>
+                  Para o Gmail não bloquear as notificações como spam, seu portal precisa de um canal autorizado de entrega. 
+                  A maneira mais fácil e 100% gratuita é usar o <strong>Google Apps Script</strong> da sua própria conta Google (<code className="bg-black/40 px-1 py-0.5 rounded text-white">filipemielletj2@gmail.com</code>). Leva apenas 1 minuto!
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setShowTutorial(!showTutorial)}
+                  className="inline-flex items-center gap-1 text-red-400 hover:text-red-300 font-bold underline cursor-pointer pt-1"
+                >
+                  <Sparkles className="w-3.5 h-3.5" />
+                  <span>{showTutorial ? 'Ocultar passo a passo' : 'Ver passo a passo de 1 minuto'}</span>
+                </button>
+              </div>
+            ) : (
+              <div className="p-3 rounded-xl bg-emerald-950/40 border border-emerald-800/80 text-emerald-300 text-xs flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-400" />
+                <span>Seu canal de envio está conectado! Alertas serão entregues diretamente na sua caixa de entrada.</span>
+              </div>
+            )}
+
+            {/* Step-by-step Tutorial */}
+            {showTutorial && (
+              <div className="p-4 rounded-xl bg-neutral-900 border border-neutral-700/80 space-y-3 text-xs text-neutral-300">
+                <strong className="text-white block font-bold border-b border-neutral-800 pb-1.5 flex items-center justify-between">
+                  <span>Passo a passo rápido (Google Apps Script Grátis):</span>
+                  <button
+                    type="button"
+                    onClick={handleCopyScript}
+                    className="px-2.5 py-1 rounded bg-red-600 hover:bg-red-500 text-white font-bold text-[10px] flex items-center gap-1 transition-all"
+                  >
+                    {copiedScript ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
+                    <span>{copiedScript ? 'Copiado!' : '1. Copiar Código'}</span>
+                  </button>
+                </strong>
+                <ol className="list-decimal list-inside space-y-1.5 leading-relaxed text-neutral-300">
+                  <li>
+                    Acesse <a href="https://script.google.com" target="_blank" rel="noreferrer" className="text-red-400 font-bold underline inline-flex items-center gap-0.5">script.google.com <ExternalLink className="w-3 h-3" /></a> com seu e-mail <code className="text-white bg-neutral-800 px-1 rounded">filipemielletj2@gmail.com</code>.
+                  </li>
+                  <li>Clique em <strong>Novo Projeto</strong> no canto superior esquerdo.</li>
+                  <li>Apague o que estiver na tela e <strong>cole o código copiado</strong> no botão acima.</li>
+                  <li>
+                    No canto superior direito, clique em <strong>Implantar &rarr; Nova Implantação</strong>.
+                  </li>
+                  <li>
+                    Selecione o tipo <strong>Aplicativo da Web</strong>. Em <em>"Quem tem acesso"</em>, selecione <strong>Qualquer pessoa</strong> (necessário para o blog enviar as notificações).
+                  </li>
+                  <li>Clique em <strong>Implantar</strong>, autorize o acesso da sua conta e copie o link final (<code className="text-white text-[11px]">https://script.google.com/macros/s/.../exec</code>).</li>
+                  <li>Cole esse link no campo abaixo e clique em <strong>Salvar Canal de Notificação</strong>!</li>
+                </ol>
+              </div>
+            )}
+
+            {/* Email Settings Form */}
+            <form onSubmit={handleSaveEmailConfig} className="space-y-4 text-xs">
+              <div>
+                <label className="block font-semibold text-neutral-300 mb-1">
+                  E-mail de Destino das Notificações
+                </label>
+                <input
+                  type="email"
+                  required
+                  value={notificationEmail}
+                  onChange={(e) => setNotificationEmail(e.target.value)}
+                  className="w-full px-3 py-2 rounded-xl bg-neutral-900 border border-neutral-700 text-white text-xs focus:outline-none focus:border-red-500"
+                />
+              </div>
+
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="font-semibold text-neutral-300 flex items-center gap-1.5">
+                    <Link2 className="w-3.5 h-3.5 text-red-500" />
+                    <span>URL do Google Apps Script (Recomendado - 100% Grátis)</span>
+                  </label>
+                  <button
+                    type="button"
+                    onClick={handleCopyScript}
+                    className="text-[11px] text-red-400 hover:text-red-300 flex items-center gap-1"
+                  >
+                    {copiedScript ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                    <span>{copiedScript ? 'Código Copiado!' : 'Copiar Código'}</span>
+                  </button>
+                </div>
+                <input
+                  type="url"
+                  value={gdriveUrl}
+                  onChange={(e) => setGdriveUrl(e.target.value)}
+                  placeholder="https://script.google.com/macros/s/AKfycb.../exec"
+                  className="w-full px-3 py-2 rounded-xl bg-neutral-900 border border-neutral-700 text-white font-mono text-xs focus:outline-none focus:border-red-500"
+                />
+                <span className="text-[11px] text-neutral-400 mt-1 block">
+                  Usado tanto para enviar e-mails direto no Gmail quanto para salvar backups no Google Drive.
+                </span>
+              </div>
+
+              <div>
+                <label className="block font-semibold text-neutral-300 mb-1 flex items-center gap-1.5">
+                  <Key className="w-3.5 h-3.5 text-amber-400" />
+                  <span>Ou Chave da API Resend (Opcional - re_...)</span>
+                </label>
+                <input
+                  type="password"
+                  value={resendApiKey}
+                  onChange={(e) => setResendApiKey(e.target.value)}
+                  placeholder="re_xxxxxxxxxxxxxxxxxxxxxxxxx"
+                  className="w-full px-3 py-2 rounded-xl bg-neutral-900 border border-neutral-700 text-white font-mono text-xs focus:outline-none focus:border-red-500"
+                />
+              </div>
+
+              <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-neutral-800">
+                <button
+                  type="button"
+                  onClick={handleTestEmail}
+                  disabled={testingEmail}
+                  className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-white font-bold text-xs transition-colors flex items-center justify-center gap-1.5 border border-neutral-700 disabled:opacity-50"
+                >
+                  {testingEmail ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Send className="w-3.5 h-3.5" />}
+                  <span>{testingEmail ? 'Testando Conexão...' : 'Enviar Teste Agora'}</span>
+                </button>
+
+                <button
+                  type="submit"
+                  disabled={savingEmailConfig}
+                  className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-red-600/30 transition-all disabled:opacity-50"
+                >
+                  {savingEmailConfig ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
+                  <span>Salvar Canal de Envio</span>
+                </button>
+              </div>
+            </form>
+
+            {/* Test feedback */}
+            {emailTestFeedback && (
+              <div
+                className={`p-3.5 rounded-xl text-xs font-semibold flex items-start gap-2 leading-relaxed ${
+                  emailTestFeedback.type === 'success'
+                    ? 'bg-emerald-950/80 border border-emerald-800 text-emerald-400'
+                    : emailTestFeedback.type === 'warning'
+                    ? 'bg-amber-950/80 border border-amber-800 text-amber-300'
+                    : 'bg-red-950/80 border border-red-800 text-red-400'
+                }`}
+              >
+                {emailTestFeedback.type === 'success' ? (
+                  <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5" />
+                ) : (
+                  <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+                )}
+                <span>{emailTestFeedback.text}</span>
+              </div>
+            )}
+          </div>
+
+          {/* Users List Card */}
           <div className="p-6 rounded-2xl bg-[#12141c] border border-neutral-800 shadow-xl space-y-4">
             <h3 className="text-sm font-bold uppercase tracking-wider text-white border-b border-neutral-800 pb-2">
               Equipe com Acesso ao Painel ({users.length})
@@ -199,69 +554,6 @@ export default function AdminUsersPage() {
                   </span>
                 </div>
               ))}
-            </div>
-          </div>
-
-          {/* Email Notifications Status Card */}
-          <div className="p-6 rounded-2xl bg-gradient-to-br from-[#12141c] to-[#1c1825] border border-neutral-800 shadow-xl space-y-4">
-            <div className="flex items-center justify-between border-b border-neutral-800 pb-3">
-              <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                <h3 className="text-sm font-bold uppercase tracking-wider text-white">
-                  Notificações do Site por E-mail
-                </h3>
-              </div>
-              <span className="px-2.5 py-0.5 rounded-full bg-emerald-950 border border-emerald-700 text-emerald-400 text-[10px] font-bold uppercase">
-                Ativado
-              </span>
-            </div>
-
-            <p className="text-xs text-neutral-300 leading-relaxed">
-              O portal está configurado para enviar alertas imediatos para <strong className="text-white font-mono">filipemielletj2@gmail.com</strong> sempre que houver novas interações.
-            </p>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs text-neutral-300">
-              <div className="p-2.5 rounded-xl bg-neutral-900/80 border border-neutral-800 flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
-                <span>Mensagens de Contato</span>
-              </div>
-              <div className="p-2.5 rounded-xl bg-neutral-900/80 border border-neutral-800 flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
-                <span>Comentários em Matérias</span>
-              </div>
-              <div className="p-2.5 rounded-xl bg-neutral-900/80 border border-neutral-800 flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
-                <span>Novos Assinantes Newsletter</span>
-              </div>
-              <div className="p-2.5 rounded-xl bg-neutral-900/80 border border-neutral-800 flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
-                <span>Backups &amp; Segurança</span>
-              </div>
-            </div>
-
-            <div className="pt-2 flex items-center justify-between">
-              <span className="text-[11px] text-neutral-400">
-                Entrega automática via Google Apps Script ou API.
-              </span>
-              <button
-                type="button"
-                onClick={async () => {
-                  try {
-                    const res = await fetch('/api/notifications/test', { method: 'POST' });
-                    const d = await res.json();
-                    if (d.success) {
-                      alert('E-mail de teste disparado com sucesso para filipemielletj2@gmail.com!');
-                    } else {
-                      alert('Resultado: ' + (d.message || d.error || 'Verifique as configurações.'));
-                    }
-                  } catch (err: any) {
-                    alert('Erro ao disparar teste: ' + err.message);
-                  }
-                }}
-                className="px-3.5 py-1.5 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-white font-bold text-xs transition-colors flex items-center gap-1.5 border border-neutral-700"
-              >
-                <span>Enviar Teste Agora</span>
-              </button>
             </div>
           </div>
         </div>

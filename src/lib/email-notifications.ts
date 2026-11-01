@@ -139,7 +139,7 @@ export async function sendSiteNotification(notification: SiteNotification): Prom
     } catch {}
 
     // Method 1: Google Apps Script Webhook (native to user's Google account)
-    const gdriveUrl = settings.auto_backup_gdrive_url || process.env.AUTO_BACKUP_GDRIVE_URL || '';
+    const gdriveUrl = settings.auto_backup_gdrive_url || settings.notification_email_webhook_url || process.env.AUTO_BACKUP_GDRIVE_URL || '';
     if (gdriveUrl && gdriveUrl.startsWith('https://script.google.com/macros/s/')) {
       try {
         const res = await fetch(gdriveUrl.trim(), {
@@ -164,7 +164,7 @@ export async function sendSiteNotification(notification: SiteNotification): Prom
     }
 
     // Method 2: Resend API if key is present
-    const resendKey = process.env.RESEND_API_KEY;
+    const resendKey = settings.resend_api_key || process.env.RESEND_API_KEY;
     if (resendKey) {
       try {
         const res = await fetch('https://api.resend.com/emails', {
@@ -205,12 +205,13 @@ export async function sendSiteNotification(notification: SiteNotification): Prom
           }),
           signal: AbortSignal.timeout(8000)
         });
+        return { success: true, message: `Notificação enviada para o webhook configurado.` };
       } catch {}
     }
 
     return {
-      success: true,
-      message: `Notificação registrada no sistema para envio a ${targetEmail}.`
+      success: false,
+      message: `Nenhum canal de envio configurado (Google Apps Script ou chave Resend). O e-mail foi registrado no banco, mas não pôde ser enviado para a caixa de entrada de ${targetEmail}. Configure a URL do Google Apps Script no painel!`
     };
   } catch (error: any) {
     return { success: false, message: error.message };
