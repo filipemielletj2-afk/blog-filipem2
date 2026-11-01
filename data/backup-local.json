@@ -1,0 +1,1295 @@
+{
+  "version": "2.0.0",
+  "exported_at": "2026-10-31T19:45:14.023Z",
+  "site_title": "BLOG FILIPEM2",
+  "categories": [
+    {
+      "id": 1,
+      "name": "Games",
+      "slug": "games",
+      "description": "Notícias, análises de jogos, lançamentos de PlayStation, Xbox, Nintendo e PC, jogos indies e guias completos.",
+      "color": "#DC2626",
+      "icon": "Gamepad2",
+      "parent_id": null,
+      "sort_order": 1
+    },
+    {
+      "id": 2,
+      "name": "Músicas",
+      "slug": "musicas",
+      "description": "Novidades do mundo musical, lançamentos de álbuns, críticas, rock, metal, pop, eletrônica, k-pop e grandes festivais.",
+      "color": "#F59E0B",
+      "icon": "Music",
+      "parent_id": null,
+      "sort_order": 2
+    },
+    {
+      "id": 3,
+      "name": "Filmes",
+      "slug": "filmes",
+      "description": "Críticas de cinema, lançamentos, trailers oficiais, bilheterias confiáveis e bastidores de Hollywood e produções nacionais.",
+      "color": "#E11D48",
+      "icon": "Film",
+      "parent_id": null,
+      "sort_order": 3
+    },
+    {
+      "id": 4,
+      "name": "Séries",
+      "slug": "series",
+      "description": "Tudo sobre produções de streaming, temporadas, análises detalhadas de episódios, renovações e cancelamentos.",
+      "color": "#8B5CF6",
+      "icon": "Tv",
+      "parent_id": null,
+      "sort_order": 4
+    },
+    {
+      "id": 5,
+      "name": "Cultura Geek & Tecnologia",
+      "slug": "cultura-geek-tecnologia",
+      "description": "Animes, mangás, inovação tecnológica, inteligência artificial, hardware e tendências da cultura pop.",
+      "color": "#3B82F6",
+      "icon": "Cpu",
+      "parent_id": null,
+      "sort_order": 5
+    }
+  ],
+  "tags": [
+    {
+      "id": 1,
+      "name": "PlayStation 5",
+      "slug": "playstation-5"
+    },
+    {
+      "id": 2,
+      "name": "Xbox Series X",
+      "slug": "xbox-series-x"
+    },
+    {
+      "id": 3,
+      "name": "Nintendo Switch",
+      "slug": "nintendo-switch"
+    },
+    {
+      "id": 4,
+      "name": "PC Gaming",
+      "slug": "pc-gaming"
+    },
+    {
+      "id": 5,
+      "name": "Indies",
+      "slug": "indies"
+    },
+    {
+      "id": 6,
+      "name": "RPG",
+      "slug": "rpg"
+    },
+    {
+      "id": 7,
+      "name": "Cinema",
+      "slug": "cinema"
+    },
+    {
+      "id": 8,
+      "name": "Marvel",
+      "slug": "marvel"
+    },
+    {
+      "id": 9,
+      "name": "DC",
+      "slug": "dc"
+    },
+    {
+      "id": 10,
+      "name": "Streaming",
+      "slug": "streaming"
+    },
+    {
+      "id": 11,
+      "name": "Netflix",
+      "slug": "netflix"
+    },
+    {
+      "id": 12,
+      "name": "Rock",
+      "slug": "rock"
+    },
+    {
+      "id": 13,
+      "name": "Eletrônica",
+      "slug": "eletr-nica"
+    },
+    {
+      "id": 14,
+      "name": "Inteligência Artificial",
+      "slug": "intelig-ncia-artificial"
+    },
+    {
+      "id": 15,
+      "name": "Hardware",
+      "slug": "hardware"
+    },
+    {
+      "id": 16,
+      "name": "Anime",
+      "slug": "anime"
+    },
+    {
+      "id": 17,
+      "name": "Reviews",
+      "slug": "reviews"
+    },
+    {
+      "id": 18,
+      "name": "jogos 2026, melhores jogos 2026, lançamentos de jogos, videojogos 2026, Grand Theft Auto VI, GTA 6, Marvel's Wolverine, Resident Evil Requiem, Monster Hunter Wilds, Gears of War E-Day, Fable, Control Resonant, Castlevania Belmont's Curse, PS5, PlayStation 5, Xbox Series X, PC gaming, jogos de mundo aberto, survival horror, RPG de ação, novidades gaming, tendências gaming 2026",
+      "slug": "jogos-2026-melhores-jogos-2026-lancamentos-de-jogos-videojogos-2026-grand-theft-auto-vi-gta-6-marvels-wolverine-resident-evil-requiem-monster-hunter-wilds-gears-of-war-e-day-fable-control-resonant-castlevania-belmonts-curse-ps5-playstation-5-xbox-series-x-pc-gaming-jogos-de-mundo-aberto-survival-horror-rpg-de-acao-novidades-gaming-tendencias-gaming-2026"
+    },
+    {
+      "id": 21,
+      "name": "homem-aranha um novo dia, spider-man brand new day, marvel studios, tom holland, zendaya, sadie sink, jon bernthal, jean grey, mcu 2026, filmes de super-heróis, cinema, maiores bilheteiras",
+      "slug": "homem-aranha-um-novo-dia-spider-man-brand-new-day-marvel-studios-tom-holland-zendaya-sadie-sink-jon-bernthal-jean-grey-mcu-2026-filmes-de-super-herois-cinema-maiores-bilheteiras"
+    },
+    {
+      "id": 22,
+      "name": "forza horizon 6, japão, jdm, tokyo, touge, drift, playground games, xbox series x, pc gaming, jogos de corrida, carros japoneses",
+      "slug": "forza-horizon-6-japao-jdm-tokyo-touge-drift-playground-games-xbox-series-x-pc-gaming-jogos-de-corrida-carros-japoneses"
+    },
+    {
+      "id": 23,
+      "name": "jogos difíceis, jogos mais difíceis, rage games, desafios gamer, jogos punitivos, hardcore gamer, Sekiro Shadows Die Twice, osu!, Getting Over It, Cuphead, Celeste, soulslike, jogos de ritmo, jogos de plataforma, jogos indie, FromSoftware, dicas de jogos, filipemblog",
+      "slug": "jogos-dificeis-jogos-mais-dificeis-rage-games-desafios-gamer-jogos-punitivos-hardcore-gamer-sekiro-shadows-die-twice-osu-getting-over-it-cuphead-celeste-soulslike-jogos-de-ritmo-jogos-de-plataforma-jogos-indie-fromsoftware-dicas-de-jogos-filipemblog"
+    },
+    {
+      "id": 24,
+      "name": "iPhoneDuo",
+      "slug": "iphoneduo"
+    },
+    {
+      "id": 25,
+      "name": "iPhone18",
+      "slug": "iphone18"
+    },
+    {
+      "id": 26,
+      "name": "iPhone18Pro",
+      "slug": "iphone18pro"
+    },
+    {
+      "id": 27,
+      "name": "LancamentoApple",
+      "slug": "lancamentoapple"
+    },
+    {
+      "id": 28,
+      "name": "CelularDobravel",
+      "slug": "celulardobravel"
+    },
+    {
+      "id": 34,
+      "name": "- GTA 6, GTA VI, Rockstar Games, Vice City, Jason e Lucia, PlayStation 5, Xbox Series X|S, review de games",
+      "slug": "-gta-6-gta-vi-rockstar-games-vice-city-jason-e-lucia-playstation-5-xbox-series-xs-review-de-games"
+    },
+    {
+      "id": 39,
+      "name": "Doctor X",
+      "slug": "doctor-x"
+    },
+    {
+      "id": 41,
+      "name": "Doramas",
+      "slug": "doramas"
+    },
+    {
+      "id": 42,
+      "name": "Kim Ji-won",
+      "slug": "kim-ji-won"
+    },
+    {
+      "id": 43,
+      "name": "Séries coreanas",
+      "slug": "series-coreanas"
+    },
+    {
+      "id": 44,
+      "name": "Drama médico",
+      "slug": "drama-medico"
+    },
+    {
+      "id": 45,
+      "name": "DeathStranding",
+      "slug": "deathstranding"
+    },
+    {
+      "id": 46,
+      "name": "HideoKojima",
+      "slug": "hideokojima"
+    },
+    {
+      "id": 47,
+      "name": "DS2",
+      "slug": "ds2"
+    },
+    {
+      "id": 48,
+      "name": "OnTheBeach",
+      "slug": "onthebeach"
+    },
+    {
+      "id": 49,
+      "name": "NormanReedus",
+      "slug": "normanreedus"
+    },
+    {
+      "id": 50,
+      "name": "PlayStation",
+      "slug": "playstation"
+    },
+    {
+      "id": 51,
+      "name": "StrandGame",
+      "slug": "strandgame"
+    },
+    {
+      "id": 52,
+      "name": "KojimaProductions",
+      "slug": "kojimaproductions"
+    },
+    {
+      "id": 70,
+      "name": "R36S",
+      "slug": "r36s"
+    },
+    {
+      "id": 71,
+      "name": "ConsolaPortatil",
+      "slug": "consolaportatil"
+    },
+    {
+      "id": 72,
+      "name": "ConsolePortatil",
+      "slug": "consoleportatil"
+    },
+    {
+      "id": 73,
+      "name": "RetroGaming",
+      "slug": "retrogaming"
+    },
+    {
+      "id": 74,
+      "name": "ConsoleRetro",
+      "slug": "consoleretro"
+    },
+    {
+      "id": 75,
+      "name": "Emulador",
+      "slug": "emulador"
+    },
+    {
+      "id": 76,
+      "name": "JogosClassicos",
+      "slug": "jogosclassicos"
+    },
+    {
+      "id": 77,
+      "name": "RetroGames",
+      "slug": "retrogames"
+    },
+    {
+      "id": 78,
+      "name": "NostalgiaGamer",
+      "slug": "nostalgiagamer"
+    }
+  ],
+  "articles": [
+    {
+      "id": 1,
+      "title": "A Nova Era dos RPGs de Ação: Como a Próxima Geração Está Redefinindo Mundos Abertos",
+      "subtitle": "Gráficos hiper-realistas, inteligência artificial em NPCs e combate sem telas de carregamento marcam nova fase da indústria.",
+      "slug": "a-nova-era-dos-rpgs-de-acao-geracao-mundos-abertos",
+      "content": "\n        <p class=\"lead\">A indústria dos jogos eletrônicos atingiu um ponto de inflexão fascinante. Se na década passada o conceito de \"mundo aberto\" muitas vezes significava colecionar centenas de ícones repetitivos espalhados por um mapa imenso, hoje os principais estúdios globais estão adotando uma filosofia radicalmente diferente: densidade narrativa, física contextual e inteligência artificial adaptativa.</p>\n        \n        <h2>Física Avançada e Sem Telas de Transição</h2>\n        <p>Graças à consolidação dos SSDs ultrarrápidos de última geração e motores gráficos de ponta como a Unreal Engine 5, os limites entre cenários internos e externos praticamente desapareceram. Cidades virtuais agora respiram sem quedas bruscas de taxa de quadros, permitindo que cada edifício seja explorável e cada cidadão digital tenha rotinas plausíveis de trabalho, descanso e interação.</p>\n\n        <blockquote>\"O verdadeiro salto geracional não é apenas a contagem de polígonos na tela, mas sim a capacidade do mundo de reagir de forma convincente às escolhas impulsivas do jogador.\"</blockquote>\n\n        <h2>O Papel dos Algoritmos na Criação de Desafios</h2>\n        <p>Inimigos que aprendem com o estilo de jogo do usuário deixaram de ser ficção científica. Novos modelos comportamentais analisam padrões táticos: se o jogador abusa de esquivas ou ataques à distância, os oponentes rapidamente se reagrupam em flancos para cortar rotas de fuga. O resultado é um combate muito mais orgânico, tenso e recompensador.</p>\n\n        <h2>Perspectivas para os Próximos Anos</h2>\n        <p>Com os novos anúncios previstos para os grandes festivais internacionais de jogos, a expectativa é que essa revolução atinja também produções independentes com escopos mais focados, garantindo diversidade de propostas e experiências inesquecíveis para todos os perfis de entusiastas.</p>\n      ",
+      "excerpt": "Mundos dinâmicos com ciclos climáticos reais e sistemas neurais de comportamento colocam os jogadores no centro de narrativas verdadeiramente vivas.",
+      "cover_image": "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1200&q=80",
+      "cover_caption": "Captura ilustrativa de ambientação futurista em mundos abertos interativos.",
+      "cover_source": "Acervo Editorial / Divulgação",
+      "author_id": 1,
+      "category_id": 1,
+      "status": "published",
+      "published_at": "2026-10-26 00:36:15",
+      "updated_at": "2026-10-26 00:36:15",
+      "created_at": "2026-10-26 00:36:15",
+      "reading_time": 6,
+      "views": 1424,
+      "featured": 1,
+      "meta_title": "A Nova Era dos RPGs de Ação: Como a Próxima Geração Está Redefinindo Mundos Abertos | BLOG FILIPEM2",
+      "meta_description": "Mundos dinâmicos com ciclos climáticos reais e sistemas neurais de comportamento colocam os jogadores no centro de narrativas verdadeiramente vivas.",
+      "canonical_url": "https://blogfilipem2.com.br/artigo/a-nova-era-dos-rpgs-de-acao-geracao-mundos-abertos",
+      "og_image": null,
+      "sources_json": "[{\"title\":\"Game Developers Conference (GDC) Reports\",\"url\":\"https://gdconf.com\"},{\"title\":\"Digital Foundry Tech Reviews\",\"url\":\"https://www.eurogamer.net/digitalfoundry\"}]",
+      "allow_comments": 1,
+      "amazon_ad_code": null,
+      "amazon_product_title": null,
+      "amazon_product_url": null
+    },
+    {
+      "id": 2,
+      "title": "O Ressurgimento dos Sintetizadores e da Estética Retrô na Música Contemporânea",
+      "subtitle": "Como timbres vintage dos anos 80 combinados com batidas futuristas estão dominando as paradas globais de streaming.",
+      "slug": "ressurgimento-sintetizadores-estetica-retro-musica-contemporanea",
+      "content": "\n        <p class=\"lead\">O que faz um timbre sintetizado criado há mais de quatro décadas soar mais moderno do que nunca nos fones de ouvido dos jovens de hoje? A resposta está na confluência entre calor analógico e precisão digital.</p>\n        \n        <h2>A Busca Pela Textura Orgânica</h2>\n        <p>Em um mercado amplamente dominado por instrumentos virtuais hiper-polidos, produtores musicais de renome estão retornando aos circuitos com pequenas imperfeições sonoras: o calor das válvulas, a oscilação suave de frequência e o grave encorpado dos lendários modelos Roland Juno e Moog.</p>\n\n        <h2>Impacto nas Trilhas Sonoras de Games e Séries</h2>\n        <p>Essa tendência transcende os álbuns de estúdio e é o coração pulsante das trilhas sonoras mais cultuadas do cinema contemporâneo e de jogos com temáticas cyberpunk e neon-noir. O som eletrônico retrô não é apenas nostalgia; é um manifesto estético sobre como enxergamos o futuro com as lentes do passado.</p>\n      ",
+      "excerpt": "Da synthwave aos novos lançamentos de grandes nomes do pop internacional, a paixão por instrumentos analógicos ganha roupagem moderna.",
+      "cover_image": "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=1200&q=80",
+      "cover_caption": "Painel de sintetizadores modulares analógicos em estúdio profissional.",
+      "cover_source": "Estúdio / Divulgação Musical",
+      "author_id": 1,
+      "category_id": 2,
+      "status": "published",
+      "published_at": "2026-10-26 00:36:15",
+      "updated_at": "2026-10-26 00:36:15",
+      "created_at": "2026-10-26 00:36:15",
+      "reading_time": 4,
+      "views": 986,
+      "featured": 1,
+      "meta_title": "O Ressurgimento dos Sintetizadores e da Estética Retrô na Música Contemporânea | BLOG FILIPEM2",
+      "meta_description": "Da synthwave aos novos lançamentos de grandes nomes do pop internacional, a paixão por instrumentos analógicos ganha roupagem moderna.",
+      "canonical_url": "https://blogfilipem2.com.br/artigo/ressurgimento-sintetizadores-estetica-retro-musica-contemporanea",
+      "og_image": null,
+      "sources_json": "[{\"title\":\"Sound On Sound Magazine Analysis\",\"url\":\"https://www.soundonsound.com\"},{\"title\":\"Billboard Global Charts\",\"url\":\"https://www.billboard.com\"}]",
+      "allow_comments": 1,
+      "amazon_ad_code": null,
+      "amazon_product_title": null,
+      "amazon_product_url": null
+    },
+    {
+      "id": 3,
+      "title": "Cinematografia Digital vs Película: Como Grandes Diretores Estão Filmando a Nova Ficção Científica",
+      "subtitle": "Câmeras de altíssima resolução, lentes anamórficas e iluminação em volumes de LED transformam a narrativa visual nos cinemas.",
+      "slug": "cinematografia-digital-vs-pelicula-ficcao-cientifica",
+      "content": "\n        <p class=\"lead\">O cinema de ficção científica sempre foi o laboratório onde a técnica encontra o sonho humano. Nos últimos anos, uma verdadeira revolução visual tomou de assalto as salas IMAX ao redor do planeta.</p>\n        \n        <h2>O Fim da Era da Tela Verde Absoluta</h2>\n        <p>A tecnologia dos \"Volumes\" — gigantescas cúpulas circulares construídas com milhões de microLEDs capazes de renderizar planos de fundo fotorrealistas em tempo real — mudou a forma como os atores contracenam. Em vez de imaginar um horizonte alienígena diante de um pano verde, a luz e os reflexos dos cenários incidem fisicamente nos rostos, trajes e objetos de cena.</p>\n\n        <h2>A Poética da Luz e das Lentes</h2>\n        <p>Mesmo com câmeras digitais capazes de gravar em 8K com alcance dinâmico sem precedentes, cineastas renomados optam por acoplar lentes anamórficas vintage dos anos 1970 para introduzir aberrações ópticas encantadoras, flares elegantes e um toque humano insubstituível.</p>\n      ",
+      "excerpt": "Uma análise detalhada das decisões técnicas e artísticas que constroem a atmosfera visual das maiores obras de ficção científica deste ano.",
+      "cover_image": "https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&w=1200&q=80",
+      "cover_caption": "Equipamento de filmagem cinematográfica profissional em estúdio.",
+      "cover_source": "Acervo Cinematográfico / Divulgação",
+      "author_id": 1,
+      "category_id": 3,
+      "status": "published",
+      "published_at": "2026-10-26 00:36:15",
+      "updated_at": "2026-10-26 00:36:15",
+      "created_at": "2026-10-26 00:36:15",
+      "reading_time": 5,
+      "views": 754,
+      "featured": 0,
+      "meta_title": "Cinematografia Digital vs Película: Como Grandes Diretores Estão Filmando a Nova Ficção Científica | BLOG FILIPEM2",
+      "meta_description": "Uma análise detalhada das decisões técnicas e artísticas que constroem a atmosfera visual das maiores obras de ficção científica deste ano.",
+      "canonical_url": "https://blogfilipem2.com.br/artigo/cinematografia-digital-vs-pelicula-ficcao-cientifica",
+      "og_image": null,
+      "sources_json": "[{\"title\":\"American Cinematographer Magazine\",\"url\":\"https://ascmag.com\"}]",
+      "allow_comments": 1,
+      "amazon_ad_code": null,
+      "amazon_product_title": null,
+      "amazon_product_url": null
+    },
+    {
+      "id": 4,
+      "title": "O Fenômeno das Séries de Alta Densidade: Por Que Histórias Complexas Dominam o Streaming",
+      "subtitle": "Tramas com múltiplos pontos de vista e mundos ricos conquistam públicos cada vez mais atentos aos mínimos detalhes de produção.",
+      "slug": "fenomeno-series-alta-densidade-complexidade-streaming",
+      "content": "\n        <p class=\"lead\">Houve uma época em que a televisão aberta evitava tramas intrincadas por medo de perder o espectador que não assistiu ao episódio da semana anterior. No streaming sob demanda, esse paradigma ruiu por completo.</p>\n        \n        <h2>O Hábito de Debater Cada Detalhe na Comunidade</h2>\n        <p>Hoje, cada frame de uma produção de destaque é esmiuçado por fãs em fóruns, redes sociais e vídeos de teoria. Essa participação ativa transforma o ato de assistir a uma série em uma experiência comunitária rica e vibrante.</p>\n\n        <h2>Qualidade Técnica de Longa-Metragem na Telinha</h2>\n        <p>Os orçamentos por episódio das séries de ponta rivalizam diretamente com os de blockbusters do cinema. Direção de arte primorosa, trilhas sonoras orquestrais e efeitos visuais meticulosos tornam o consumo doméstico uma verdadeira celebração audiovisual.</p>\n      ",
+      "excerpt": "Espectadores preferem temporadas com arcos bem amarrados a episódios puramente episódicos. Entenda os fatores por trás dessa virada narrativa.",
+      "cover_image": "https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=1200&q=80",
+      "cover_caption": "Ambiente de cinema em casa com exibição de produções épicas de streaming.",
+      "cover_source": "Streaming News / Divulgação",
+      "author_id": 1,
+      "category_id": 4,
+      "status": "published",
+      "published_at": "2026-10-26 00:36:15",
+      "updated_at": "2026-10-26 00:36:15",
+      "created_at": "2026-10-26 00:36:15",
+      "reading_time": 5,
+      "views": 894,
+      "featured": 0,
+      "meta_title": "O Fenômeno das Séries de Alta Densidade: Por Que Histórias Complexas Dominam o Streaming | BLOG FILIPEM2",
+      "meta_description": "Espectadores preferem temporadas com arcos bem amarrados a episódios puramente episódicos. Entenda os fatores por trás dessa virada narrativa.",
+      "canonical_url": "https://blogfilipem2.com.br/artigo/fenomeno-series-alta-densidade-complexidade-streaming",
+      "og_image": null,
+      "sources_json": "[{\"title\":\"Variety Industry Insights\",\"url\":\"https://variety.com\"}]",
+      "allow_comments": 1,
+      "amazon_ad_code": null,
+      "amazon_product_title": null,
+      "amazon_product_url": null
+    },
+    {
+      "id": 5,
+      "title": "Inteligência Artificial Generativa e o Futuro dos Efeitos Visuais na Cultura Pop",
+      "subtitle": "Ferramentas neurais estão acelerando tarefas de pós-produção e permitindo que criadores independentes realizem visões ambiciosas.",
+      "slug": "inteligencia-artificial-futuro-efeitos-visuais-cultura-pop",
+      "content": "\n        <p class=\"lead\">A tecnologia avança a passos largos e o ecossistema criativo da cultura geek está no epicentro dessa transformação. O debate sobre automação e assistência inteligente nunca foi tão relevante.</p>\n        \n        <h2>Aceleração de Tarefas Repetitivas</h2>\n        <p>Em estúdios de animação e jogos, modeladores e artistas de textura passam dias ajustando reflexos e rotoscopias frame a frame. Com ferramentas neurais integradas a softwares clássicos como Blender e Maya, essas etapas rotineiras passam a levar minutos, liberando tempo precioso para o refinamento artístico e a concepção de conceitos originais.</p>\n\n        <h2>A Importância da Autoria Humana e Ética</h2>\n        <p>No centro de qualquer obra memorável está a sensibilidade humana: a capacidade de emocionar, questionar a moral e contar histórias com verdade e empatia. A tecnologia permanece como um instrumento poderoso nas mãos de artistas talentosos.</p>\n      ",
+      "excerpt": "Como algoritmos de ponta estão sendo integrados a fluxos de trabalho éticos na criação de jogos, animações e efeitos especiais.",
+      "cover_image": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80",
+      "cover_caption": "Arte conceitual abstrata representando sinapses neurais e tecnologia digital.",
+      "cover_source": "Acervo Tech / Imagem Editorial",
+      "author_id": 1,
+      "category_id": 5,
+      "status": "published",
+      "published_at": "2026-10-26 00:36:15",
+      "updated_at": "2026-10-26 00:36:15",
+      "created_at": "2026-10-26 00:36:15",
+      "reading_time": 6,
+      "views": 1655,
+      "featured": 1,
+      "meta_title": "Inteligência Artificial Generativa e o Futuro dos Efeitos Visuais na Cultura Pop | BLOG FILIPEM2",
+      "meta_description": "Como algoritmos de ponta estão sendo integrados a fluxos de trabalho éticos na criação de jogos, animações e efeitos especiais.",
+      "canonical_url": "https://blogfilipem2.com.br/artigo/inteligencia-artificial-futuro-efeitos-visuais-cultura-pop",
+      "og_image": null,
+      "sources_json": "[{\"title\":\"MIT Technology Review\",\"url\":\"https://www.technologyreview.com\"},{\"title\":\"Ars Technica Science & Tech\",\"url\":\"https://arstechnica.com\"}]",
+      "allow_comments": 1,
+      "amazon_ad_code": null,
+      "amazon_product_title": null,
+      "amazon_product_url": null
+    },
+    {
+      "id": 6,
+      "title": "O Ano de Ouro: Os Melhores e Mais Aguardados Jogos de 2026 ",
+      "subtitle": "",
+      "slug": "o-ano-de-ouro-os-melhores-e-mais-aguardados-jogos-de-2026",
+      "content": " <footer class=\"post-tags\">    <section class=\"post-content\">\n        <p>O ano de 2026 já está marcado como um ponto de virada histórico para a indústria dos videojogos. Com o retorno de franquias lendárias, sequências ambiciosas e o resgate de séries que estavam há anos na geladeira, os jogadores têm um calendário lotado de experiências inesquecíveis. Se queres manter o teu blog atualizado com o que está a dominar as conversas, aqui estão os maiores destaques deste ano.</p>\n\n        <h2>Um Mergulho Profundo nos Títulos que Estão a Definir 2026</h2>\n        <p>O impacto dos lançamentos deste ano vai muito além dos gráficos de ponta. As mecânicas de gameplay foram refinadas, a inteligência artificial dos NPCs atingiu novos patamares e as narrativas estão mais imersivas do que nunca. Para quem acompanha o cenário, seja a jogar no sofá ou a transmitir ao vivo para milhares de espetadores, estes são os detalhes que fazem cada título destacar-se.</p>\n\n        <h3>Grand Theft Auto VI: A Evolução do Mundo Aberto</h3>\n        <p>A Rockstar não está apenas a entregar um novo mapa; o estado de Leonida é um ecossistema vivo. A densidade de NPCs, o trânsito dinâmico e o sistema de clima afetam diretamente a jogabilidade. O jogo apresenta um sistema de progressão de personagens onde as escolhas de Lucia e Jason alteram a perceção pública e as oportunidades no submundo do crime. O modo online também promete ser uma plataforma robusta, dominando as métricas de streaming instantaneamente.</p>\n\n        <h3>Monster Hunter Wilds: Caçadas Dinâmicas e Multijogador Impecável</h3>\n        <p>A Capcom refinou a fórmula da caçada adicionando transições perfeitas entre biomas sem ecrãs de carregamento. As tempestades de areia, inundações e nevões não são apenas efeitos visuais; elas mudam o comportamento dos monstros e as táticas necessárias para abatê-los. A integração do multijogador foi aprimorada, facilitando a vida de quem gere sessões com amigos ou servidores dedicados para abater as feras mais colossais do jogo num combate cooperativo extremamente gratificante.</p>\n\n        <h3>Marvel’s Wolverine: Brutalidade em Primeira Classe</h3>\n        <p>A Insomniac afastou-se do tom leve de Spider-Man para entregar uma experiência visceral. O fator de cura de Logan está diretamente integrado às mecânicas de combate: os jogadores verão o dano no corpo do mutante a curar em tempo real após combates intensos. A exploração foca-se num estilo metroidvania mais contido, recompensando a curiosidade com melhorias para as garras de adamantium e detalhes profundos do lore dos X-Men.</p>\n\n        <h3>Gears of War: E-Day: O Retorno ao Terror e Sobrevivência</h3>\n        <p>Para os jogadores que acompanham a franquia, <strong>E-Day</strong> traz de volta o peso e a brutalidade dos primeiros jogos. A campanha remove os elementos táticos exagerados das entradas recentes e foca-se na sobrevivência crua de Marcus Fenix e Dom Santiago no primeiro dia da invasão Locust. O combate corpo a corpo com a Lancer nunca pareceu tão desesperador e impactante.</p>\n\n        <h3>Control Resonant: Física e Paranormalidade Expandidas</h3>\n        <p>A engine Northlight da Remedy Entertainment foi levada ao limite. A interação com o cenário em <strong>Control Resonant</strong> permite usar literalmente qualquer objeto do mapa como arma. A jogar com Dylan, a árvore de habilidades introduz poderes focados na distorção do próprio cenário, criando quebra-cabeças ambientais complexos e combates onde o teto e o chão podem mudar de lugar a qualquer momento.</p>\n\n        <h3>Fable: O Conto de Fadas Sombrio Ganha Nova Vida</h3>\n        <p>A Playground Games traduziu a sua maestria técnica para um mundo de fantasia vibrante e reativo. Albion responde às tuas escolhas morais de forma visual: as vilas prosperam ou apodrecem dependendo das tuas ações, e o humor ácido britânico está mais afiado do que nunca. O sistema de magia permite combinar elementos dinamicamente durante os confrontos.</p>\n\n        <h3>Resident Evil: Requiem e Castlevania: Belmont’s Curse: O Peso do Legado</h3>\n        <p><strong>Requiem</strong> abandona a ação exagerada para prender o jogador em recursos escassos e corredores claustrofóbicos, com quebra-cabeças exigentes. Já <strong>Belmont's Curse</strong> brilha por exigir uma precisão rítmica nos comandos. O peso do chicote de Rose Belmont e a necessidade de dominar esquivas perfeitas trazem um desafio mecânico que recompensa reflexos rápidos e memorização de padrões.</p>\n    </section>\n\n    <hr style=\"margin:30px 0;border:0;border-top:1px solid #eee\" />\n\n\n        <p><strong>Tags:</strong> \n            <span style=\"color:#555;font-style:italic\">jogos 2026, melhores jogos 2026, lançamentos de jogos, videojogos 2026, Grand Theft Auto VI, GTA 6, Marvel's Wolverine, Resident Evil Requiem, Monster Hunter Wilds, Gears of War E-Day, Fable, Control Resonant, Castlevania Belmont's Curse, PS5, PlayStation 5, Xbox Series X, PC gaming, jogos de mundo aberto, survival horror, RPG de ação</span>\n        </p>\n    </footer>\n\n",
+      "excerpt": "O Ano de Ouro: Os Melhores e Mais Aguardados Jogos de 2026 ",
+      "cover_image": "https://t.ctcdn.com.br/Rj8N9Rmrd5g7Gas6dOUfWPCQPSI=/640x360/smart/i1089631.jpeg",
+      "cover_caption": "",
+      "cover_source": "https://canaltech.com.br/games/calendario-lancamentos-de-jogos-2026/",
+      "author_id": 1,
+      "category_id": 1,
+      "status": "published",
+      "published_at": "2026-10-28T20:36:17.802Z",
+      "updated_at": "2026-10-28 15:03:53",
+      "created_at": "2026-10-30 20:20:58",
+      "reading_time": 4,
+      "views": 6,
+      "featured": 1,
+      "meta_title": "O Ano de Ouro: Os Melhores e Mais Aguardados Jogos de 2026  | BLOG FILIPEM2",
+      "meta_description": "O Ano de Ouro: Os Melhores e Mais Aguardados Jogos de 2026 ",
+      "canonical_url": "",
+      "og_image": "https://t.ctcdn.com.br/Rj8N9Rmrd5g7Gas6dOUfWPCQPSI=/640x360/smart/i1089631.jpeg",
+      "sources_json": "[]",
+      "allow_comments": 1,
+      "amazon_ad_code": null,
+      "amazon_product_title": "Grand Theft Auto VI - PlayStation 5 & Xbox Series",
+      "amazon_product_url": "https://www.amazon.com.br/s?k=GTA+6+PlayStation+5&tag=blogfilipem2-20"
+    },
+    {
+      "id": 7,
+      "title": "O Hino do City Pop: A História de Miki Matsubara e \"Stay With Me",
+      "subtitle": "",
+      "slug": "o-hino-do-city-pop-a-historia-de-miki-matsubara-e-stay-with-me",
+      "content": "<article>\n    <header>\n        <h1 style=\"text-align:center\">O Hino do City Pop: A História de Miki Matsubara e \"Stay With Me\"</h1>\n    </header>\n\n    <section class=\"post-video\" style=\"text-align:center;margin:20px 0\">\n        \n        <iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/9YnxXEE-fvU\" title=\"Miki Matsubara - Stay With Me\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" allowfullscreen style=\"border-radius:10px;box-shadow:0 4px 8px rgba(0,0,0,0.1);max-width:100%\"></iframe>\n    </section>\n\n    <section class=\"post-content\">\n        <p>Se tens estado atento às tendências de música ou passas algum tempo nas redes sociais, é muito provável que já tenhas ouvido a contagiante e nostálgica <strong>\"真夜中のドア〜stay with me\" (Mayonaka no Door ~ Stay With Me)</strong>. Esta canção tornou-se um fenómeno viral mundial quase 40 anos após o seu lançamento original.</p>\n\n        <h2>A Magia por Trás da Música</h2>\n        <p>Lançada originalmente em novembro de 1979, esta canção foi o single de estreia da cantora japonesa Miki Matsubara e rapidamente se tornou um dos maiores marcos do <em>City Pop</em>. Este género musical, que marcou o Japão dos anos 70 e 80, mistura pop, jazz, funk e R&amp;B, refletindo perfeitamente a atmosfera urbana e o boom económico da época.</p>\n        \n        <p>A letra narra uma história melancólica de um romance que está a chegar ao fim. O título refere-se à \"porta da meia-noite\", onde a protagonista implora para que o seu amor não se vá embora – o famoso e irresistível refrão <em>\"Stay with me\"</em>.</p>\n        \n        <p>Graças ao TikTok, ao YouTube e aos algoritmos de streaming, a música renasceu no final de 2020, explodindo no ocidente e atingindo o topo das tabelas virais globais em plataformas como o Spotify.</p>\n\n        <h2>O Talento de Miki Matsubara</h2>\n        <p>Nascida em Osaka, no Japão, em 1959, Miki Matsubara foi uma talentosa cantora e compositora. Ao longo da década de 80, construiu uma carreira sólida, lançou vários álbuns de sucesso e compôs também músicas para aberturas e encerramentos de animes.</p>\n        \n        <p>Dona de uma voz encorpada e afinada, Miki tinha grandes influências da música ocidental, especialmente do jazz e do R&amp;B, o que casava na perfeição com a sonoridade rica e sofisticada das suas obras.</p>\n        \n        <h3>Um Legado Eterno</h3>\n        <p>Infelizmente, a história de Miki Matsubara teve um desfecho trágico e prematuro. A artista faleceu em 2004, aos 44 anos, vítima de complicações causadas por um cancro. Ela nunca chegou a testemunhar o estrondoso sucesso mundial que a sua música alcançaria décadas mais tarde.</p>\n        \n        <p>Ainda assim, \"Stay With Me\" eternizou o seu talento, garantindo que a sua voz e a sua arte continuem a ressoar e a apaixonar milhões de ouvintes em todo o mundo.</p>\n    </section>\n\n    <hr style=\"margin:30px 0;border:0;border-top:1px solid #eee\" />\n\n    <footer class=\"post-tags\">\n        <p><strong>Tags:</strong> \n            <span style=\"color:#555;font-style:italic\">city pop, miki matsubara, stay with me, música japonesa, anos 80, tendências musicais, j-pop, clássicos da música</span>\n        </p>\n    </footer>\n</article>\n",
+      "excerpt": "O Hino do City Pop: A História de Miki Matsubara e \"Stay With Me",
+      "cover_image": "https://i.scdn.co/image/ab676161000051745f0f64c377388c01d381b896",
+      "cover_caption": "",
+      "cover_source": "spotify",
+      "author_id": 1,
+      "category_id": 2,
+      "status": "published",
+      "published_at": "2026-10-28T20:36:17.802Z",
+      "updated_at": "2026-10-28 15:06:03",
+      "created_at": "2026-10-30 20:20:58",
+      "reading_time": 2,
+      "views": 7,
+      "featured": 1,
+      "meta_title": "O Hino do City Pop: A História de Miki Matsubara e \"Stay With Me | BLOG FILIPEM2",
+      "meta_description": "O Hino do City Pop: A História de Miki Matsubara e \"Stay With Me",
+      "canonical_url": "",
+      "og_image": "https://i.scdn.co/image/ab676161000051745f0f64c377388c01d381b896",
+      "sources_json": "[{\"title\":\"Informações e vídeo retirados do canal oficial de Miki Matsubara no YouTube\",\"url\":\"https://www.youtube.com/watch?v=9YnxXEE-fvU\"}]",
+      "allow_comments": 1,
+      "amazon_ad_code": null,
+      "amazon_product_title": "Séries Asiáticas e Doramas na Amazon",
+      "amazon_product_url": "https://www.amazon.com.br/s?k=doramas+series&tag=blogfilipem2-20"
+    },
+    {
+      "id": 8,
+      "title": "Homem-Aranha: Um Novo Dia – O Recomeço Sombrio e o Maior Sucesso de 2026",
+      "subtitle": "",
+      "slug": "homem-aranha-um-novo-dia-o-recomeco-sombrio-e-o-maior-sucesso-de-2026",
+      "content": "<article>\n    <header>\n        <h1 style=\"text-align:center\">Homem-Aranha: Um Novo Dia – O Recomeço Sombrio e o Maior Sucesso de 2026</h1>\n    </header>\n\n    <section class=\"post-media\" style=\"text-align:center;margin:20px 0\">\n        \n        <a href=\"https://www.youtube.com/watch?v=bwt2-nyEP0A\" target=\"_blank\" rel=\"noopener noreferrer\">\n            <img src=\"https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGigGb5CNNSvL9B3lDdup6N-v45FWAH6MSVAO2maSv0km6k1L_SN84pKzQRUDC6VcvGS-IiLxLoyQOzqofcYvat6PhTKWjD9V9Kg5QUvGFoW2zUZH6QhP_BDVtsa4WxUhAPGr6d93QViyyCayNF30JPRPO2_Q==\" alt=\"Pôster Oficial de Homem-Aranha: Um Novo Dia - Clique para Assistir ao Trailer\" style=\"border-radius:10px;box-shadow:0 4px 8px rgba(0,0,0,0.3);max-width:100%;height:auto\" />\n        </a>\n        <p style=\"font-size:0.8em;color:#777;margin-top:10px\">Clique no pôster para assistir ao Trailer Final - Dublado Oficial</p>\n    </section>\n\n    <section class=\"post-content\">\n        <p>Se procuras informações detalhadas sobre o mais recente filme do Cabeça de Teia, vieste ao sítio certo! <strong>Homem-Aranha: Um Novo Dia</strong> (<em>Spider-Man: Brand New Day</em>) chegou aos cinemas no final de julho de 2026 e redefiniu completamente o Universo Cinematográfico da Marvel. Mas o que torna este filme tão especial?</p>\n\n        <h2>A História: Quatro Anos de Solidão e Trevas</h2>\n        <p>A trama decorre quatro anos após os eventos devastadores de <em>Sem Volta para Casa</em>. A história foca-se num Peter Parker mais solitário do que nunca, a lutar a tempo inteiro como o vigilante de Nova Iorque. O seu objetivo? Proteger uma cidade e amigos que nem sequer se lembram da sua existência.</p>\n        \n        <p>O filme traz uma atmosfera muito mais crua e urbana. Longe das tecnologias bilionárias das Indústrias Stark, Peter agora vive num minúsculo apartamento no sótão, possui o seu próprio sistema caseiro de IA e até uma impressora 3D para criar os seus trajes. O tom é visivelmente mais sério e violento: o Homem-Aranha entra em confrontos físicos intensos no submundo do crime, devolvendo a sensação de \"Amigão da Vizinhança\" que trabalha lado a lado com as frequências da polícia.</p>\n\n        <h3>A Evolução Perturbadora dos Poderes</h3>\n        <p>A pressão constante e a extrema solidão de não ter ninguém com quem partilhar a sua vida (chegando ao ponto de espiar secretamente a sua ex-namorada, MJ) começam a destruir o estado psicológico de Peter. Isto desencadeia uma mutação radical e instável no seu ADN: os seus olhos ficam completamente pretos em momentos de stress extremo, os sentidos ficam esmagadoramente aguçados, sofre ataques de fúria e, para seu próprio nojo inicial, começa a disparar teias orgânicas diretamente dos pulsos.</p>\n\n        <h3>O Desespero de Jean Grey</h3>\n        <p>O perigo principal não é uma entidade cósmica, mas sim uma adolescente magoada e desesperada. Interpretada brilhantemente por <strong>Sadie Sink</strong>, Jean Grey é introduzida como uma mutante poderosa (com capacidades de telecinésia, telepatia e possessão de mentes). Ela entra numa espiral destrutiva em Nova Iorque à procura da sua irmã, Sara, que foi sequestrada pelo Departamento de Controlo de Danos (DODC). O verdadeiro terror do filme é a capacidade de Jean de possuir as mentes de qualquer pessoa, virando aliados e inimigos contra Peter.</p>\n\n        <h3>Alianças Improváveis no Submundo</h3>\n        <p>Como se trava um inimigo que não pode simplesmente ser esmurrado? Isolado e temendo que Jean possa controlar mentes poderosas, Peter cruza-se com o violento <strong>Justiceiro (Frank Castle)</strong>, interpretado por Jon Bernthal. Apesar de entrarem em conflito direto devido aos seus métodos completamente opostos, ambos formam uma aliança de respeito mútuo para derrubar as operações secretas do DODC. O filme também conta com a presença de Mark Ruffalo (Hulk), cuja mente regride para uma forma mais selvagem sob a influência destas novas ameaças.</p>\n\n        <h2>Um Fenómeno Absoluto de Bilheteira</h2>\n        <p>Além da narrativa envolvente realizada por Destin Daniel Cretton, os números de <em>Brand New Day</em> são de cair o queixo:</p>\n        <ul>\n            <li><strong>Orçamento vs. Lucro:</strong> Custou 225 milhões de dólares, mas arrecadou mais de <strong>2,5 mil milhões de dólares</strong> a nível mundial.</li>\n            <li><strong>Recordes Quebrados:</strong> Teve a maior abertura de fim de semana da história na América do Norte (360 milhões) e atingiu a marca de mil milhões em apenas 5 dias.</li>\n            <li><strong>O Marco de Tom Holland:</strong> Graças a este sucesso massivo, Tom Holland tornou-se o ator principal mais rentável da história do cinema.</li>\n        </ul>\n\n        <p><em>Homem-Aranha: Um Novo Dia</em> não é apenas mais um filme de super-heróis; é o ápice da jornada de Peter Parker rumo à vida adulta, forçando-o a descobrir a sua verdadeira identidade enquanto enfrenta o lado mais negro da cidade.</p>\n    </section>\n\n    <hr style=\"margin:30px 0;border:0;border-top:1px solid #eee\" />\n\n    <footer class=\"post-tags\">\n        <p><strong>Tags:</strong> \n            <span style=\"color:#555;font-style:italic\">homem-aranha um novo dia, spider-man brand new day, marvel studios, tom holland, zendaya, sadie sink, jon bernthal, jean grey, mcu 2026, filmes de super-heróis, cinema, maiores bilheteiras</span>\n        </p>\n    </footer>\n</article>",
+      "excerpt": "Homem-Aranha: Um Novo Dia – O Recomeço Sombrio e o Maior Sucesso de 2026",
+      "cover_image": "https://i.ytimg.com/vi/PlulyWs1kS4/sddefault.jpg",
+      "cover_caption": "",
+      "cover_source": "https://www.ingresso.com/",
+      "author_id": 1,
+      "category_id": 3,
+      "status": "published",
+      "published_at": "2026-10-28T20:36:17.802Z",
+      "updated_at": "2026-10-28 15:10:47",
+      "created_at": "2026-10-30 21:30:45",
+      "reading_time": 4,
+      "views": 8,
+      "featured": 1,
+      "meta_title": "Homem-Aranha: Um Novo Dia – O Recomeço Sombrio e o Maior Sucesso de 2026 | BLOG FILIPEM2",
+      "meta_description": "Homem-Aranha: Um Novo Dia – O Recomeço Sombrio e o Maior Sucesso de 2026",
+      "canonical_url": "",
+      "og_image": "https://i.ytimg.com/vi/PlulyWs1kS4/sddefault.jpg",
+      "sources_json": "[{\"title\":\"Sony Pictures Brasil\",\"url\":\"https://www.youtube.com/watch?v=bwt2-nyEP0A\"}]",
+      "allow_comments": 1,
+      "amazon_ad_code": null,
+      "amazon_product_title": null,
+      "amazon_product_url": null
+    },
+    {
+      "id": 9,
+      "title": "Forza Horizon 6: Como o Japão Foi Transformado no Melhor Cenário da Franquia",
+      "subtitle": "",
+      "slug": "forza-horizon-6-o-proximo-nivel-da-conducao-em-mundo-aberto",
+      "content": "<article>\n    <header>\n        <h1 style=\"text-align:center\">Forza Horizon 6: Como o Japão Foi Transformado no Melhor Cenário da Franquia</h1>\n    </header>\n\n    <section class=\"post-content\">\n        <p>Foram anos de rumores, milhares de publicações em fóruns e pedidos intermináveis da comunidade. Finalmente, a Playground Games ouviu-nos: <strong>Forza Horizon 6 decorre no Japão</strong>. E, para alívio de todos os fãs de velocidade, a implementação do cenário não é apenas um mapa bonito, mas sim a maior e mais autêntica carta de amor à cultura automóvel japonesa já feita num videojogo.</p>\n\n        <h2>Um Mapa de Contrastes: Do Néon à Natureza</h2>\n        <p>A recriação do Japão no ForzaTech é absolutamente deslumbrante. A equipa de desenvolvimento não se limitou a recriar Tóquio; eles condensaram a essência da geografia japonesa num mapa incrivelmente diversificado, que se divide em três grandes pilares:</p>\n\n        <h3>1. A Metrópole e a Via Rápida Wangan</h3>\n        <p>As áreas urbanas são inspiradas em Tóquio e Osaka, repletas de arranha-céus, becos apertados e, claro, um mar de luzes de néon. O <em>Ray Tracing</em> global brilha aqui, com as luzes da cidade a refletirem-se nas poças de água e na pintura dos carros. A joia da coroa é a colossal via rápida que circunda a cidade (inspirada na famosa <em>Shuto Expressway / Wangan</em>), perfeita para corridas de velocidade máxima a mais de 300 km/h à meia-noite.</p>\n\n        <h3>2. O Renascimento do Touge (Corridas de Montanha)</h3>\n        <p>Se és fã de <em>Initial D</em>, vais passar 90% do teu tempo aqui. A Playground Games desenhou as montanhas mais sinuosas, íngremes e perigosas da história da franquia. Inspiradas no icónico Monte Fuji e em Hakone, estas estradas apertadas exigem um domínio absoluto do controlo do carro. Fazer <em>drift</em> numa curva de ganchos (hairpins) à beira do abismo nunca foi tão gratificante, e a física melhorada dos pneus faz com que cada derrapagem pareça incrivelmente realista.</p>\n\n        <h3>3. Encontros de Carros (Car Meets) Estilo Daikoku Futo</h3>\n        <p>A cultura <strong>JDM (Japanese Domestic Market)</strong> é sobre comunidade. No jogo, foram implementados parques de estacionamento interativos baseados no lendário <em>Daikoku Futo Parking Area</em>. Estes são \"hubs\" sociais sem colisões, onde podes estacionar, sair da câmara do carro, caminhar (com o teu avatar) e admirar as modificações dos veículos de outros jogadores em tempo real, organizando comboios espontâneos para a cidade.</p>\n\n        <h2>As Quatro Estações no Japão</h2>\n        <p>O sistema de estações do ano regressa, mas com um impacto cultural e visual muito mais forte:</p>\n        <ul>\n            <li><strong>Primavera:</strong> O mapa explode em tons de rosa com o florescer das cerejeiras (Sakura). A aderência é perfeita e o cenário é digno de um postal.</li>\n            <li><strong>Verão:</strong> Traz chuvas intensas e tufões dinâmicos, encharcando as autoestradas e criando desafios extremos de <em>aquaplaning</em>.</li>\n            <li><strong>Outono:</strong> As montanhas cobrem-se de folhas vermelhas e laranjas, e a neblina matinal nas estradas rurais cria uma atmosfera misteriosa para corridas ilegais.</li>\n            <li><strong>Inverno:</strong> As regiões montanhosas (inspiradas em Hokkaido) ficam cobertas de neve profunda, transformando os percursos de <em>touge</em> em verdadeiras pistas de rali no gelo.</li>\n        </ul>\n\n        <h2>Modificação Extrema: O Céu é o Limite</h2>\n        <p>Para combinar com o Japão, o sistema de afinação e personalização visual foi refeito. A integração com marcas reais como <em>Liberty Walk</em>, <em>Rocket Bunny</em> e <em>RWB</em> (Rauh-Welt Begriff) está mais profunda do que nunca. Além disso, agora podes adicionar iluminação néon por baixo do carro (underglow), autocolantes de <em>Itasha</em> (estilo anime) em alta resolução e alterar a sonoridade das válvulas de escape para obter aquele som característico dos motores japoneses.</p>\n\n        <p><em>Forza Horizon 6</em> não é apenas um jogo de carros; é um bilhete de avião virtual de primeira classe para o paraíso automobilístico asiático, entregando exatamente aquilo com que a comunidade sonhou na última década.</p>\n    </section>\n\n    <hr style=\"margin:30px 0;border:0;border-top:1px solid #eee\" />\n\n    <footer class=\"post-tags\">\n        <p><strong>Tags:</strong> \n            <span style=\"color:#555;font-style:italic\">forza horizon 6, japão, jdm, tokyo, touge, drift, playground games, xbox series x, pc gaming, jogos de corrida, carros japoneses</span>\n        </p>\n    </footer>\n</article>",
+      "excerpt": "Forza Horizon 6: O Próximo Nível da Condução em Mundo Aberto",
+      "cover_image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlJwGYsUcr3IG4HiA0pPrBp1qPypFj1UUoGMeAfC9riw&s=10",
+      "cover_caption": "",
+      "cover_source": "https://www.playstation.com/",
+      "author_id": 1,
+      "category_id": 1,
+      "status": "published",
+      "published_at": "2026-10-28T20:36:17.802Z",
+      "updated_at": "2026-10-30 20:15:58",
+      "created_at": "2026-10-30 21:30:45",
+      "reading_time": 4,
+      "views": 9,
+      "featured": 1,
+      "meta_title": "Forza Horizon 6: O Próximo Nível da Condução em Mundo Aberto | BLOG FILIPEM2",
+      "meta_description": "Forza Horizon 6: O Próximo Nível da Condução em Mundo Aberto",
+      "canonical_url": "",
+      "og_image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlJwGYsUcr3IG4HiA0pPrBp1qPypFj1UUoGMeAfC9riw&s=10",
+      "sources_json": "[]",
+      "allow_comments": 1,
+      "amazon_ad_code": null,
+      "amazon_product_title": null,
+      "amazon_product_url": null
+    },
+    {
+      "id": 10,
+      "title": "Games Mais Dificil - vontade de arremessar o controle ou o mouse na parede!!",
+      "subtitle": "",
+      "slug": "games-mais-dificil-vontade-de-arremessar-o-controle-ou-o-mouse-na-parede",
+      "content": "\n<h2>Quem nunca sentiu aquela vontade de arremessar o controle ou o mouse na parede que atire a primeira pedra.</h2>\n<p>Aqui no filipemblog.com, sabemos que a comunidade gamer tem uma relação de amor e ódio com desafios extremos. Seja para provar as próprias habilidades, superar os amigos ou simplesmente gerar aqueles momentos inesquecíveis (e estressantes) nas lives, jogos com dificuldade punitiva têm um lugar especial na nossa biblioteca.</p>\n\n<p>Se você está procurando algo para testar seus reflexos e a sua sanidade, confira esta lista com alguns dos jogos mais difíceis já criados:</p>\n\n<hr />\n\n<h3>1. Sekiro: Shadows Die Twice</h3>\n<p>A desenvolvedora FromSoftware já é famosa por criar a série <em>Dark Souls</em> e <em>Elden Ring</em>, mas <em>Sekiro</em> eleva a dificuldade a outro patamar. Aqui, você não pode simplesmente subir o nível do seu personagem para esmagar os inimigos. O jogo exige que você domine a mecânica de <em>parry</em> (defesa no tempo exato). Um erro de milissegundos no ritmo do combate e a tela de \"Morte\" vai aparecer para você. É um verdadeiro teste de ritmo e nervos de aço.</p>\n<div style=\"text-align:center;margin-bottom:20px\">\n    <iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/rXMX4YJ7Lks\" title=\"Sekiro: Shadows Die Twice Trailer\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>\n</div>\n\n<h3>2. osu!</h3>\n<p>Quando o assunto é dificuldade extrema, muita gente esquece os jogos de ritmo, mas eles abrigam alguns dos maiores desafios do mundo dos games. Quem vê de fora pode achar que é só clicar em círculos, mas em níveis avançados, <em>osu!</em> exige uma precisão de mira, coordenação motora e um tempo de reação que parecem desumanos. Tentar passar dos mapas mais intensos (ou buscar aquele \"Full Combo\") é uma prova de resistência física e mental que exige horas e horas de memória muscular.</p>\n\n<h3>3. Getting Over It with Bennett Foddy</h3>\n<p>Este jogo é o verdadeiro terror das transmissões ao vivo. O conceito é simples: você controla um homem dentro de um caldeirão que precisa escalar uma montanha de entulhos usando apenas uma marreta. O problema? A física do jogo é propositalmente desengonçada e punitiva. Um movimento em falso e você pode cair, perdendo horas de progresso em questão de segundos. É o simulador perfeito de frustração.</p>\n\n\n<h3>4. Cuphead</h3>\n<p>Não se deixe enganar pelos gráficos maravilhosos inspirados nos desenhos animados dos anos 1930. <em>Cuphead</em> é um jogo brutal. Focado em batalhas contra chefes, ele exige que você decore padrões de ataque complexos enquanto a tela vira um verdadeiro caos de projéteis. Cada vitória traz um alívio imenso, mas até lá, você vai repetir a mesma fase dezenas de vezes.</p>\n<div style=\"text-align:center;margin-bottom:20px\">\n    <iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/4TjUPXAn2Rg\" title=\"Cuphead Trailer\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>\n</div>\n\n<h3>5. Celeste</h3>\n<p>Um jogo de plataforma onde a precisão é tudo. A história de superação da protagonista Madeline combina perfeitamente com a jornada do próprio jogador. As mecânicas de pulo e impulso são simples de entender, mas incrivelmente difíceis de dominar nas fases mais avançadas (especialmente se você decidir ir atrás dos morangos opcionais ou jogar os Lados B e C).</p>\n<div style=\"text-align:center;margin-bottom:20px\">\n    <iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/70d9irlxiB4\" title=\"Celeste Trailer\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>\n</div>\n\n<hr />\n\n<h3>Conclusão</h3>\n<p>Zerar qualquer um desses títulos é uma verdadeira medalha de honra no mundo dos games. A sensação de finalmente derrotar aquele chefe impossível ou passar daquela música insana é o que faz o sofrimento valer a pena.</p>\n\n<p><strong>E você, qual foi o jogo que mais te fez suar frio até hoje?</strong> Deixe aí nos comentários e continue acompanhando o blog para mais dicas e análises do mundo dos games!</p>\n",
+      "excerpt": "Games Mais Dificil - vontade de arremessar o controle ou o mouse na parede!!",
+      "cover_image": "https://t.ctcdn.com.br/yRsneD6Bbx1ajo4h5INEk0C7_34=/1200x675/smart/i1086067.png",
+      "cover_caption": "",
+      "cover_source": "https://canaltech.com.br/games/jogos-mais-dificeis-de-2025/",
+      "author_id": 1,
+      "category_id": 1,
+      "status": "published",
+      "published_at": "2026-10-29T00:49:08.274Z",
+      "updated_at": "2026-10-28 21:05:04",
+      "created_at": "2026-10-30 21:30:45",
+      "reading_time": 3,
+      "views": 13,
+      "featured": 1,
+      "meta_title": "Games Mais Dificil - vontade de arremessar o controle ou o mouse na parede!! | BLOG FILIPEM2",
+      "meta_description": "Games Mais Dificil - vontade de arremessar o controle ou o mouse na parede!!",
+      "canonical_url": "",
+      "og_image": "https://t.ctcdn.com.br/yRsneD6Bbx1ajo4h5INEk0C7_34=/1200x675/smart/i1086067.png",
+      "sources_json": "[]",
+      "allow_comments": 1,
+      "amazon_ad_code": null,
+      "amazon_product_title": null,
+      "amazon_product_url": null
+    },
+    {
+      "id": 11,
+      "title": "O Futuro Chegou em Dobro: Conheça o Inovador iPhone Duo e a Linha iPhone 18",
+      "subtitle": "",
+      "slug": "o-futuro-chegou-em-dobro-conheca-o-inovador-iphone-duo-e-a-linha-iphone-18",
+      "content": "<article>\n    <h1>O Futuro Chegou em Dobro: Conheça o Inovador iPhone Duo e a Linha iPhone 18</h1>\n    <p>A Apple mudou as regras do jogo com uma estratégia de lançamento dividida, separando suas linhas premium e de entrada de forma inédita. Em setembro, o mundo conheceu os poderosos iPhone 18 Pro e o revolucionário iPhone Duo, o primeiro modelo dobrável da marca. O iPhone 18 padrão e o 18e ficaram para a primavera, trazendo a nova geração de chips e inteligência artificial para o grande público.</p>\n\n    <h2>iPhone Duo: A Apple Entra na Era dos Dobráveis</h2>\n    <div class=\"price\">Preço estimado: A partir de US$ 1.499 (aprox. R$ 14.999 no Brasil)</div>\n    <p>O iPhone Duo chega para disputar o mercado de dobráveis com um foco em usabilidade, produtividade e acabamento premium em titânio.</p>\n    <ul>\n        <li><strong>Telas e Design:</strong> Tela externa de 5,4 polegadas e display interno de 7,6 polegadas com acabamento <em>nano-texture</em> projetado para reduzir o brilho e tornar o vinco central praticamente invisível.</li>\n        <li><strong>Segurança:</strong> O Face ID dá lugar a um novo Touch ID integrado diretamente ao botão de energia lateral.</li>\n        <li><strong>Câmeras Otimizadas para o Formato:</strong> O conjunto traseiro conta com o sistema duplo <em>Fusion</em> de 48MP. A tela externa ganha utilidade com o <em>Duo Preview</em> (permitindo que a pessoa fotografada veja a si mesma antes do clique) e o <em>Kid Cue</em> (animações na tela externa para atrair o olhar de crianças).</li>\n        <li><strong>Desempenho:</strong> Chip A20 Pro, 12GB de RAM, resfriamento por câmara de vapor e um sistema de bateria dupla (dual-battery) para suportar as duas telas.</li>\n    </ul>\n\n    <h2>iPhone 18 Pro e Pro Max: O Ápice da Fotografia e Desempenho</h2>\n    <div class=\"price\">Preço estimado: A partir de US$ 1.099 (Pro) e US$ 1.199 (Pro Max) (aprox. R$ 9.299 / R$ 10.999 no Brasil)</div>\n    <p>A linha Pro tradicional mantém o formato em barra, mas eleva o nível do hardware fotográfico a patamares profissionais, impulsionada pelo novo processador de imagem do chip A20 Pro.</p>\n    <ul>\n        <li><strong>Trio de 48MP:</strong> Pela primeira vez, todas as três câmeras traseiras (Principal, Ultrawide e Telefoto) possuem sensores de 48 megapixels. Isso garante fotos em altíssima resolução e vídeos em 8K independentemente da lente escolhida.</li>\n        <li><strong>Abertura Variável:</strong> A câmera principal agora conta com abertura variável (f/1.4 a f/2.0), permitindo controle físico sobre a profundidade de campo e a entrada de luz, ideal para fotógrafos exigentes.</li>\n        <li><strong>Zoom Aprimorado:</strong> A lente telefoto periscópio agora oferece zoom óptico contínuo entre 5x e 10x, sem perda de qualidade digital no meio do caminho.</li>\n    </ul>\n\n    <h2>iPhone 18 e 18e: A Nova Geração de Entrada</h2>\n    <div class=\"price\">Preço estimado: A partir de US$ 599 (18e) e US$ 799 (18) (aprox. R$ 5.499 / R$ 7.399 no Brasil)</div>\n    <p>Reservados para a primavera, os modelos base democratizam o acesso aos novos chips e recursos de inteligência artificial.</p>\n    <ul>\n        <li><strong>Novo Processador de 2nm:</strong> Ambos utilizam o chip A20 padrão (2 nanômetros), garantindo eficiência energética extrema. A memória RAM salta para 9GB ou 12GB para suportar processamento local de IA.</li>\n        <li><strong>Tamanhos e Câmeras:</strong> O iPhone 18 mantém a tela de 6,3 polegadas com o sistema de câmera dupla. O iPhone 18e tem tela de 6,12 polegadas (60Hz) e uma câmera traseira de lente única de 48MP.</li>\n        <li><strong>Selfies em Alta Resolução:</strong> Toda a linha, incluindo os modelos mais baratos, recebe um upgrade considerável na câmera frontal, saltando dos antigos 12MP para 24MP.</li>\n    </ul>\n\n    <h2>A Nova Siri e a Revolução da Apple Intelligence (iOS 27)</h2>\n    <p>O hardware avançado, especialmente o aumento de memória RAM em toda a linha, tem um motivo claro: rodar a nova versão da Siri baseada no modelo fundacional atualizado da Apple Intelligence.</p>\n    <ul>\n        <li><strong>Processamento 100% On-Device:</strong> A maioria das requisições agora acontece diretamente no aparelho, garantindo respostas instantâneas sem depender da nuvem e mantendo total privacidade dos dados.</li>\n        <li><strong>Consciência de Tela (Screen Awareness):</strong> A Siri agora \"lê\" o que está na sua tela. Você pode dizer <em>\"adicione esse endereço aos meus contatos\"</em> enquanto olha para uma mensagem no WhatsApp, e ela executará a ação sem precisar de comandos complexos.</li>\n        <li><strong>Memória de Contexto Longa:</strong> A assistente lembra de interações passadas. Se você perguntou sobre um voo de um amigo na terça-feira, na sexta-feira pode simplesmente perguntar <em>\"a que horas ele chega mesmo?\"</em> e a Siri saberá de quem e qual voo você está falando.</li>\n        <li><strong>Geração Multimodal:</strong> A Siri agora gera imagens no app Notas baseada em rabiscos e pode reescrever e-mails de trabalho no Mail ajustando não apenas o tom, mas incluindo dados e anexos encontrados no próprio aparelho.</li>\n    </ul>\n\n    <div class=\"sources\">\n        <strong>Fontes e Referências (Baseado em projeções e vazamentos da indústria):</strong>\n        <ul>\n            <li><a href=\"https://www.macrumors.com/\" target=\"_blank\">MacRumors</a> - Rumores sobre chips de 2nm da TSMC e linha iPhone 18 (Relatórios de 2024-2026).</li>\n            <li><a href=\"https://www.bloomberg.com/technology\" target=\"_blank\">Bloomberg (Mark Gurman)</a> - Projeções da newsletter <em>Power On</em> sobre o ecossistema Apple Intelligence e o projeto de dobráveis da Apple.</li>\n            <li><strong>Ming-Chi Kuo (TF International Securities)</strong> - Notas para investidores sobre atualizações de sensores fotográficos de 48MP e câmeras frontais de 24MP.</li>\n            <li><a href=\"https://appleinsider.com/\" target=\"_blank\">AppleInsider</a> - Previsões sobre mudanças de design e patentes de dispositivos dobráveis e telas <em>nano-texture</em>.</li>\n        </ul>\n    </div>\n</article>\n\n\n",
+      "excerpt": "O Futuro Chegou em Dobro: Conheça o Inovador iPhone Duo e a Linha iPhone 18",
+      "cover_image": "https://macmagazine.com.br/wp-content/uploads/2026/09/10-iPhone-18-Pro-Duo-scaled.jpg",
+      "cover_caption": "",
+      "cover_source": "https://macmagazine.com.br/post/2026/09/13/iphones-18-pro-e-iphone-duo-como-os-atuais-flagships-se-comparam/",
+      "author_id": 1,
+      "category_id": 5,
+      "status": "published",
+      "published_at": "2026-10-30T17:58:31.426Z",
+      "updated_at": "2026-10-29 15:37:37",
+      "created_at": "2026-10-30 21:30:45",
+      "reading_time": 5,
+      "views": 18,
+      "featured": 1,
+      "meta_title": "O Futuro Chegou em Dobro: Conheça o Inovador iPhone Duo e a Linha iPhone 18 | BLOG FILIPEM2",
+      "meta_description": "O Futuro Chegou em Dobro: Conheça o Inovador iPhone Duo e a Linha iPhone 18",
+      "canonical_url": "",
+      "og_image": "https://macmagazine.com.br/wp-content/uploads/2026/09/10-iPhone-18-Pro-Duo-scaled.jpg",
+      "sources_json": "[{\"title\":\"AppleInsider\",\"url\":\"https://appleinsider.com/\"}]",
+      "allow_comments": 1,
+      "amazon_ad_code": null,
+      "amazon_product_title": null,
+      "amazon_product_url": null
+    },
+    {
+      "id": 12,
+      "title": "GTA 6: análise dos trailers, gráficos e história de Jason e Lucia",
+      "subtitle": "Analisamos os trailers de GTA 6, os gráficos, Vice City, Jason e Lucia e as expectativas para o próximo grande jogo da Rockstar Games.",
+      "slug": "gta-6-analise-dos-trailers-graficos-e-historia-de-jason-e-lucia",
+      "content": "# GTA 6: Análise dos trailers — a Rockstar está preparando uma nova revolução nos games?\n\n**O retorno a Vice City promete uma experiência gigantesca, personagens marcantes e um mundo aberto que parece mais vivo do que nunca. Mas será que GTA 6 conseguirá superar as expectativas absurdas criadas pelos fãs?**\n\n*Por FilipeMBlog | Games e Entretenimento*\n\nDesde que a Rockstar Games revelou o primeiro trailer de *Grand Theft Auto VI*, em dezembro de 2023, ficou claro que o próximo capítulo da franquia seria um dos lançamentos mais aguardados da história dos videogames. Com a chegada do segundo trailer, em maio de 2025, e dos vídeos divulgados posteriormente, a empresa apresentou novos detalhes sobre o universo, os protagonistas e a atmosfera de seu próximo grande projeto. \n\n## Vice City está de volta, e a nostalgia ganhou uma nova cara\n\nO primeiro trailer foi responsável por apresentar o clima de GTA 6. Com cenários ensolarados, praias, festas, estradas e cenas que lembram a cultura da Flórida, a Rockstar construiu uma identidade visual que mistura o exagero característico da franquia com referências ao mundo atual.\n\nVice City aparece muito mais moderna e detalhada do que nas versões anteriores. A cidade parece movimentada, cheia de contrastes e com uma personalidade própria. Não é apenas uma paisagem bonita: é um lugar que transmite a sensação de estar constantemente acontecendo alguma coisa.\n\nUm dos pontos mais interessantes é a forma como o trailer apresenta a sociedade desse universo. Redes sociais, vídeos virais, festas e situações absurdas ajudam a construir uma sátira da cultura contemporânea, algo que sempre fez parte da identidade de Grand Theft Auto.\n\nVisualmente, a primeira apresentação já deixou uma impressão forte. A iluminação, os reflexos, os cenários e a riqueza de detalhes indicam uma evolução técnica significativa em relação a GTA V.\n\n## Jason e Lucia: uma história que promete ir além do crime\n\nSe o primeiro trailer apresentou o mundo, o segundo aprofundou a apresentação de Jason Duval e Lucia Caminos.\n\nA dupla ocupa o centro da narrativa, com um relacionamento que parece ter papel importante na história. A proposta de acompanhar dois protagonistas abre espaço para explorar diferentes perspectivas, conflitos pessoais e decisões que podem colocar os personagens em situações cada vez mais perigosas.\n\nO segundo trailer também apresenta momentos cotidianos, cenas de ação e passagens que ajudam a transmitir a personalidade dos protagonistas. Em vez de mostrar apenas perseguições e explosões, a Rockstar parece querer estabelecer uma conexão entre o público e os personagens.\n\nEssa escolha pode ser um dos maiores acertos do jogo. Uma história de crime se torna muito mais interessante quando existe algo além do dinheiro e da violência: relações complicadas, confiança, ambição e as consequências das próprias escolhas.\n\nNaturalmente, ainda precisamos jogar para descobrir a profundidade dessa narrativa. Os trailers despertam curiosidade, mas não são suficientes para confirmar a qualidade do roteiro ou o desenvolvimento dos personagens.\n\n## Gráficos impressionantes, mas o visual não é tudo\n\nUm dos aspectos que mais chamam a atenção nos vídeos é a apresentação visual.\n\nOs personagens possuem expressões faciais detalhadas, os ambientes apresentam diferentes condições de iluminação e os cenários demonstram uma variedade impressionante de elementos. A água, a vegetação, os veículos e as ruas contribuem para uma sensação de mundo mais convincente.\n\nOutro detalhe importante é a ambientação. O contraste entre áreas urbanas, regiões costeiras e espaços mais afastados sugere uma experiência que vai além de circular por uma única grande cidade.\n\nMas existe uma questão importante: gráficos impressionantes não garantem, sozinhos, um grande jogo.\n\nA verdadeira prova será a forma como todos esses elementos funcionam durante a exploração. O mundo precisará oferecer atividades interessantes, personagens com comportamentos convincentes, missões bem construídas e liberdade suficiente para que cada jogador tenha suas próprias histórias.\n\nÉ nesse ponto que GTA 6 poderá realmente se destacar.\n\n## O segundo trailer elevou as expectativas\n\nNa minha análise, o segundo trailer foi importante porque apresentou uma visão mais completa da proposta do jogo. Enquanto o primeiro apostava na apresentação de Vice City e na construção de sua atmosfera, o segundo colocou Jason e Lucia em evidência e mostrou mais elementos da narrativa.\n\nA combinação entre cenas cinematográficas e imagens capturadas no próprio jogo também reforçou a impressão de que a Rockstar está trabalhando em uma apresentação visual bastante ambiciosa.\n\nA trilha sonora merece destaque. A música e a edição ajudam a dar ritmo às imagens, alternando momentos descontraídos com cenas que sugerem perigo e tensão. Essa combinação é uma das características que tornam os trailers da franquia tão marcantes.\n\nAinda assim, vale manter os pés no chão: cenas selecionadas para divulgação não representam necessariamente o ritmo de uma missão completa ou o desempenho do jogo em todas as situações.\n\n## E os vídeos mais recentes?\n\nAlém dos dois trailers principais, a Rockstar divulgou *Grand Theft Auto VI: An Extended Look*, uma apresentação mais extensa que oferece um olhar adicional sobre o universo do jogo, e o *Launch Trailer*, publicado em outubro de 2026.\n\nO material mais recente amplia a apresentação do projeto e reforça a importância de Jason, Lucia e do cenário de Leonida. A divulgação também mantém o foco na atmosfera cinematográfica que a empresa vem construindo desde a primeira apresentação.\n\nPara quem acompanha a franquia há anos, esses materiais ajudam a entender melhor a direção artística escolhida pela Rockstar. Porém, ainda é importante separar o que os vídeos efetivamente mostram das expectativas da comunidade sobre mecânicas, missões e possibilidades de exploração.\n\n## O que ainda queremos ver em GTA 6?\n\nApesar de tudo o que já foi apresentado, algumas perguntas continuam sendo fundamentais para avaliar o jogo de verdade:\n\n- **Liberdade no mundo aberto:** será possível interagir com o ambiente de maneiras realmente diferentes?\n- **Inteligência artificial:** os pedestres e os policiais terão comportamentos mais naturais e variados?\n- **Missões:** a campanha permitirá diferentes abordagens ou seguirá estruturas mais tradicionais?\n- **Atividades secundárias:** o mundo terá conteúdo interessante além da história principal?\n- **Desempenho:** como o jogo se comportará durante perseguições, tiroteios e cenas com muitos elementos na tela?\n\nEsses pontos podem fazer a diferença entre um jogo visualmente impressionante e uma experiência que continuará interessante durante dezenas ou centenas de horas.\n\n## Veredito do FilipeMBlog\n\n**GTA 6 tem potencial para se tornar um dos grandes acontecimentos da indústria dos games.** Seus trailers apresentam um universo visualmente impressionante, uma ambientação cheia de personalidade e uma dupla de protagonistas que desperta curiosidade.\n\nO maior mérito da Rockstar, até aqui, é conseguir transformar cada apresentação em um acontecimento. Vice City parece ter identidade própria, a direção artística é marcante e a relação entre Jason e Lucia oferece uma base interessante para a narrativa.\n\nMeu principal ponto de atenção é a distância entre a expectativa criada pelos trailers e a experiência real de jogar. A Rockstar precisará entregar sistemas de jogo consistentes, missões memoráveis e um mundo que continue surpreendendo depois que a novidade dos gráficos passar.\n\nPor enquanto, a impressão é bastante positiva. GTA 6 tem os ingredientes para marcar uma nova fase da franquia, mas o veredito definitivo só poderá ser dado quando pudermos explorar Leonida por conta própria.\n\n**Nota dos trailers: 9,5/10.**\n\n*Esta nota avalia os materiais de divulgação, a apresentação visual e a capacidade de despertar interesse. Não representa uma avaliação do jogo completo.*\n\nE você, está tão ansioso quanto nós para jogar GTA 6? O que mais chamou sua atenção nos trailers: os gráficos, a história de Jason e Lucia ou a possibilidade de explorar Vice City novamente? Deixe sua opinião nos comentários!\n\n---\n\n*BLOG FILIPEM2 — Games, tecnologia e cultura geek.*",
+      "excerpt": "GTA 6: análise dos trailers, gráficos e história de Jason e Lucia",
+      "cover_image": "https://www.notebookcheck.info/fileadmin/Notebooks/News/_nc5/GTA-6-new-details.jpg",
+      "cover_caption": "",
+      "cover_source": "https://www.notebookcheck.info/Varejista-brasileiro-revela-novos-detalhes-sobre-os-NPCs-de-GTA-6-o-sistema-de-redes-sociais-no-jogo-e-muito-mais.1329295.0.html",
+      "author_id": 1,
+      "category_id": 1,
+      "status": "published",
+      "published_at": "2026-10-30T17:58:31.427Z",
+      "updated_at": "2026-10-30 22:58:01",
+      "created_at": "2026-10-30 21:30:45",
+      "reading_time": 7,
+      "views": 17,
+      "featured": 1,
+      "meta_title": "GTA 6: análise dos trailers, gráficos e história de Jason e Lucia | BLOG FILIPEM2",
+      "meta_description": "GTA 6: análise dos trailers, gráficos e história de Jason e Lucia",
+      "canonical_url": "",
+      "og_image": "https://www.notebookcheck.info/fileadmin/_processed_/webp/Notebooks/News/_nc5/GTA-6-new-details-q82-w480-h.webp",
+      "sources_json": "[{\"title\":\"rockstargames\",\"url\":\"https://www.rockstargames.com/VI\"},{\"title\":\"rockstargames\",\"url\":\"https://www.rockstargames.com/VI/trailer-2\"},{\"title\":\"rockstargames\",\"url\":\"https://www.rockstargames.com/VI/trailer-1\"}]",
+      "allow_comments": 1,
+      "amazon_ad_code": null,
+      "amazon_product_title": null,
+      "amazon_product_url": null
+    },
+    {
+      "id": 13,
+      "title": "Doctor X: da versão japonesa ao remake coreano — qual das duas séries médicas é melhor?",
+      "subtitle": "",
+      "slug": "doctor-x-da-versao-japonesa-ao-remake-coreano-qual-das-duas-series-medicas-e-melhor",
+      "content": "**Uma cirurgiã que não aceita ordens, hospitais dominados por interesses e operações praticamente impossíveis. Doctor X voltou em uma nova versão sul-coreana, mas sua história começou muito antes, no Japão. Conheça as diferenças entre as duas produções.**\n\n*Por FilipeMBlog | Séries e Entretenimento*\n\nExistem séries que conseguem conquistar o público com histórias diferentes, personagens marcantes e protagonistas que fogem completamente do padrão. Doctor X é um desses casos.\n\nEm 2012, o Japão apresentou ao público Doctor-X: Surgeon Michiko Daimon, uma produção médica protagonizada por Ryoko Yonekura. A série conquistou popularidade ao acompanhar uma cirurgiã freelancer que não aceita as regras impostas pelos hospitais e demonstra suas habilidades em operações extremamente complicadas.\n\nMais de uma década depois, a história ganhou uma nova interpretação na Coreia do Sul. Em 2026, a Netflix apresentou Doctor X: A Máfia do Jaleco Branco, estrelada por Kim Ji-won, trazendo a proposta para um novo cenário e uma abordagem própria.\n\nMas o que realmente mudou? E será que a nova versão consegue manter o charme da produção japonesa?\n\n## 🇯🇵 Doctor-X: Surgeon Michiko Daimon — onde tudo começou\n\n\n\nhttps://youtu.be/_aDATPOMsQ4?si=PBywo183wCINeBKV\n\n\n\nA história original estreou em 2012, no Japão, e apresentou Michiko Daimon, interpretada por Ryoko Yonekura.\n\nMichiko é uma cirurgiã freelancer extremamente competente, que trabalha por meio de uma agência de profissionais médicos. Diferentemente dos médicos tradicionais, ela não aceita hierarquias hospitalares como justificativa para impedir seu trabalho.\n\nSua personalidade é direta, independente e muitas vezes provocadora. Ela não está interessada em cargos importantes, prestígio ou reconhecimento dentro do hospital. Seu objetivo é realizar cirurgias e salvar vidas.\n\nUma das características mais marcantes da personagem é sua confiança absoluta nas próprias habilidades. Quando outros médicos hesitam diante de uma operação complicada, Michiko está pronta para assumir o desafio.\n\nA produção também apresenta bastante humor, rivalidades profissionais e críticas à burocracia do sistema médico japonês.\n\n**O grande diferencial da versão original** está na personalidade de Michiko. Ela não precisa mudar seu comportamento para conquistar respeito. Seu talento fala por si.\n\nA série japonesa teve sete temporadas, exibidas entre 2012 e 2021, além de um filme lançado em 2024.\n\n## 🇰🇷 Doctor X: A Máfia do Jaleco Branco — a nova versão da Netflix\n\nhttps://www.youtube.com/watch?v=ncr0c1sgA_w\n\nEm 2026, a Coreia do Sul decidiu apresentar sua própria interpretação dessa história.\n\nA nova produção acompanha Gye Su-jeong, interpretada por Kim Ji-won, uma cirurgiã brilhante que chega ao Hospital Universitário Guseo.\n\nAssim como Michiko, Su-jeong não aceita facilmente as regras impostas por seus superiores. Entretanto, a nova versão apresenta uma atmosfera mais voltada ao suspense e às disputas de poder.\n\nO hospital é dominado por médicos influentes, corrupção e interesses pessoais. Nesse ambiente, a protagonista precisa enfrentar não apenas operações difíceis, mas também pessoas que utilizam seus cargos para controlar o funcionamento da instituição.\n\nA produção recebeu o subtítulo A Máfia do Jaleco Branco justamente por essa atmosfera de disputas e corrupção.\n\nKim Ji-won, conhecida internacionalmente por Rainha das Lágrimas, assume uma personagem bastante diferente de seus papéis românticos mais conhecidos.\n\nA versão coreana possui 12 episódios e aposta em uma narrativa mais compacta.\n\n## Duas protagonistas, a mesma personalidade independente\n\nTalvez a maior semelhança entre as produções esteja justamente nas protagonistas.\n\nMichiko Daimon e Gye Su-jeong são mulheres extremamente competentes, que não aceitam ser controladas por médicos poderosos.\n\nAs duas enfrentam ambientes profissionais dominados por hierarquias e interesses que muitas vezes entram em conflito com a responsabilidade de salvar vidas.\n\nEntretanto, existe uma diferença na maneira como cada produção apresenta esses conflitos.\n\nA versão japonesa possui uma identidade mais estabelecida, com uma protagonista que se tornou conhecida por suas frases marcantes, seu comportamento irreverente e sua confiança durante as cirurgias.\n\nJá a versão coreana aposta em uma atmosfera mais sombria, com maior destaque para a corrupção hospitalar e os conflitos entre os personagens.\n\nNão se trata simplesmente de trocar uma atriz por outra. A adaptação coreana procura construir sua própria identidade.\n\n## Qual versão é melhor?\n\nEssa é uma pergunta que depende muito do que o espectador procura.\n\nA produção japonesa tem a vantagem de possuir uma história desenvolvida ao longo de sete temporadas. Isso permite acompanhar Michiko em diferentes hospitais, conhecer melhor os personagens e observar a evolução das relações profissionais.\n\nJá a versão coreana apresenta uma experiência mais curta e concentrada, com uma atmosfera de suspense e conflitos que podem agradar quem gosta de dramas sul-coreanos.\n\nPara quem gosta de humor, personagens icônicos e histórias médicas com uma protagonista extremamente confiante, a versão japonesa merece atenção especial.\n\nPara quem prefere suspense, disputas de poder e uma narrativa mais compacta, a versão coreana pode ser uma ótima escolha.\n\n## Vale a pena assistir às duas?\n\nCom certeza!\n\nUma das coisas mais interessantes de acompanhar remakes é perceber como uma mesma ideia pode ganhar características diferentes dependendo do país e da equipe responsável pela produção.\n\nA série japonesa construiu uma identidade própria e conquistou seu espaço na televisão. Agora, a Coreia do Sul tem a oportunidade de apresentar essa história para uma nova geração de espectadores.\n\nO interessante é assistir às duas sem esperar que sejam exatamente iguais. Cada produção tem seu próprio ritmo, elenco e maneira de contar a história.\n\n## Veredito do FilipeMBlog\n\nDoctor X é um exemplo interessante de como uma boa ideia pode atravessar fronteiras e ganhar novas interpretações.\n\nA versão japonesa possui o carisma de Michiko Daimon e uma trajetória consolidada. Já a adaptação coreana apresenta Kim Ji-won em um papel diferente, com uma proposta mais sombria e uma abordagem própria sobre corrupção e poder dentro dos hospitais.\n\nMinha recomendação é simples: não escolha uma versão antes de conhecer as duas.\n\n**A original japonesa merece ser lembrada por sua protagonista inesquecível, enquanto a nova versão coreana merece atenção por tentar renovar uma fórmula que já conquistou muitos espectadores.**\n\n**Nota editorial:**\n- Versão japonesa: 9,0/10.\n- Versão coreana: 8,5/10.\n\n*As notas são avaliações editoriais do FilipeMBlog, não notas oficiais das produções.*\n\n---\n\n**E você, qual Doctor X prefere?**\n\nA personalidade irreverente de Michiko Daimon ou a nova interpretação de Gye Su-jeong?\n\nJá assistiu à versão japonesa antes de começar a coreana? Conte sua opinião nos comentários!\n\n**BLOG FILIPEM2 — Games, tecnologia, filmes, séries e cultura geek.**",
+      "excerpt": "Doctor X: da versão japonesa ao remake coreano — qual das duas séries médicas é melhor?",
+      "cover_image": "/uploads/1793475912041-ca7fc0b044c382f1.jpg",
+      "cover_caption": "Gemini_Generated_Image_bdmnqobdmnqobdmn.jpg",
+      "cover_source": "netflix.com",
+      "author_id": 1,
+      "category_id": 4,
+      "status": "published",
+      "published_at": "2026-10-30T17:58:31.427Z",
+      "updated_at": "2026-10-31 19:45:13",
+      "created_at": "2026-10-30 21:30:45",
+      "reading_time": 6,
+      "views": 13,
+      "featured": 1,
+      "meta_title": "Doctor X: da versão japonesa ao remake coreano — qual das duas séries médicas é melhor? | BLOG FILIPEM2",
+      "meta_description": "Doctor X: da versão japonesa ao remake coreano — qual das duas séries médicas é melhor?",
+      "canonical_url": "",
+      "og_image": "https://occ-0-2794-2219.1.nflxso.net/dnm/api/v6/6AYY37jfdO6hpXcMjf9Yu5cnmO0/AAAABRXFDBYWCsgniYGR7pZxEf4m9EervKM5JPNCF8kTLYkklr-OHeQXKvoKTJvrlCSef5JLboVqrEserLJzwkG03VqHw8xKv7oE-ppv.jpg?r=fe5",
+      "sources_json": "[{\"title\":\"netflix.com tudum\",\"url\":\"https://www.netflix.com/tudum/pt-br/artigos/doctor-x-a-mafia-do-jaleco-branco-personagens\"}]",
+      "allow_comments": 1,
+      "amazon_ad_code": "",
+      "amazon_product_title": "",
+      "amazon_product_url": ""
+    },
+    {
+      "id": 14,
+      "title": "A Jornada de Sam Bridges e o Futuro em 'On the Beach'",
+      "subtitle": "",
+      "slug": "a-jornada-de-sam-bridges-e-o-futuro-em-on-the-beach",
+      "content": "      <p>Criada por <strong>Hideo Kojima</strong>, a franquia Death Stranding redefiniu a interação entre jogadores através do conceito de \"Strand Game\". Misturando logística e exploração de cenários hostis com uma narrativa cinematográfica profunda, a série aborda temas complexos sobre a vida, a morte e as conexões humanas.</p>\n    \n    <p>Se você deseja entender o impacto do jogo original ou preparar-se para a aguardada sequência, eis tudo o que você precisa saber sobre o universo da Bridges.</p>\n\n    <h2>O Primeiro Incidente (Death Stranding Original)</h2>\n    <p>O título de 2019 introduziu um universo onde as leis da natureza foram corrompidas por um evento apocalíptico que fundiu o mundo dos vivos com a \"Praia\" (dimensão dos mortos). Você assume o papel de Sam Porter Bridges, um entregador convocado pela UCA para atravessar uma versão devastada da América do Norte.</p>\n    <p>O ambiente exterior é letal. A chuva foi substituída pela <strong>Chuva Temporal</strong> (Timefall), que acelera drasticamente o envelhecimento de qualquer coisa que toca. O mundo também está infestado por BTs (entidades invisíveis e mortais). Para sobreviver, Sam utiliza um BB (Bridge Baby, chamado carinhosamente de Lou) para detectar as ameaças.</p>\n\n    <h2>A Inovação do Strand System e Mecânicas</h2>\n    <div class=\"highlight-box\">\n        A genialidade do jogo está no multiplayer colaborativo e invisível. Os jogadores nunca se veem, mas as estruturas construídas por um (escadas, pontes, rodovias e tirolesas) aparecem no mundo de outros jogadores, criando uma teia global de ajuda mútua.\n    </div>\n    <ul>\n        <li><strong>Física e Desafio:</strong> A jogabilidade é focada na movimentação. O jogador precisa gerenciar minuciosamente o peso, o equilíbrio da carga nas costas e o desgaste dos equipamentos em terrenos acidentados.</li>\n        <li><strong>Elenco de Estrelas:</strong> A trama conta com atuações de Norman Reedus (Sam), Mads Mikkelsen (Cliff), Léa Seydoux (Fragile) e Troy Baker (o terrorista Higgs), elevando o padrão de captura de performance.</li>\n    </ul>\n\n    <h2>A Nova Fronteira: Death Stranding 2 (On the Beach)</h2>\n    <p>A sequência direta leva a operação de reconexão para um patamar global. Após anos de uma vida isolada que é abruptamente interrompida, Sam é resgatado e junta-se à <strong>Drawbridge</strong>, uma organização filantrópica desvinculada do governo, liderada por Fragile.</p>\n    <ul>\n        <li><strong>O DHV Magellan:</strong> Em vez de focar apenas em centros de distribuição fixos, a equipe usa uma gigantesca nave/submarino que navega por poças de piche, servindo como uma base de operações móvel.</li>\n        <li><strong>Cenários e Clima Dinâmico:</strong> O terreno agora reage em tempo real. Desastres naturais como enchentes devastadoras, terremotos e incêndios alteram completamente o mapa e destroem rotas.</li>\n        <li><strong>A Volta de Higgs:</strong> O icônico vilão retorna num corpo ciborgue bizarro. Empunhando uma guitarra elétrica que atira e dá choques, ele comanda um exército de robôs samurais para se vingar de Sam.</li>\n    </ul>\n\n    <h2>Plataformas e Disponibilidade</h2>\n    <p>A franquia se expandiu além da sua casa original, tornando-se acessível para mais jogadores:</p>\n    <ul>\n        <li><span class=\"price-tag\">Já Disponível</span> <strong>Death Stranding (Versão Base e Director's Cut):</strong> Pode ser jogado no PS4, PS5, PC (Steam/Epic), macOS e até em dispositivos Apple recentes (iPhone 15 Pro, iPads com chip M1+).</li>\n        <li><span class=\"price-tag\">Lançamento 2025+</span> <strong>Death Stranding 2 - On the Beach:</strong> Anunciado, por enquanto, como um título exclusivo para o PlayStation 5.</li>\n    </ul>\n    \n    <p>O dilema central da nova fase da franquia deixa um questionamento no ar para os fãs debaterem: <em>\"Deveríamos ter nos conectado?\"</em></p>\n\n    <div class=\"tags\">\n        <strong>Tags:</strong> #DeathStranding #HideoKojima #DS2 #OnTheBeach #NormanReedus #PlayStation #StrandGame #KojimaProductions\n    </div>\n\n\n\n\n\n\n<div class=\"my-6 p-5 rounded-2xl bg-[#0f1118] border border-amber-500/40 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4\">\n  <div class=\"space-y-1\">\n    <span class=\"text-[10px] font-bold text-amber-400 uppercase tracking-wider bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20\">Recomendado na Amazon</span>\n    <h4 class=\"text-sm sm:text-base font-bold text-white\">Death Stranding 2: On the beach - PlayStation 5</h4>\n    <p class=\"text-xs text-neutral-400\">Entrega rápida Prime e garantia oficial pela Amazon.</p>\n  </div>\n  <a href=\"https://link.amazon/B00PB3c0f?tag=blogfilipem2-20\" target=\"_blank\" rel=\"sponsored noopener noreferrer\" class=\"px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-xs uppercase tracking-wider shrink-0 transition-all shadow-md\">\n    Comprar na Amazon →\n  </a>\n</div>\n",
+      "excerpt": "A Jornada de Sam Bridges e o Futuro em 'On the Beach'",
+      "cover_image": "https://i.ytimg.com/vi/tae8F4gkfiw/maxresdefault.jpg",
+      "cover_caption": "",
+      "cover_source": "CHVRCHES - Death Stranding",
+      "author_id": 1,
+      "category_id": 1,
+      "status": "published",
+      "published_at": "2026-10-31T19:44:12.642Z",
+      "updated_at": "2026-10-30 22:57:01",
+      "created_at": "2026-10-30 22:55:56",
+      "reading_time": 3,
+      "views": 2,
+      "featured": 1,
+      "meta_title": "A Jornada de Sam Bridges e o Futuro em 'On the Beach' | BLOG FILIPEM2",
+      "meta_description": "A Jornada de Sam Bridges e o Futuro em 'On the Beach'",
+      "canonical_url": "",
+      "og_image": "https://i.ytimg.com/vi/tae8F4gkfiw/maxresdefault.jpg",
+      "sources_json": "[]",
+      "allow_comments": 1,
+      "amazon_ad_code": null,
+      "amazon_product_title": null,
+      "amazon_product_url": null
+    },
+    {
+      "id": 15,
+      "title": "O Console Portátil Retrô que Está Dominando o Mercado",
+      "subtitle": "",
+      "slug": "o-console-portatil-retro-que-esta-dominando-o-mercado",
+      "content": "   <p>O <strong>R36S</strong> tornou-se um dos consoles portáteis retrô mais populares do mercado devido ao seu excelente custo-benefício. Focado em oferecer uma experiência nostálgica acessível, este pequeno dispositivo em formato vertical entrega uma biblioteca imensa de jogos clássicos sem exigir configurações complexas.</p>\n    \n    <p>Se você está pensando em adquirir um dispositivo para reviver os clássicos ou apresentar jogos antigos às novas gerações, eis tudo o que você precisa saber.</p>\n\n    <h2>Tela e Construção</h2>\n    <p>O R36S é equipado com uma <strong>tela IPS de 3,5 polegadas</strong> (resolução de 640 x 480 pixels). Este painel garante cores vivas e ótimos ângulos de visão, tornando os gráficos antigos nítidos e muito mais agradáveis do que nas telas LCD padrão de consoles mais baratos.</p>\n    <p>O chassi é construído em plástico ABS resistente e inclui um direcional digital (D-pad), quatro botões de ação e dois analógicos na parte inferior, além de botões de ombro (L1/L2 e R1/R2) na traseira.</p>\n\n    <h2>Desempenho e Sistemas Suportados</h2>\n    <div class=\"highlight-box\">\n        No interior, o console opera com um processador Quad-Core de 64 bits (o conhecido chip <strong>RK3326</strong>) aliado a 1GB de RAM. O sistema operacional é baseado em Linux (frequentemente rodando ArkOS ou interfaces semelhantes).\n    </div>\n    <ul>\n        <li><strong>O que roda perfeitamente:</strong> Você terá uma experiência impecável com sistemas de 8 e 16 bits como Atari, Master System, NES, SNES, Mega Drive, Game Boy (Classic, Color e Advance), além de jogos de fliperama (Arcade/MAME). A emulação de <strong>PlayStation 1 (PS1)</strong> também é excelente.</li>\n        <li><strong>Onde ele sofre:</strong> Embora os anúncios prometam compatibilidade com Nintendo 64, Dreamcast e PSP, jogos mais pesados destas plataformas apresentam dificuldades (quedas de framerate e engasgos no áudio). Considere-o apenas para jogos 2D mais leves do PSP.</li>\n    </ul>\n\n    <h2>Autonomia de Bateria</h2>\n    <p>O dispositivo inclui uma bateria entre <strong>3200 a 3500 mAh</strong>, recarregável via USB-C (tempo médio de carga de 2 horas).</p>\n    <ul>\n        <li><strong>Sistemas Leves (Game Boy, SNES):</strong> Autonomia atinge facilmente a marca de 6 a 8 horas de uso contínuo.</li>\n        <li><strong>Sistemas Pesados (PS1):</strong> O consumo aumenta, reduzindo a autonomia para cerca de 3 a 4 horas.</li>\n    </ul>\n\n    <h2>Conforto e Ergonomia</h2>\n    <p>Sendo um aparelho bastante compacto, pessoas com mãos maiores podem sentir algum desconforto após sessões longas de jogo, especialmente ao usar os botões traseiros ou os analógicos inferiores. Para resolver isso, muitos jogadores optam por comprar \"Grips\" (suportes impressos em 3D) vendidos à parte.</p>\n\n    <h2>Preços e Onde Comprar</h2>\n    <p>O preço é o maior atrativo do R36S, mas varia bastante conforme a loja:</p>\n    <ul>\n        <li><span class=\"price-tag\">R$ 160 a R$ 250</span> <strong>Importação (AliExpress/Shopee internacional):</strong> Preços em promoções, mas exige atenção às taxas alfandegárias vigentes.</li>\n        <li><span class=\"price-tag\">R$ 250 a R$ 450</span> <strong>Lojas Nacionais (Mercado Livre, KaBuM!, Magalu):</strong> Comprando com estoque no Brasil, você tem a vantagem da entrega rápida e isenção de surpresas com taxas extras.</li>\n    </ul>\n    \n    <p>Geralmente, ele já é vendido em versões com cartões de 64GB ou 128GB, pré-carregados com 10.000 a 15.000 jogos.</p>\n\n    <div class=\"tags\">\n        <strong>Tags:</strong> #R36S #ConsolePortatil #RetroGaming #ArkOS #RetroArch #RK3326 #JogosClassicos #PS1 #CustoBeneficio\n    </div>\n\n\n\n\n\n\n<div class=\"my-6 p-5 rounded-2xl bg-[#0f1118] border border-amber-500/40 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4\">\n  <div class=\"space-y-1\">\n    <span class=\"text-[10px] font-bold text-amber-400 uppercase tracking-wider bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20\">Recomendado na Amazon</span>\n    <h4 class=\"text-sm sm:text-base font-bold text-white\">Console de jogos portátil retrô, console de videogame R36S, 128G</h4>\n    <p class=\"text-xs text-neutral-400\">Entrega rápida Prime e garantia oficial pela Amazon.</p>\n  </div>\n  <a href=\"https://link.amazon/B08T6rBeb?tag=blogfilipem2-20\" target=\"_blank\" rel=\"sponsored noopener noreferrer\" class=\"px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-xs uppercase tracking-wider shrink-0 transition-all shadow-md\">\n    Comprar na Amazon →\n  </a>\n</div>\n\n\n<div class=\"my-6 p-5 rounded-2xl bg-[#0f1118] border border-amber-500/40 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4\">\n  <div class=\"space-y-1\">\n    <span class=\"text-[10px] font-bold text-amber-400 uppercase tracking-wider bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20\">Recomendado na Amazon</span>\n    <h4 class=\"text-sm sm:text-base font-bold text-white\">Console de jogos portátil retrô, console de videogame R36S, 64G</h4>\n    <p class=\"text-xs text-neutral-400\">Entrega rápida Prime e garantia oficial pela Amazon.</p>\n  </div>\n  <a href=\"https://link.amazon/B02tbvjRm?tag=blogfilipem2-20\" target=\"_blank\" rel=\"sponsored noopener noreferrer\" class=\"px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-xs uppercase tracking-wider shrink-0 transition-all shadow-md\">\n    Comprar na Amazon →\n  </a>\n</div>\n\n",
+      "excerpt": "O Console Portátil Retrô que Está Dominando o Mercado",
+      "cover_image": "https://r36s-console.com/cdn/shop/articles/clones-r36s-pro-k36-r40s.webp?v=1791046974&width=1500",
+      "cover_caption": "",
+      "cover_source": "r36s-console.com",
+      "author_id": 1,
+      "category_id": 5,
+      "status": "published",
+      "published_at": "2026-10-31T19:44:12.642Z",
+      "updated_at": "2026-10-30 23:04:25",
+      "created_at": "2026-10-30 23:03:16",
+      "reading_time": 3,
+      "views": 1,
+      "featured": 1,
+      "meta_title": "O Console Portátil Retrô que Está Dominando o Mercado | BLOG FILIPEM2",
+      "meta_description": "O Console Portátil Retrô que Está Dominando o Mercado",
+      "canonical_url": "",
+      "og_image": "https://r36s-console.com/cdn/shop/articles/clones-r36s-pro-k36-r40s.webp?v=1791046974&width=1500",
+      "sources_json": "[]",
+      "allow_comments": 1,
+      "amazon_ad_code": null,
+      "amazon_product_title": null,
+      "amazon_product_url": null
+    }
+  ],
+  "article_tags": [
+    {
+      "article_id": 1,
+      "tag_id": 4
+    },
+    {
+      "article_id": 1,
+      "tag_id": 1
+    },
+    {
+      "article_id": 1,
+      "tag_id": 2
+    },
+    {
+      "article_id": 1,
+      "tag_id": 6
+    },
+    {
+      "article_id": 2,
+      "tag_id": 12
+    },
+    {
+      "article_id": 2,
+      "tag_id": 13
+    },
+    {
+      "article_id": 3,
+      "tag_id": 7
+    },
+    {
+      "article_id": 3,
+      "tag_id": 17
+    },
+    {
+      "article_id": 4,
+      "tag_id": 10
+    },
+    {
+      "article_id": 4,
+      "tag_id": 11
+    },
+    {
+      "article_id": 5,
+      "tag_id": 14
+    },
+    {
+      "article_id": 5,
+      "tag_id": 15
+    },
+    {
+      "article_id": 6,
+      "tag_id": 18
+    },
+    {
+      "article_id": 8,
+      "tag_id": 21
+    },
+    {
+      "article_id": 9,
+      "tag_id": 22
+    },
+    {
+      "article_id": 10,
+      "tag_id": 23
+    },
+    {
+      "article_id": 11,
+      "tag_id": 24
+    },
+    {
+      "article_id": 11,
+      "tag_id": 25
+    },
+    {
+      "article_id": 11,
+      "tag_id": 26
+    },
+    {
+      "article_id": 11,
+      "tag_id": 27
+    },
+    {
+      "article_id": 11,
+      "tag_id": 28
+    },
+    {
+      "article_id": 14,
+      "tag_id": 45
+    },
+    {
+      "article_id": 14,
+      "tag_id": 46
+    },
+    {
+      "article_id": 14,
+      "tag_id": 47
+    },
+    {
+      "article_id": 14,
+      "tag_id": 48
+    },
+    {
+      "article_id": 14,
+      "tag_id": 49
+    },
+    {
+      "article_id": 14,
+      "tag_id": 50
+    },
+    {
+      "article_id": 14,
+      "tag_id": 51
+    },
+    {
+      "article_id": 14,
+      "tag_id": 52
+    },
+    {
+      "article_id": 12,
+      "tag_id": 34
+    },
+    {
+      "article_id": 15,
+      "tag_id": 70
+    },
+    {
+      "article_id": 15,
+      "tag_id": 71
+    },
+    {
+      "article_id": 15,
+      "tag_id": 72
+    },
+    {
+      "article_id": 15,
+      "tag_id": 73
+    },
+    {
+      "article_id": 15,
+      "tag_id": 74
+    },
+    {
+      "article_id": 15,
+      "tag_id": 75
+    },
+    {
+      "article_id": 15,
+      "tag_id": 76
+    },
+    {
+      "article_id": 15,
+      "tag_id": 77
+    },
+    {
+      "article_id": 15,
+      "tag_id": 78
+    },
+    {
+      "article_id": 13,
+      "tag_id": 11
+    },
+    {
+      "article_id": 13,
+      "tag_id": 39
+    },
+    {
+      "article_id": 13,
+      "tag_id": 41
+    },
+    {
+      "article_id": 13,
+      "tag_id": 42
+    },
+    {
+      "article_id": 13,
+      "tag_id": 43
+    },
+    {
+      "article_id": 13,
+      "tag_id": 44
+    }
+  ],
+  "pages": [
+    {
+      "id": 1,
+      "title": "Sobre Nós",
+      "slug": "sobre",
+      "content": "\n        <h1>Sobre o BLOG FILIPEM2</h1>\n        <p class=\"lead\">O <strong>BLOG FILIPEM2</strong> nasceu da paixão visceral por tecnologia, jogos eletrônicos, trilhas sonoras inesquecíveis, grandes produções cinematográficas e as tendências que movem a cultura geek global.</p>\n        \n        <h2>Nossa Missão Editorial</h2>\n        <p>Existimos para fornecer aos nossos leitores análises aprofundadas, notícias verificadas com rapidez e seriedade, além de guias que realmente ajudam os entusiastas a desfrutar do melhor do entretenimento moderno.</p>\n        <p>Acreditamos no jornalismo ético, na transparência sobre as fontes de informação e na valorização dos direitos autorais de todos os criadores.</p>\n\n        <h2>Valores Fundamentais</h2>\n        <ul>\n          <li><strong>Autenticidade:</strong> Produzimos análises e críticas com opiniões genuínas, sem influências comerciais secretas.</li>\n          <li><strong>Respeito ao Leitor:</strong> Design limpo, sem anúncios invasivos ou popups abusivos que interfiram na leitura.</li>\n          <li><strong>Inovação Tecnológica:</strong> Um portal moderno, veloz, acessível e preparado para os padrões mais rigorosos da web contemporânea.</li>\n          <li><strong>Privacidade:</strong> Cumprimento estrito da Lei Geral de Proteção de Dados (LGPD) e transparência total no tratamento de dados.</li>\n        </ul>\n\n        <h2>Contato Editorial</h2>\n        <p>Dúvidas, sugestões de pauta ou parcerias comerciais podem ser enviadas diretamente por meio da nossa página oficial de <a href=\"/contato\">Contato</a>.</p>\n      ",
+      "meta_title": "Sobre Nós | BLOG FILIPEM2",
+      "meta_description": "Conheça a história, a missão editorial e os valores que tornam o BLOG FILIPEM2 referência em games, cinema, música e cultura pop.",
+      "is_system": 1,
+      "created_at": "2026-10-26 00:36:15",
+      "updated_at": "2026-10-26 00:36:15"
+    },
+    {
+      "id": 2,
+      "title": "Política de Privacidade",
+      "slug": "privacidade",
+      "content": "\n        <h1>Política de Privacidade — BLOG FILIPEM2</h1>\n        <p class=\"lead\">Esta Política de Privacidade descreve como o <strong>BLOG FILIPEM2</strong> coleta, utiliza, armazena e protege os dados pessoais de seus usuários, em total conformidade com a <strong>Lei Geral de Proteção de Dados Pessoais (LGPD — Lei Federal nº 13.709/2018)</strong> e demais legislações brasileiras aplicáveis.</p>\n        \n        <h2>1. Identificação do Controlador</h2>\n        <p>O portal <strong>BLOG FILIPEM2</strong> é o controlador dos dados coletados durante sua navegação neste site. Para qualquer questão relacionada à privacidade, disponibilizamos o canal específico informado ao final deste documento.</p>\n\n        <h2>2. Dados Pessoais Coletados</h2>\n        <p>Coletamos apenas as informações estritamente necessárias para a operação, segurança e melhoria contínua do portal:</p>\n        <ul>\n          <li><strong>Dados fornecidos voluntariamente:</strong> Nome e endereço de e-mail ao enviar mensagens pelo formulário de contato, inscrever-se na newsletter ou publicar comentários autorizados nos artigos.</li>\n          <li><strong>Dados de navegação técnica:</strong> Endereço IP (armazenado de forma anonimizada ou pseudonimizada para prevenção de abusos e segurança cibernética), tipo de navegador, sistema operacional e páginas acessadas.</li>\n          <li><strong>Cookies e preferências:</strong> Registros sobre seu tema preferido (modo claro ou escuro) e seu consentimento quanto a cookies, armazenados localmente no seu dispositivo.</li>\n        </ul>\n\n        <h2>3. Finalidades do Tratamento de Dados</h2>\n        <p>Tratamos seus dados com base nas seguintes hipóteses legais previstas no art. 7º da LGPD:</p>\n        <ul>\n          <li><strong>Consentimento:</strong> Para envio de novidades por e-mail e moderação de comentários com seu nome público.</li>\n          <li><strong>Legítimo Interesse:</strong> Para análise agregada e estatística de audiência, identificação de erros técnicos e melhoria do desempenho das páginas.</li>\n          <li><strong>Cumprimento de Obrigação Legal:</strong> Guarda de registros de acesso a aplicações de internet, em conformidade com o art. 15 do Marco Civil da Internet (Lei nº 12.965/2014).</li>\n        </ul>\n\n        <h2>4. Compartilhamento de Dados</h2>\n        <p><strong>Não vendemos, não alugamos e não comercializamos dados pessoais com terceiros.</strong> O compartilhamento pode ocorrer unicamente com provedores de infraestrutura de hospedagem e segurança que operem sob rigorosos contratos de sigilo e conformidade com a LGPD, ou mediante ordem judicial emanada por autoridade competente.</p>\n\n        <h2>5. Direitos do Titular de Dados</h2>\n        <p>Conforme previsto no art. 18 da LGPD, você possui o direito de solicitar a qualquer momento:</p>\n        <ul>\n          <li>Confirmação da existência de tratamento e acesso aos seus dados pessoais.</li>\n          <li>Correção de dados incompletos, inexatos ou desatualizados.</li>\n          <li>Anonimização, bloqueio ou eliminação de dados desnecessários ou tratados em desconformidade.</li>\n          <li>Revogação do consentimento concedido anteriormente.</li>\n        </ul>\n\n        <h2>6. Segurança da Informação</h2>\n        <p>Adotamos medidas técnicas e administrativas aptas a proteger seus dados contra acessos não autorizados, destruição, perda ou alteração acidental, incluindo criptografia em trânsito (HTTPS/TLS), hashing criptográfico forte e restrição rigorosa de acessos administrativos.</p>\n\n        <h2>7. Canal de Contato do Encarregado (DPO)</h2>\n        <p>Para exercer qualquer um de seus direitos ou esclarecer dúvidas sobre esta política, utilize nosso formulário na página de <a href=\"/contato\">Contato</a> selecionando o assunto \"Privacidade e Proteção de Dados (LGPD)\".</p>\n        <p><em>Última atualização: Outubro de 2026.</em></p>\n      ",
+      "meta_title": "Política de Privacidade | BLOG FILIPEM2",
+      "meta_description": "Saiba como o BLOG FILIPEM2 protege sua privacidade e trata seus dados com total conformidade com a LGPD (Lei nº 13.709/2018).",
+      "is_system": 1,
+      "created_at": "2026-10-26 00:36:15",
+      "updated_at": "2026-10-26 00:36:15"
+    },
+    {
+      "id": 3,
+      "title": "Política de Cookies",
+      "slug": "cookies",
+      "content": "\n        <h1>Política de Cookies — BLOG FILIPEM2</h1>\n        <p class=\"lead\">Esta política esclarece o que são cookies, como os utilizamos no <strong>BLOG FILIPEM2</strong> e como você tem total liberdade para aceitar, rejeitar ou gerenciar suas preferências a qualquer momento.</p>\n        \n        <h2>1. O Que São Cookies?</h2>\n        <p>Cookies são pequenos arquivos de texto armazenados no seu navegador quando você visita uma página da web. Eles servem para lembrar suas preferências, garantir a segurança do acesso e compreender de forma agregada como o site é utilizado.</p>\n\n        <h2>2. Tipos de Cookies Utilizados</h2>\n        <ul>\n          <li><strong>Cookies Estritamente Necessários:</strong> Fundamentais para o funcionamento básico do site, como autenticação segura do painel administrativo, prevenção contra ataques CSRF e memorização da sua escolha sobre os próprios cookies. Não podem ser desativados sem comprometer a navegação.</li>\n          <li><strong>Cookies de Preferências:</strong> Lembram opções estéticas selecionadas por você, como a alternância entre o Modo Escuro e o Modo Claro.</li>\n          <li><strong>Cookies de Desempenho e Estatísticas:</strong> Auxiliam a identificar quais artigos são mais lidos e se alguma página apresenta lentidão, sempre de forma anônima e agregada.</li>\n        </ul>\n\n        <h2>3. Como Gerenciar Seus Cookies</h2>\n        <p>Ao acessar nosso site pela primeira vez, nosso banner de consentimento permite a você escolher entre aceitar todos os cookies, manter apenas os estritamente essenciais ou configurar detalhadamente suas preferências. Você também pode limpar ou bloquear cookies diretamente nas configurações do seu navegador de internet a qualquer momento.</p>\n      ",
+      "meta_title": "Política de Cookies | BLOG FILIPEM2",
+      "meta_description": "Informações claras sobre o uso de cookies no BLOG FILIPEM2 e opções para gerenciar suas preferências de navegação.",
+      "is_system": 1,
+      "created_at": "2026-10-26 00:36:15",
+      "updated_at": "2026-10-26 00:36:15"
+    },
+    {
+      "id": 4,
+      "title": "Termos de Uso",
+      "slug": "termos",
+      "content": "\n        <h1>Termos de Uso — BLOG FILIPEM2</h1>\n        <p class=\"lead\">Bem-vindo ao <strong>BLOG FILIPEM2</strong>. Ao acessar e navegar em nossas páginas, você declara estar de acordo com os presentes Termos de Uso.</p>\n        \n        <h2>1. Uso Autorizado do Conteúdo</h2>\n        <p>Todo o conteúdo textual, visual, logotipos e marcas do BLOG FILIPEM2 são protegidos pelas leis brasileiras de direitos autorais e propriedade intelectual. É permitida a citação de trechos curtos dos nossos artigos, desde que acompanhada de crédito explícito com link direto para o artigo original em nosso portal. É expressamente proibida a cópia integral ou reprodução não autorizada com finalidade comercial.</p>\n\n        <h2>2. Conduta do Usuário e Comentários</h2>\n        <p>Ao interagir com nosso portal, seja por meio de comentários ou formulários, você se compromete a:</p>\n        <ul>\n          <li>Não enviar conteúdo ilícito, difamatório, ofensivo, preconceituoso ou que incite violência.</li>\n          <li>Não publicar mensagens publicitárias não autorizadas (spam) ou links maliciosos.</li>\n          <li>Respeitar a opinião dos demais leitores e membros da comunidade.</li>\n        </ul>\n        <p>A equipe editorial reserva-se o direito soberano de moderar, editar ou remover comentários que desrespeitem estas diretrizes.</p>\n\n        <h2>3. Isenção de Responsabilidade</h2>\n        <p>Nos empenhamos para manter as informações rigorosamente atualizadas e precisas. Contudo, em virtude da volatilidade de lançamentos e novidades da indústria tecnológica e do entretenimento, não nos responsabilizamos por perdas diretas ou indiretas decorrentes de decisões tomadas com base nas opiniões ou notícias veiculadas.</p>\n      ",
+      "meta_title": "Termos de Uso | BLOG FILIPEM2",
+      "meta_description": "Regras de utilização, condições de acesso e diretrizes para navegação no portal BLOG FILIPEM2.",
+      "is_system": 1,
+      "created_at": "2026-10-26 00:36:15",
+      "updated_at": "2026-10-26 00:36:15"
+    },
+    {
+      "id": 5,
+      "title": "Direitos Autorais e Propriedade Intelectual",
+      "slug": "direitos-autorais",
+      "content": "\n        <h1>Política de Direitos Autorais e Propriedade Intelectual</h1>\n        <p class=\"lead\">O <strong>BLOG FILIPEM2</strong> respeita integralmente os direitos de propriedade intelectual de criadores, estúdios, gravadoras, produtoras e desenvolvedores.</p>\n        \n        <h2>1. Conteúdo Original e Citação Justa</h2>\n        <p>Nossos artigos, análises, críticas e guias são redigidos originalmente por nossa equipe. O uso de imagens de divulgação, pôsteres oficiais, trailers públicos e marcas comerciais ocorre estritamente sob as regras de <em>Fair Use</em> (uso justo) e do art. 46 da Lei de Direitos Autorais Brasileira (Lei nº 9.610/1998), com a exclusiva finalidade de crítica, notícia, estudo e divulgação cultural.</p>\n\n        <h2>2. Procedimento de Notificação e Retirada (Takedown)</h2>\n        <p>Caso você seja o detentor legítimo dos direitos autorais de qualquer material exibido no portal e acredite que seu trabalho foi utilizado de maneira indevida, envie uma solicitação formal contendo:</p>\n        <ul>\n          <li>Identificação clara da obra protegida por direitos autorais.</li>\n          <li>Link exato da página onde o material está publicado em nosso portal.</li>\n          <li>Comprovação de titularidade ou procuração para agir em nome do titular.</li>\n          <li>Informações completas para contato (nome, telefone e e-mail).</li>\n        </ul>\n        <p>Nossa equipe jurídica e editorial analisará a notificação com máxima prioridade para rápida resolução ou remoção do material impugnado. Envie a notificação por meio de nossa página de <a href=\"/contato\">Contato</a>.</p>\n      ",
+      "meta_title": "Direitos Autorais e Propriedade Intelectual | BLOG FILIPEM2",
+      "meta_description": "Diretrizes de direitos autorais, uso justo de materiais de divulgação e procedimento formal para notificação e retirada de conteúdos.",
+      "is_system": 1,
+      "created_at": "2026-10-26 00:36:15",
+      "updated_at": "2026-10-26 00:36:15"
+    },
+    {
+      "id": 6,
+      "title": "Contato",
+      "slug": "contato",
+      "content": "\n        <h1>Fale Conosco — BLOG FILIPEM2</h1>\n        <p class=\"lead\">Tem alguma sugestão de pauta, crítica, proposta de parceria ou dúvida sobre o portal? Nossa equipe está à disposição para ouvir você.</p>\n        <p>Utilize o formulário interativo abaixo para enviar sua mensagem diretamente à nossa redação. Respondemos com a máxima celeridade possível nos dias úteis.</p>\n      ",
+      "meta_title": "Contato | BLOG FILIPEM2",
+      "meta_description": "Envie sugestões de pauta, propostas comerciais ou tire dúvidas diretamente com a redação do BLOG FILIPEM2.",
+      "is_system": 1,
+      "created_at": "2026-10-26 00:36:15",
+      "updated_at": "2026-10-26 00:36:15"
+    },
+    {
+      "id": 7,
+      "title": "Política de Correções e Atualizações",
+      "slug": "correcoes",
+      "content": "\n        <h1>Política de Correções e Atualizações Editoriais</h1>\n        <p class=\"lead\">A precisão e a confiança de nossa comunidade são os bens mais preciosos do <strong>BLOG FILIPEM2</strong>.</p>\n        \n        <h2>1. Compromisso com a Verdade</h2>\n        <p>Buscamos checar todas as informações antes de colocá-las no ar. No entanto, notícias de última hora ou análises técnicas podem exigir ajustes conforme novos fatos são confirmados.</p>\n\n        <h2>2. Transparência nas Retificações</h2>\n        <p>Sempre que um erro substancial de fato for corrigido em um artigo, incluiremos uma nota explícita ao final da publicação com o carimbo <strong>\"Nota de Correção / Atualização\"</strong>, especificando o que foi alterado e o respectivo horário, mantendo a integridade histórica da reportagem.</p>\n\n        <h2>3. Canal para Apontamento de Erros</h2>\n        <p>Se você identificou algum dado impreciso em qualquer uma de nossas publicações, por favor nos avise via <a href=\"/contato\">Contato</a> com o assunto \"Correção Editorial\". Agradecemos sua colaboração!</p>\n      ",
+      "meta_title": "Política de Correções | BLOG FILIPEM2",
+      "meta_description": "Nosso compromisso inegociável com a precisão dos fatos, transparência editorial e retificação rápida de dados no BLOG FILIPEM2.",
+      "is_system": 1,
+      "created_at": "2026-10-26 00:36:15",
+      "updated_at": "2026-10-26 00:36:15"
+    },
+    {
+      "id": 8,
+      "title": "Publicidade, Patrocínios e Afiliados",
+      "slug": "publicidade",
+      "content": "\n        <h1>Informações sobre Publicidade e Afiliados</h1>\n        <p class=\"lead\">O <strong>BLOG FILIPEM2</strong> mantém total independência editorial em relação a anunciantes e patrocinadores.</p>\n        \n        <h2>1. Identificação de Conteúdo Patrocinado</h2>\n        <p>Qualquer artigo, vídeo ou análise que tenha sido patrocinado por uma marca conterá rotulagem explícita e inequívoca de <strong>\"Conteúdo Patrocinado\"</strong> ou <strong>\"Publieditorial\"</strong> logo no início da matéria.</p>\n\n        <h2>2. Links Afiliados</h2>\n        <p>Eventualmente, ao indicar jogos, livros, periféricos ou eletrônicos, podemos incluir links de programas de afiliados (como Amazon ou lojas de games confiáveis). Caso o leitor decida adquirir um produto por meio desses links, poderemos receber uma pequena comissão sem qualquer custo adicional para você. Recomendamos apenas produtos em que realmente acreditamos.</p>\n\n        <h2>3. Anúncios Display</h2>\n        <p>Espaços publicitários são demarcados visualmente para não se confundirem com o conteúdo editorial legítimo, prezando sempre por um carregamento veloz e uma leitura agradável.</p>\n      ",
+      "meta_title": "Publicidade e Afiliados | BLOG FILIPEM2",
+      "meta_description": "Diretrizes sobre monetização transparente, rotulagem de publieditoriais e uso de links afiliados no BLOG FILIPEM2.",
+      "is_system": 1,
+      "created_at": "2026-10-26 00:36:15",
+      "updated_at": "2026-10-26 00:36:15"
+    }
+  ],
+  "comments": [],
+  "site_settings": [
+    {
+      "key": "site_title",
+      "value": "BLOG FILIPEM2"
+    },
+    {
+      "key": "site_tagline",
+      "value": "O Portal Definitivo de Games, Músicas, Filmes, Séries e Cultura Geek"
+    },
+    {
+      "key": "site_description",
+      "value": "Notícias diárias, análises aprofundadas, lançamentos e críticas sobre jogos, cinema, música, streaming e inovações tecnológicas."
+    },
+    {
+      "key": "site_url",
+      "value": "https://blogfilipem2.site"
+    },
+    {
+      "key": "theme_primary_color",
+      "value": "#3B82F6"
+    },
+    {
+      "key": "theme_font_heading",
+      "value": "Space Grotesk"
+    },
+    {
+      "key": "theme_font_body",
+      "value": "Inter"
+    },
+    {
+      "key": "theme_border_radius",
+      "value": "1.25rem"
+    },
+    {
+      "key": "header_menu_json",
+      "value": "[{\"title\":\"Início\",\"url\":\"/\"},{\"title\":\"Games\",\"url\":\"/categoria/games\"},{\"title\":\"Músicas\",\"url\":\"/categoria/musicas\"},{\"title\":\"Filmes\",\"url\":\"/categoria/filmes\"},{\"title\":\"Séries\",\"url\":\"/categoria/series\"},{\"title\":\"Geek & Tech\",\"url\":\"/categoria/cultura-geek-tecnologia\"},{\"title\":\"Sobre\",\"url\":\"/sobre\"},{\"title\":\"Contato\",\"url\":\"/contato\"}]"
+    },
+    {
+      "key": "footer_text",
+      "value": "© 2026 BLOG FILIPEM2. Todos os direitos reservados. Portal independente de cultura geek e entretenimento."
+    },
+    {
+      "key": "social_links_json",
+      "value": "{\"youtube\":\"https://youtube.com\",\"twitter\":\"https://x.com\",\"instagram\":\"https://instagram.com\",\"discord\":\"https://discord.com\",\"twitch\":\"https://twitch.tv\"}"
+    },
+    {
+      "key": "cookie_consent_enabled",
+      "value": "1"
+    },
+    {
+      "key": "cookie_banner_text",
+      "value": "Utilizamos cookies essenciais e tecnologias de medição anônima para garantir a melhor experiência no BLOG FILIPEM2, em conformidade com a LGPD."
+    },
+    {
+      "key": "ad_header_enabled",
+      "value": "1"
+    },
+    {
+      "key": "ad_header_code",
+      "value": "<script async src=\"https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2978439169182708\"\n     crossorigin=\"anonymous\"></script>"
+    },
+    {
+      "key": "ad_sidebar_enabled",
+      "value": "1"
+    },
+    {
+      "key": "ad_sidebar_code",
+      "value": "<script async src=\"https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2978439169182708\"\n     crossorigin=\"anonymous\"></script>"
+    },
+    {
+      "key": "ad_article_enabled",
+      "value": "1"
+    },
+    {
+      "key": "ad_article_code",
+      "value": "<script async src=\"https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2978439169182708\"\n     crossorigin=\"anonymous\"></script>"
+    },
+    {
+      "key": "ad_footer_enabled",
+      "value": "1"
+    },
+    {
+      "key": "ad_footer_code",
+      "value": "<script async src=\"https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2978439169182708\"\n     crossorigin=\"anonymous\"></script>"
+    },
+    {
+      "key": "robots_txt_content",
+      "value": "User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /api/\n\nSitemap: https://blogfilipem2.com.br/sitemap.xml"
+    },
+    {
+      "key": "google_analytics_id",
+      "value": ""
+    },
+    {
+      "key": "google_search_console_tag",
+      "value": ""
+    },
+    {
+      "key": "ads_txt",
+      "value": "google.com, pub-2978439169182708, DIRECT, f08c47fec0942fa0"
+    },
+    {
+      "key": "google_adsense_id",
+      "value": "<script async src=\"https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2978439169182708\"      crossorigin=\"anonymous\"></script>"
+    },
+    {
+      "key": "amazon_affiliate_tag",
+      "value": "blogfilipem2-20"
+    },
+    {
+      "key": "amazon_box_enabled",
+      "value": "1"
+    },
+    {
+      "key": "auto_backup_enabled",
+      "value": "1"
+    },
+    {
+      "key": "auto_backup_provider",
+      "value": "pantry"
+    },
+    {
+      "key": "auto_backup_pantry_id",
+      "value": "490f0b81-c235-44a5-b51d-3c384a5990a2"
+    },
+    {
+      "key": "auto_backup_last_sync",
+      "value": "2026-10-30T20:30:36.218Z"
+    }
+  ],
+  "visual_builder_sections": [
+    {
+      "id": 32,
+      "page_identifier": "home",
+      "type": "hero_featured",
+      "title": "Grandes Destaques",
+      "subtitle": "As matérias e análises mais quentes do momento",
+      "config_json": "{\"layout\":\"hero_with_side_stack\",\"limit\":3,\"showBadge\":true,\"showExcerpt\":true,\"showReadingTime\":true}",
+      "sort_order": 1,
+      "is_active": 1,
+      "version_state": "published"
+    },
+    {
+      "id": 33,
+      "page_identifier": "home",
+      "type": "breaking_ticker",
+      "title": "Em Alta Agora",
+      "subtitle": "",
+      "config_json": "{\"badgeText\":\"URGENTE\",\"limit\":5,\"speed\":\"normal\"}",
+      "sort_order": 2,
+      "is_active": 1,
+      "version_state": "published"
+    },
+    {
+      "id": 34,
+      "page_identifier": "home",
+      "type": "category_grid",
+      "title": "Universo dos Games",
+      "subtitle": "Lançamentos, análises técnicas e novidades para PC e Consoles",
+      "config_json": "{\"categorySlug\":\"games\",\"limit\":6,\"columns\":3,\"cardStyle\":\"card_with_hover\"}",
+      "sort_order": 3,
+      "is_active": 1,
+      "version_state": "published"
+    },
+    {
+      "id": 35,
+      "page_identifier": "home",
+      "type": "category_grid",
+      "title": "Cinema ",
+      "subtitle": "Tudo sobre as telas de cinema e as maratonas do streaming",
+      "config_json": "{\"categorySlug\":\"filmes\",\"limit\":6,\"columns\":3,\"cardStyle\":\"card_with_hover\"}",
+      "sort_order": 4,
+      "is_active": 1,
+      "version_state": "published"
+    },
+    {
+      "id": 36,
+      "page_identifier": "home",
+      "type": "category_grid",
+      "title": "Séries",
+      "subtitle": "Tudo sobre as telas de cinema e as maratonas do streaming",
+      "config_json": "{\"categorySlug\":\"series\",\"limit\":6,\"columns\":3,\"cardStyle\":\"card_with_hover\"}",
+      "sort_order": 5,
+      "is_active": 1,
+      "version_state": "published"
+    },
+    {
+      "id": 37,
+      "page_identifier": "home",
+      "type": "category_grid",
+      "title": "Cultura Geek & tecnologia ",
+      "subtitle": "Tudo Sobre Tecnologia Geek ",
+      "config_json": "{\"categorySlug\":\"cultura-geek-tecnologia\",\"limit\":6,\"columns\":3,\"cardStyle\":\"card_with_hover\"}",
+      "sort_order": 6,
+      "is_active": 1,
+      "version_state": "published"
+    },
+    {
+      "id": 38,
+      "page_identifier": "home",
+      "type": "category_grid",
+      "title": "Músicas",
+      "subtitle": "Tendências sonoras, inteligência artificial e cultura pop",
+      "config_json": "{\"categorySlug\":\"musicas\",\"limit\":6,\"columns\":3,\"cardStyle\":\"card_with_hover\"}",
+      "sort_order": 7,
+      "is_active": 1,
+      "version_state": "published"
+    },
+    {
+      "id": 39,
+      "page_identifier": "home",
+      "type": "newsletter",
+      "title": "Receba o Melhor da Cultura Geek",
+      "subtitle": "Sem spam, apenas as análises e notícias mais relevantes selecionadas pela nossa redação.",
+      "config_json": "{\"buttonText\":\"Cadastrar Gratuitamente\",\"placeholder\":\"Seu melhor e-mail...\",\"accentColor\":\"#DC2626\"}",
+      "sort_order": 8,
+      "is_active": 1,
+      "version_state": "published"
+    }
+  ],
+  "media": [
+    {
+      "id": 1,
+      "filename": "gta-6-cover.png",
+      "original_name": "gta-6-cover.png",
+      "mime_type": "image/png",
+      "size": 80443,
+      "url": "/uploads/gta-6-cover.png",
+      "alt_text": null,
+      "credit": null,
+      "created_at": "2026-10-30 20:20:58"
+    },
+    {
+      "id": 2,
+      "filename": "doctor-x-cover.png",
+      "original_name": "doctor-x-cover.png",
+      "mime_type": "image/png",
+      "size": 25260,
+      "url": "/uploads/doctor-x-cover.png",
+      "alt_text": null,
+      "credit": null,
+      "created_at": "2026-10-30 20:20:58"
+    },
+    {
+      "id": 3,
+      "filename": "1793392495814-347c9af631cc178a.jpg",
+      "original_name": "Gemini_Generated_Image_bdmnqobdmnqobdmn.jpg",
+      "mime_type": "image/jpeg",
+      "size": 2895239,
+      "url": "/uploads/1793392495814-347c9af631cc178a.jpg",
+      "alt_text": "Gemini_Generated_Image_bdmnqobdmnqobdmn.jpg",
+      "credit": null,
+      "created_at": "2026-10-30 20:34:55"
+    },
+    {
+      "id": 4,
+      "filename": "1793402080754-ce1dc5540a3cdddb.jpg",
+      "original_name": "Gemini_Generated_Image_bdmnqobdmnqobdmn.jpg",
+      "mime_type": "image/jpeg",
+      "size": 2895239,
+      "url": "/uploads/1793402080754-ce1dc5540a3cdddb.jpg",
+      "alt_text": "Gemini_Generated_Image_bdmnqobdmnqobdmn.jpg",
+      "credit": "netflix.com",
+      "created_at": "2026-10-30 23:14:40"
+    },
+    {
+      "id": 5,
+      "filename": "1793475912041-ca7fc0b044c382f1.jpg",
+      "original_name": "Gemini_Generated_Image_bdmnqobdmnqobdmn.jpg",
+      "mime_type": "image/jpeg",
+      "size": 2895239,
+      "url": "/uploads/1793475912041-ca7fc0b044c382f1.jpg",
+      "alt_text": "Gemini_Generated_Image_bdmnqobdmnqobdmn.jpg",
+      "credit": "netflix.com",
+      "created_at": "2026-10-31 19:45:12"
+    }
+  ],
+  "_metadata": {
+    "createdAt": "Sat, 31 Oct 2026 19:45:14 GMT",
+    "updatedAt": null
+  }
+}

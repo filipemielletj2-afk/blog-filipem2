@@ -114,6 +114,7 @@ export function restoreBackupSnapshot(db: DatabaseSync, data: any): { articles: 
           amazon_ad_code = excluded.amazon_ad_code,
           amazon_product_title = excluded.amazon_product_title,
           amazon_product_url = excluded.amazon_product_url
+        WHERE excluded.updated_at >= articles.updated_at OR articles.updated_at IS NULL
       `);
 
       for (const a of data.articles) {
@@ -388,13 +389,16 @@ export async function pullAutoBackupOnStartup(db: DatabaseSync): Promise<void> {
         const json = await res.json();
         remoteData = json?.snapshot || json;
       }
-    } else if (config.provider === 'pantry' && config.pantryId) {
+    }
+    
+    // Fallback: If GDrive is empty or failed, and pantryId exists, try pull from Pantry
+    if (!remoteData && config.pantryId) {
       const url = `https://getpantry.cloud/apiv1/pantry/${config.pantryId.trim()}/basket/blogfilipem2`;
       const res = await fetch(url, { signal: AbortSignal.timeout(5000) });
       if (res.ok) {
         remoteData = await res.json();
       }
-    } else if (config.provider === 'jsonbin' && config.jsonbinKey && config.jsonbinBinId) {
+    } else if (!remoteData && config.provider === 'jsonbin' && config.jsonbinKey && config.jsonbinBinId) {
       const url = `https://api.jsonbin.io/v3/b/${config.jsonbinBinId.trim()}/latest`;
       const res = await fetch(url, {
         headers: { 'X-Master-Key': config.jsonbinKey.trim() },
