@@ -79,12 +79,6 @@ export default function Footer({ categories = [], footerText }: FooterProps) {
               <li>
                 <Link href="/publicidade" className="hover:text-red-400 transition-colors">Publicidade &amp; Parcerias</Link>
               </li>
-              <li>
-                <Link href="/admin" className="text-neutral-500 hover:text-red-400 transition-colors flex items-center space-x-1">
-                  <Shield className="w-3.5 h-3.5" />
-                  <span>Painel do Administrador</span>
-                </Link>
-              </li>
             </ul>
           </div>
 

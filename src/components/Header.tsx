@@ -81,15 +81,6 @@ export default function Header({ categories = [], siteTitle = 'BLOG FILIPEM2' }:
               <Link href="/contato" className={`transition-colors ${isLightMode ? 'text-slate-600 hover:text-red-600' : 'hover:text-red-400'}`}>
                 Contato
               </Link>
-              <Link
-                href="/admin"
-                className={`flex items-center space-x-1 font-semibold transition-colors ${
-                  isLightMode ? 'text-red-600 hover:text-red-700' : 'text-neutral-500 hover:text-red-400'
-                }`}
-              >
-                <Shield className="w-3.5 h-3.5" />
-                <span>Painel Admin</span>
-              </Link>
             </div>
           </div>
         </div>
@@ -243,14 +234,6 @@ export default function Header({ categories = [], siteTitle = 'BLOG FILIPEM2' }:
                 className={`px-3 py-2 text-sm ${isLightMode ? 'text-slate-600 hover:text-slate-900' : 'text-neutral-400 hover:text-white'}`}
               >
                 Fale Conosco
-              </Link>
-              <Link
-                href="/admin"
-                onClick={() => setMobileMenuOpen(false)}
-                className="px-3 py-2 text-sm text-red-600 hover:text-red-700 flex items-center space-x-1.5 font-semibold"
-              >
-                <Shield className="w-4 h-4" />
-                <span>Acessar Painel Administrativo</span>
               </Link>
             </div>
           </div>
