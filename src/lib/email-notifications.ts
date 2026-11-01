@@ -140,6 +140,15 @@ export async function sendSiteNotification(notification: SiteNotification): Prom
 
     // Method 1: Google Apps Script Webhook (native to user's Google account)
     const gdriveUrl = settings.auto_backup_gdrive_url || settings.notification_email_webhook_url || process.env.AUTO_BACKUP_GDRIVE_URL || '';
+    
+    // Detect if user accidentally pasted an Apps Script Library or Editor URL
+    if (gdriveUrl && (gdriveUrl.includes('/macros/library/') || gdriveUrl.includes('/edit'))) {
+      return {
+        success: false,
+        message: 'Atenção: A URL colada é de "Biblioteca" ou "Editor" e não recebe chamadas externas. No Google Apps Script, clique em "Implantar" > "Nova Implantação", selecione o tipo "Aplicativo da Web", escolha "Quem tem acesso: Qualquer pessoa" e copie o link final que termina com /exec.'
+      };
+    }
+
     if (gdriveUrl && gdriveUrl.startsWith('https://script.google.com/macros/s/')) {
       try {
         const res = await fetch(gdriveUrl.trim(), {
@@ -157,15 +166,28 @@ export async function sendSiteNotification(notification: SiteNotification): Prom
         });
         if (res.ok) {
           return { success: true, message: `Notificação enviada com sucesso para ${targetEmail} via Google Apps Script!` };
+        } else {
+          return {
+            success: false,
+            message: `O Google Apps Script retornou HTTP ${res.status}. Certifique-se de que a implantação foi feita como "Aplicativo da Web" com "Quem tem acesso: Qualquer pessoa".`
+          };
         }
       } catch (err: any) {
         console.error('[Notification] Falha ao enviar via Google Apps Script:', err.message);
+        return { success: false, message: `Erro ao enviar via Google Apps Script: ${err.message}` };
       }
     }
 
     // Method 2: Resend API if key is present
     const resendKey = settings.resend_api_key || process.env.RESEND_API_KEY;
-    if (resendKey) {
+    if (resendKey && resendKey.trim().length > 0) {
+      if (!resendKey.trim().startsWith('re_')) {
+        return {
+          success: false,
+          message: 'A chave Resend informada é inválida (chaves da Resend sempre começam com "re_"). Se você estiver usando o Google Apps Script, apague o campo da Resend e deixe apenas a URL do Google.'
+        };
+      }
+
       try {
         const res = await fetch('https://api.resend.com/emails', {
           method: 'POST',
@@ -174,7 +196,7 @@ export async function sendSiteNotification(notification: SiteNotification): Prom
             Authorization: `Bearer ${resendKey.trim()}`
           },
           body: JSON.stringify({
-            from: 'BLOG FILIPEM2 <notificacoes@blogfilipem2.site>',
+            from: 'BLOG FILIPEM2 <onboarding@resend.dev>',
             to: [targetEmail],
             subject: `[BLOG FILIPEM2] ${notification.subject}`,
             html: htmlBody
@@ -183,9 +205,16 @@ export async function sendSiteNotification(notification: SiteNotification): Prom
         });
         if (res.ok) {
           return { success: true, message: `E-mail enviado para ${targetEmail} via Resend!` };
+        } else {
+          const errData = await res.json().catch(() => ({}));
+          return {
+            success: false,
+            message: `Erro ao enviar via Resend: ${errData.message || 'Verifique a validade da chave API no painel da Resend.'}`
+          };
         }
       } catch (err: any) {
         console.error('[Notification] Falha ao enviar via Resend:', err.message);
+        return { success: false, message: `Falha na conexão com Resend: ${err.message}` };
       }
     }
 

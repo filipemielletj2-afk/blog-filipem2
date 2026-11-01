@@ -234,9 +234,12 @@ export default function AdminUsersPage() {
     setTimeout(() => setCopiedScript(false), 3000);
   };
 
-  const isChannelConnected = Boolean(
-    (gdriveUrl && gdriveUrl.startsWith('https://script.google.com/macros/s/')) || resendApiKey
+  const isGoogleUrlValid = Boolean(
+    gdriveUrl && gdriveUrl.startsWith('https://script.google.com/macros/s/') && gdriveUrl.includes('/exec')
   );
+  const isLibraryUrl = Boolean(gdriveUrl && (gdriveUrl.includes('/macros/library/') || gdriveUrl.includes('/edit')));
+  const isResendKeyValid = Boolean(resendApiKey && resendApiKey.trim().startsWith('re_'));
+  const isChannelConnected = isGoogleUrlValid || isResendKeyValid;
 
   return (
     <div className="space-y-6">
@@ -467,6 +470,29 @@ export default function AdminUsersPage() {
                 <span className="text-[11px] text-neutral-400 mt-1 block">
                   Usado tanto para enviar e-mails direto no Gmail quanto para salvar backups no Google Drive.
                 </span>
+
+                {isLibraryUrl && (
+                  <div className="mt-2.5 p-3 rounded-xl bg-amber-950/80 border border-amber-600/80 text-amber-200 text-xs space-y-1.5 leading-relaxed">
+                    <div className="font-bold flex items-center gap-1.5 text-amber-300">
+                      <AlertCircle className="w-4 h-4 text-amber-400 shrink-0" />
+                      <span>Atenção: Você colou um link de &quot;Biblioteca&quot;!</span>
+                    </div>
+                    <p>
+                      Para receber os e-mails, o Google precisa que a implantação seja do tipo <strong>&quot;Aplicativo da Web&quot;</strong> (o link correto deve começar com <code className="bg-black/60 px-1 py-0.5 rounded text-white font-mono">https://script.google.com/macros/s/...</code> e terminar com <code className="bg-black/60 px-1 py-0.5 rounded text-white font-mono font-bold">/exec</code>).
+                    </p>
+                    <div className="pt-1">
+                      <a
+                        href="https://script.google.com/d/1WAycW2YhuXRHvIAdBM6XRoY_HcMzf25ed66cTd8iad55_B5SV0AdGHA_/edit"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-1 text-red-400 hover:text-red-300 font-bold underline"
+                      >
+                        <ExternalLink className="w-3.5 h-3.5" />
+                        <span>Clique aqui para abrir seu script &rarr; Implantar &rarr; Nova Implantação &rarr; Aplicativo da Web</span>
+                      </a>
+                    </div>
+                  </div>
+                )}
               </div>
 
               <div>
@@ -481,6 +507,11 @@ export default function AdminUsersPage() {
                   placeholder="re_xxxxxxxxxxxxxxxxxxxxxxxxx"
                   className="w-full px-3 py-2 rounded-xl bg-neutral-900 border border-neutral-700 text-white font-mono text-xs focus:outline-none focus:border-red-500"
                 />
+                {resendApiKey && !resendApiKey.trim().startsWith('re_') && (
+                  <span className="text-[11px] text-amber-400 mt-1 block">
+                    ⚠️ A chave da Resend precisa começar com &quot;re_&quot;. Se você for usar apenas o Google Apps Script acima, pode apagar este campo.
+                  </span>
+                )}
               </div>
 
               <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-neutral-800">
