@@ -19,7 +19,7 @@ import {
   ChevronRight,
   ListFilter
 } from 'lucide-react';
-import { formatDateBR } from '@/lib/utils';
+import { formatDateBR, formatDateTimeBR } from '@/lib/utils';
 
 export default function AdminArticlesPage() {
   const [articles, setArticles] = useState<any[]>([]);
@@ -252,15 +252,20 @@ export default function AdminArticlesPage() {
                       </td>
 
                       <td className="py-3.5 px-4 whitespace-nowrap">
-                        <span
-                          className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase ${
-                            art.status === 'published'
-                              ? 'bg-emerald-950/80 text-emerald-400 border border-emerald-800/60'
-                              : 'bg-amber-950/80 text-amber-400 border border-amber-800/60'
-                          }`}
-                        >
-                          {art.status === 'published' ? 'Publicado' : 'Rascunho'}
-                        </span>
+                        {art.status === 'published' ? (
+                          <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-emerald-950/80 text-emerald-400 border border-emerald-800/60">
+                            Publicado
+                          </span>
+                        ) : art.status === 'scheduled' ? (
+                          <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-purple-950/80 text-purple-300 border border-purple-800/60 flex items-center gap-1 w-fit">
+                            <Clock className="w-3 h-3 text-purple-400" />
+                            <span>Agendado</span>
+                          </span>
+                        ) : (
+                          <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-amber-950/80 text-amber-400 border border-amber-800/60">
+                            Rascunho
+                          </span>
+                        )}
                       </td>
 
                       <td className="py-3.5 px-4 whitespace-nowrap text-neutral-400 font-mono">
@@ -268,7 +273,14 @@ export default function AdminArticlesPage() {
                       </td>
 
                       <td className="py-3.5 px-4 whitespace-nowrap text-neutral-400">
-                        {formatDateBR(art.published_at)}
+                        {art.status === 'scheduled' ? (
+                          <span className="text-purple-300 font-medium flex items-center gap-1.5" title="Liberado automaticamente nesta data e horário">
+                            <Clock className="w-3.5 h-3.5 text-purple-400 shrink-0" />
+                            <span>Agendado: {formatDateTimeBR(art.published_at)}</span>
+                          </span>
+                        ) : (
+                          formatDateBR(art.published_at)
+                        )}
                       </td>
 
                       <td className="py-3.5 px-4 text-right whitespace-nowrap">

@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getDb, toPlain } from '@/lib/db';
+import { getCurrentUser } from '@/lib/auth';
 import { ensureAutoBackupSynced } from '@/lib/auto-backup';
 import { formatDateBR, formatDateTimeBR, formatYouTubeEmbedUrl } from '@/lib/utils';
 import ArticleCard from '@/components/ArticleCard';
@@ -210,6 +211,14 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     notFound();
   }
 
+  // Non-published articles (scheduled or drafts) can only be viewed by authenticated admins
+  if (article.status !== 'published') {
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
+      notFound();
+    }
+  }
+
   // Fetch tags
   const tags = toPlain(db.prepare(`
     SELECT t.id, t.name, t.slug
@@ -309,6 +318,46 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
   return (
     <article className="max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-12 space-y-8">
+      {/* Admin Preview Banners for Scheduled / Draft articles */}
+      {article.status === 'scheduled' && (
+        <div className="p-4 rounded-2xl bg-purple-950/80 border border-purple-600/80 text-purple-200 text-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-lg">
+          <div className="flex items-center gap-2">
+            <Clock className="w-5 h-5 text-purple-400 shrink-0" />
+            <div>
+              <strong className="text-white block font-bold text-sm">Modo de Pré-visualização: Artigo Agendado</strong>
+              <span>
+                Esta matéria está oculta do público e será liberada automaticamente em{' '}
+                <strong className="text-purple-300">{formatDateBR(article.published_at)}</strong>.
+              </span>
+            </div>
+          </div>
+          <Link
+            href={`/admin/artigos/${article.id}/editar`}
+            className="px-3.5 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs shrink-0 transition-colors shadow-md shadow-purple-600/30"
+          >
+            Editar Agendamento
+          </Link>
+        </div>
+      )}
+
+      {article.status === 'draft' && (
+        <div className="p-4 rounded-2xl bg-amber-950/80 border border-amber-600/80 text-amber-200 text-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-lg">
+          <div className="flex items-center gap-2">
+            <ShieldCheck className="w-5 h-5 text-amber-400 shrink-0" />
+            <div>
+              <strong className="text-white block font-bold text-sm">Modo de Pré-visualização: Rascunho Privado</strong>
+              <span>Esta matéria ainda não foi publicada e está visível apenas para administradores logados.</span>
+            </div>
+          </div>
+          <Link
+            href={`/admin/artigos/${article.id}/editar`}
+            className="px-3.5 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-xs shrink-0 transition-colors"
+          >
+            Publicar Matéria
+          </Link>
+        </div>
+      )}
+
       {/* Schema.org Injections */}
       <script
         type="application/ld+json"

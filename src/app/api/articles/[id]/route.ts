@@ -131,6 +131,14 @@ export async function PUT(request: Request, { params }: { params: { id: string }
     const cleanContent = content !== undefined ? sanitizeContent(content) : current.content;
     const readingTime = calculateReadingTime(cleanContent);
 
+    const newStatus = status !== undefined ? status : current.status;
+    let finalPublishedAt = published_at !== undefined ? published_at : current.published_at;
+    if (newStatus === 'scheduled' && !finalPublishedAt) {
+      finalPublishedAt = new Date(Date.now() + 3600000).toISOString();
+    } else if (newStatus === 'published' && (!finalPublishedAt || current.status === 'scheduled' || current.status === 'draft')) {
+      finalPublishedAt = published_at || new Date().toISOString();
+    }
+
     db.prepare(`
       UPDATE articles SET
         title = ?,
@@ -167,8 +175,8 @@ export async function PUT(request: Request, { params }: { params: { id: string }
       cover_caption !== undefined ? cover_caption : current.cover_caption,
       cover_source !== undefined ? cover_source : current.cover_source,
       category_id !== undefined ? category_id : current.category_id,
-      status !== undefined ? status : current.status,
-      published_at !== undefined ? published_at : current.published_at,
+      newStatus,
+      finalPublishedAt,
       readingTime,
       featured !== undefined ? (featured ? 1 : 0) : current.featured,
       meta_title !== undefined ? meta_title : current.meta_title,

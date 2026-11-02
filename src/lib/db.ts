@@ -5,6 +5,28 @@ import { hashPassword } from './auth';
 
 let dbInstance: DatabaseSync | null = null;
 let autoBackupStartupTriggered = false;
+let lastScheduledCheck = 0;
+
+export function publishDueScheduledArticles(db: DatabaseSync): number {
+  const now = Date.now();
+  // Throttle check to at most once every 5 seconds to keep getDb super-fast
+  if (now - lastScheduledCheck < 5000) return 0;
+  lastScheduledCheck = now;
+
+  try {
+    const result = db.prepare(`
+      UPDATE articles 
+      SET status = 'published', updated_at = CURRENT_TIMESTAMP 
+      WHERE status = 'scheduled' 
+        AND published_at IS NOT NULL 
+        AND (datetime(published_at) <= datetime('now') OR published_at <= ?)
+    `).run(new Date().toISOString());
+    return Number(result.changes || 0);
+  } catch (err) {
+    console.error('[DB] Erro ao auto-publicar matérias agendadas:', err);
+    return 0;
+  }
+}
 
 export function toPlain<T>(obj: T): T {
   if (obj === null || obj === undefined) return obj;
@@ -12,7 +34,10 @@ export function toPlain<T>(obj: T): T {
 }
 
 export function getDb(): DatabaseSync {
-  if (dbInstance) return dbInstance;
+  if (dbInstance) {
+    publishDueScheduledArticles(dbInstance);
+    return dbInstance;
+  }
 
   const dataDir = path.join(process.cwd(), 'data');
   if (!fs.existsSync(dataDir)) {
@@ -27,6 +52,7 @@ export function getDb(): DatabaseSync {
   dbInstance.exec('PRAGMA foreign_keys = ON;');
 
   initDatabase(dbInstance);
+  publishDueScheduledArticles(dbInstance);
 
   if (!autoBackupStartupTriggered) {
     autoBackupStartupTriggered = true;

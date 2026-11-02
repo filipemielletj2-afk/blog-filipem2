@@ -179,10 +179,12 @@ export default function AdminDashboardPage() {
                         className={`px-2 py-0.5 rounded font-mono text-[10px] uppercase font-bold ${
                           art.status === 'published'
                             ? 'bg-emerald-950/80 text-emerald-400 border border-emerald-800/60'
+                            : art.status === 'scheduled'
+                            ? 'bg-purple-950/80 text-purple-300 border border-purple-800/60'
                             : 'bg-amber-950/80 text-amber-400 border border-amber-800/60'
                         }`}
                       >
-                        {art.status === 'published' ? 'Publicado' : 'Rascunho'}
+                        {art.status === 'published' ? 'Publicado' : art.status === 'scheduled' ? 'Agendado' : 'Rascunho'}
                       </span>
                     </td>
                     <td className="py-3.5 pr-4 text-neutral-400 font-mono">

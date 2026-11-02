@@ -27,7 +27,9 @@ import {
   Check,
   FolderOpen,
   ShoppingBag,
-  Sparkles
+  Sparkles,
+  Calendar,
+  Clock
 } from 'lucide-react';
 import { slugify } from '@/lib/utils';
 
@@ -50,6 +52,20 @@ export default function ArticleEditor({ initialData, articleId }: ArticleEditorP
   const [coverSource, setCoverSource] = useState(initialData?.cover_source || '');
   const [categoryId, setCategoryId] = useState<number>(initialData?.category_id || 1);
   const [status, setStatus] = useState(initialData?.status || 'published');
+  const [publishedAt, setPublishedAt] = useState<string>(() => {
+    if (initialData?.published_at) {
+      try {
+        const d = new Date(initialData.published_at);
+        if (!isNaN(d.getTime())) {
+          const pad = (n: number) => String(n).padStart(2, '0');
+          return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+        }
+      } catch {}
+    }
+    const d = new Date(Date.now() + 60 * 60 * 1000);
+    const pad = (n: number) => String(n).padStart(2, '0');
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  });
   const [featured, setFeatured] = useState(Boolean(initialData?.featured));
   const [allowComments, setAllowComments] = useState(initialData?.allow_comments !== 0);
 
@@ -385,6 +401,16 @@ export default function ArticleEditor({ initialData, articleId }: ArticleEditorP
     setLoading(true);
     setNotification(null);
 
+    const targetStatus = forceStatus || status;
+    let finalPublishedAt: string | null = null;
+    if (targetStatus === 'published') {
+      finalPublishedAt = initialData?.published_at || new Date().toISOString();
+    } else if (targetStatus === 'scheduled') {
+      finalPublishedAt = publishedAt ? new Date(publishedAt).toISOString() : new Date(Date.now() + 3600000).toISOString();
+    } else {
+      finalPublishedAt = null;
+    }
+
     const payload = {
       title,
       subtitle,
@@ -395,7 +421,8 @@ export default function ArticleEditor({ initialData, articleId }: ArticleEditorP
       cover_caption: coverCaption,
       cover_source: coverSource,
       category_id: categoryId,
-      status: forceStatus || status,
+      status: targetStatus,
+      published_at: finalPublishedAt,
       featured: featured ? 1 : 0,
       allow_comments: allowComments ? 1 : 0,
       tags,
@@ -422,7 +449,21 @@ export default function ArticleEditor({ initialData, articleId }: ArticleEditorP
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Erro ao salvar artigo.');
 
-      setNotification({ type: 'success', text: 'Artigo salvo e sincronizado com o portal!' });
+      if (forceStatus) {
+        setStatus(forceStatus);
+      }
+
+      if (targetStatus === 'scheduled') {
+        const formattedDate = publishedAt ? new Date(publishedAt).toLocaleString('pt-BR') : '';
+        setNotification({
+          type: 'success',
+          text: `Matéria agendada com sucesso! Será publicada automaticamente em ${formattedDate}.`
+        });
+      } else if (targetStatus === 'draft') {
+        setNotification({ type: 'success', text: 'Rascunho salvo com sucesso!' });
+      } else {
+        setNotification({ type: 'success', text: 'Matéria salva e publicada no portal!' });
+      }
 
       if (!articleId && data.id) {
         router.push(`/admin/artigos/${data.id}/editar`);
@@ -468,22 +509,59 @@ export default function ArticleEditor({ initialData, articleId }: ArticleEditorP
             </a>
           )}
 
-          <button
-            onClick={() => handleSave('draft')}
-            disabled={loading}
-            className="px-4 py-2 rounded-xl bg-neutral-900 border border-neutral-700 hover:border-neutral-500 text-neutral-200 text-xs font-bold transition-colors disabled:opacity-50"
-          >
-            Salvar Rascunho
-          </button>
+          {status === 'scheduled' ? (
+            <>
+              <button
+                type="button"
+                onClick={() => handleSave('draft')}
+                disabled={loading}
+                className="px-4 py-2 rounded-xl bg-neutral-900 border border-neutral-700 hover:border-neutral-500 text-neutral-200 text-xs font-bold transition-colors disabled:opacity-50"
+              >
+                Salvar Rascunho
+              </button>
 
-          <button
-            onClick={() => handleSave('published')}
-            disabled={loading}
-            className="px-5 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-xs uppercase tracking-wider flex items-center gap-2 shadow-lg shadow-red-600/30 transition-all disabled:opacity-50"
-          >
-            {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-            <span>Publicar Imediatamente</span>
-          </button>
+              <button
+                type="button"
+                onClick={() => handleSave('scheduled')}
+                disabled={loading}
+                className="px-5 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs uppercase tracking-wider flex items-center gap-2 shadow-lg shadow-purple-600/30 transition-all disabled:opacity-50"
+              >
+                {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Clock className="w-4 h-4" />}
+                <span>Salvar Agendamento</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => handleSave('published')}
+                disabled={loading}
+                className="px-3.5 py-2 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-neutral-300 hover:text-white text-xs font-semibold transition-colors disabled:opacity-50"
+                title="Publicar agora sem aguardar o horário"
+              >
+                Publicar Agora
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                type="button"
+                onClick={() => handleSave('draft')}
+                disabled={loading}
+                className="px-4 py-2 rounded-xl bg-neutral-900 border border-neutral-700 hover:border-neutral-500 text-neutral-200 text-xs font-bold transition-colors disabled:opacity-50"
+              >
+                Salvar Rascunho
+              </button>
+
+              <button
+                type="button"
+                onClick={() => handleSave('published')}
+                disabled={loading}
+                className="px-5 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-xs uppercase tracking-wider flex items-center gap-2 shadow-lg shadow-red-600/30 transition-all disabled:opacity-50"
+              >
+                {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+                <span>{articleId ? 'Salvar Matéria' : 'Publicar Agora'}</span>
+              </button>
+            </>
+          )}
         </div>
       </div>
 
@@ -838,17 +916,40 @@ export default function ArticleEditor({ initialData, articleId }: ArticleEditorP
 
             <div className="space-y-3 text-xs">
               <div>
-                <label className="block font-semibold text-neutral-300 mb-1">Status</label>
+                <label className="block font-semibold text-neutral-300 mb-1">Status da Matéria</label>
                 <select
                   value={status}
                   onChange={(e) => setStatus(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl bg-neutral-900 border border-neutral-700 text-white text-xs focus:outline-none focus:border-red-500"
+                  className="w-full px-3 py-2 rounded-xl bg-neutral-900 border border-neutral-700 text-white text-xs font-semibold focus:outline-none focus:border-red-500"
                 >
-                  <option value="published">Publicado no Ar</option>
-                  <option value="draft">Rascunho Privado</option>
-                  <option value="scheduled">Agendado</option>
+                  <option value="published">🟢 Publicado no Ar</option>
+                  <option value="scheduled">🟣 Agendado</option>
+                  <option value="draft">🟡 Rascunho Privado</option>
                 </select>
               </div>
+
+              {status === 'scheduled' && (
+                <div className="p-3.5 rounded-xl bg-purple-950/40 border border-purple-800/80 space-y-2.5">
+                  <div className="flex items-center justify-between">
+                    <label className="flex items-center gap-1.5 text-purple-300 font-bold text-xs">
+                      <Calendar className="w-4 h-4 text-purple-400" />
+                      <span>Data e Horário de Liberação</span>
+                    </label>
+                    <span className="text-[10px] bg-purple-900/80 text-purple-200 px-2 py-0.5 rounded font-mono font-bold border border-purple-700/60">
+                      AUTOMÁTICO
+                    </span>
+                  </div>
+                  <input
+                    type="datetime-local"
+                    value={publishedAt}
+                    onChange={(e) => setPublishedAt(e.target.value)}
+                    className="w-full px-3 py-2 rounded-xl bg-neutral-900 border border-purple-700/80 text-white font-mono text-xs focus:outline-none focus:border-purple-500"
+                  />
+                  <p className="text-[11px] text-purple-200/90 leading-relaxed">
+                    ⏰ O artigo permanecerá em espera e será publicado automaticamente no portal assim que esta data e horário chegarem.
+                  </p>
+                </div>
+              )}
 
               <div>
                 <label className="block font-semibold text-neutral-300 mb-1">Categoria Principal *</label>

@@ -150,7 +150,14 @@ export async function POST(request: Request) {
 
     const readingTime = calculateReadingTime(content);
     const cleanContent = sanitizeContent(content);
-    const pubDate = published_at || (status === 'published' ? new Date().toISOString() : null);
+    let pubDate = published_at || null;
+    if (status === 'published') {
+      pubDate = published_at || new Date().toISOString();
+    } else if (status === 'scheduled') {
+      pubDate = published_at || new Date(Date.now() + 3600000).toISOString();
+    } else if (status === 'draft') {
+      pubDate = null;
+    }
 
     const insertStmt = db.prepare(`
       INSERT INTO articles (
