@@ -5,6 +5,8 @@ import { usePathname } from 'next/navigation';
 import Header from './Header';
 import Footer from './Footer';
 import CookieBanner from './CookieBanner';
+import SitePreloader from './SitePreloader';
+import PageTransitionProgress from './PageTransitionProgress';
 
 interface AppShellProps {
   children: React.ReactNode;
@@ -37,16 +39,23 @@ export default function AppShell({
     }
   }, [isAdmin]);
 
-  // Admin pages have their own full-screen standalone layout
+  // Admin pages have their own full-screen standalone layout with transition progress
   if (isAdmin) {
-    return <>{children}</>;
+    return (
+      <>
+        <PageTransitionProgress />
+        {children}
+      </>
+    );
   }
 
-  // Public portal pages render standard Header, Main, Footer and CookieBanner
+  // Public portal pages render standard Header, Main, Footer, Preloader and CookieBanner
   return (
     <>
+      <SitePreloader />
+      <PageTransitionProgress />
       <Header categories={categories} siteTitle={siteTitle} />
-      <main className="flex-1">{children}</main>
+      <main className="flex-1 animate-pageTransition">{children}</main>
       <Footer categories={categories} footerText={footerText} />
       <CookieBanner />
     </>
