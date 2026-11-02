@@ -219,7 +219,14 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-screen flex flex-col antialiased selection:bg-red-600 selection:text-white transition-colors duration-200">
-        <AppShell categories={categories} siteTitle={settings.site_title} footerText={settings.footer_text}>
+        <AppShell
+          categories={categories}
+          siteTitle={settings.site_title}
+          footerText={settings.footer_text}
+          transitionEffect={settings.page_transition_effect || 'slices_vertical'}
+          transitionSpeed={settings.page_transition_speed || 'normal'}
+          transitionShowLogo={settings.page_transition_show_logo !== '0'}
+        >
           {children}
         </AppShell>
       </body>

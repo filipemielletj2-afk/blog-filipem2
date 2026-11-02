@@ -13,13 +13,19 @@ interface AppShellProps {
   categories: any[];
   siteTitle?: string;
   footerText?: string;
+  transitionEffect?: string;
+  transitionSpeed?: string;
+  transitionShowLogo?: boolean;
 }
 
 export default function AppShell({
   children,
   categories = [],
   siteTitle = 'BLOG FILIPEM2',
-  footerText
+  footerText,
+  transitionEffect = 'slices_vertical',
+  transitionSpeed = 'normal',
+  transitionShowLogo = true
 }: AppShellProps) {
   const rawPathname = usePathname();
   const pathname = rawPathname || '';
@@ -39,10 +45,15 @@ export default function AppShell({
     }
   }, [isAdmin]);
 
-  // Admin pages have their own full-screen standalone layout with transition progress
+  // Admin pages have their own full-screen standalone layout with transition progress and preview listener
   if (isAdmin) {
     return (
       <>
+        <CurtainTransition
+          initialEffect={transitionEffect}
+          initialSpeed={transitionSpeed}
+          initialShowLogo={transitionShowLogo}
+        />
         <PageTransitionProgress />
         {children}
       </>
@@ -52,7 +63,11 @@ export default function AppShell({
   // Public portal pages render standard Header, Main, Footer, Curtain Transition and CookieBanner
   return (
     <>
-      <CurtainTransition />
+      <CurtainTransition
+        initialEffect={transitionEffect}
+        initialSpeed={transitionSpeed}
+        initialShowLogo={transitionShowLogo}
+      />
       <PageTransitionProgress />
       <Header categories={categories} siteTitle={siteTitle} />
       <main className="flex-1 animate-pageTransition">{children}</main>
