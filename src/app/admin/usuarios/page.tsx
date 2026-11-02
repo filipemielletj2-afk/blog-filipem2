@@ -237,9 +237,16 @@ export default function AdminUsersPage() {
   const isGoogleUrlValid = Boolean(
     gdriveUrl && gdriveUrl.startsWith('https://script.google.com/macros/s/') && gdriveUrl.includes('/exec')
   );
-  const isLibraryUrl = Boolean(gdriveUrl && (gdriveUrl.includes('/macros/library/') || gdriveUrl.includes('/edit')));
+  const isLibraryUrl = Boolean(
+    gdriveUrl && (gdriveUrl.includes('/macros/library/') || gdriveUrl.includes('/edit') || (!gdriveUrl.includes('/exec') && gdriveUrl.includes('/d/')))
+  );
   const isResendKeyValid = Boolean(resendApiKey && resendApiKey.trim().startsWith('re_'));
-  const isChannelConnected = isGoogleUrlValid || isResendKeyValid;
+  const isChannelConnected = !isLibraryUrl && (isGoogleUrlValid || isResendKeyValid);
+
+  const scriptIdMatch = gdriveUrl ? gdriveUrl.match(/\/d\/([a-zA-Z0-9_-]+)/) : null;
+  const scriptDirectEditUrl = scriptIdMatch
+    ? `https://script.google.com/d/${scriptIdMatch[1]}/edit`
+    : 'https://script.google.com/home/projects';
 
   return (
     <div className="space-y-6">
@@ -472,23 +479,34 @@ export default function AdminUsersPage() {
                 </span>
 
                 {isLibraryUrl && (
-                  <div className="mt-2.5 p-3 rounded-xl bg-amber-950/80 border border-amber-600/80 text-amber-200 text-xs space-y-1.5 leading-relaxed">
-                    <div className="font-bold flex items-center gap-1.5 text-amber-300">
-                      <AlertCircle className="w-4 h-4 text-amber-400 shrink-0" />
-                      <span>Atenção: Você colou um link de &quot;Biblioteca&quot;!</span>
+                  <div className="mt-3 p-4 rounded-xl bg-red-950/80 border-2 border-red-500 text-red-100 text-xs space-y-2.5 leading-relaxed">
+                    <div className="font-bold flex items-center gap-2 text-red-300 text-sm">
+                      <AlertCircle className="w-5 h-5 text-red-400 shrink-0" />
+                      <span>Atenção: Você colou um link de &quot;Biblioteca&quot; ou &quot;Editor&quot;!</span>
                     </div>
-                    <p>
-                      Para receber os e-mails, o Google precisa que a implantação seja do tipo <strong>&quot;Aplicativo da Web&quot;</strong> (o link correto deve começar com <code className="bg-black/60 px-1 py-0.5 rounded text-white font-mono">https://script.google.com/macros/s/...</code> e terminar com <code className="bg-black/60 px-1 py-0.5 rounded text-white font-mono font-bold">/exec</code>).
+                    <p className="text-white/90">
+                      O link atual (<code className="bg-black/60 px-1 py-0.5 rounded text-red-300 font-mono text-[11px] break-all">{gdriveUrl}</code>) é um link interno do editor e <strong>não recebe chamadas externas</strong> para disparar e-mails.
                     </p>
+                    <div className="p-3 bg-black/50 rounded-lg space-y-1.5 text-neutral-200">
+                      <strong className="text-white block font-bold">Como pegar a URL correta no Google em 30 segundos:</strong>
+                      <ol className="list-decimal list-inside space-y-1 text-neutral-300 text-[11px]">
+                        <li>Abra seu script no botão vermelho abaixo.</li>
+                        <li>No canto superior direito, clique no botão azul <strong>&quot;Implantar&quot;</strong> &rarr; <strong>&quot;Nova implantação&quot;</strong>.</li>
+                        <li>Clique na engrenagem (ao lado de &quot;Selecione o tipo&quot;) e escolha <strong>&quot;Aplicativo da Web&quot;</strong>.</li>
+                        <li>Em <em>&quot;Quem tem acesso&quot;</em>, escolha <strong>&quot;Qualquer pessoa&quot;</strong>.</li>
+                        <li>Clique em <strong>&quot;Implantar&quot;</strong>, autorize sua conta Google e copie a <strong>URL do aplicativo da Web</strong> (ela sempre termina com <code className="text-emerald-400 font-bold">/exec</code>).</li>
+                        <li>Cole o link copiado aqui neste campo e clique em <strong>Salvar Canal de Envio</strong>!</li>
+                      </ol>
+                    </div>
                     <div className="pt-1">
                       <a
-                        href="https://script.google.com/d/1WAycW2YhuXRHvIAdBM6XRoY_HcMzf25ed66cTd8iad55_B5SV0AdGHA_/edit"
+                        href={scriptDirectEditUrl}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex items-center gap-1 text-red-400 hover:text-red-300 font-bold underline"
+                        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold transition-all shadow-md shadow-red-600/30"
                       >
-                        <ExternalLink className="w-3.5 h-3.5" />
-                        <span>Clique aqui para abrir seu script &rarr; Implantar &rarr; Nova Implantação &rarr; Aplicativo da Web</span>
+                        <ExternalLink className="w-4 h-4" />
+                        <span>Abrir meu script no Google e gerar o link /exec</span>
                       </a>
                     </div>
                   </div>
@@ -501,7 +519,8 @@ export default function AdminUsersPage() {
                   <span>Ou Chave da API Resend (Opcional - re_...)</span>
                 </label>
                 <input
-                  type="password"
+                  type="text"
+                  autoComplete="off"
                   value={resendApiKey}
                   onChange={(e) => setResendApiKey(e.target.value)}
                   placeholder="re_xxxxxxxxxxxxxxxxxxxxxxxxx"

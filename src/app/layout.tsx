@@ -154,6 +154,7 @@ export default function RootLayout({
           />
         )}
         {/* Google Search & Browser Favicons */}
+        <link rel="shortcut icon" href="/favicon.ico" />
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="icon" type="image/png" sizes="48x48" href="/icon-48x48.png" />
         <link rel="icon" type="image/png" sizes="96x96" href="/icon-96x96.png" />

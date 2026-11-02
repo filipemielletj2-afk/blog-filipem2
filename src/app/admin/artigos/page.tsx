@@ -14,7 +14,10 @@ import {
   Calendar,
   Clock,
   Loader2,
-  AlertCircle
+  AlertCircle,
+  ChevronLeft,
+  ChevronRight,
+  ListFilter
 } from 'lucide-react';
 import { formatDateBR } from '@/lib/utils';
 
@@ -25,7 +28,10 @@ export default function AdminArticlesPage() {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('');
   const [loading, setLoading] = useState(true);
-  const [pagination, setPagination] = useState({ page: 1, limit: 12, total: 0, totalPages: 1 });
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState<number | 'all'>(100);
+  const [total, setTotal] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     loadCategories();
@@ -33,7 +39,7 @@ export default function AdminArticlesPage() {
 
   useEffect(() => {
     loadArticles();
-  }, [search, selectedCategory, selectedStatus, pagination.page]);
+  }, [search, selectedCategory, selectedStatus, page, limit]);
 
   const loadCategories = async () => {
     try {
@@ -48,7 +54,7 @@ export default function AdminArticlesPage() {
   const loadArticles = async () => {
     setLoading(true);
     try {
-      let url = `/api/articles?page=${pagination.page}&limit=${pagination.limit}`;
+      let url = `/api/articles?page=${page}&limit=${limit}&sort=newest`;
       if (search) url += `&search=${encodeURIComponent(search)}`;
       if (selectedCategory) url += `&category=${encodeURIComponent(selectedCategory)}`;
       if (selectedStatus) url += `&status=${encodeURIComponent(selectedStatus)}`;
@@ -56,7 +62,10 @@ export default function AdminArticlesPage() {
       const res = await fetch(url);
       const data = await res.json();
       setArticles(data.articles || []);
-      setPagination(data.pagination || { page: 1, limit: 12, total: 0, totalPages: 1 });
+      if (data.pagination) {
+        setTotal(data.pagination.total);
+        setTotalPages(data.pagination.totalPages);
+      }
     } catch (err) {
       console.error(err);
     } finally {
@@ -71,10 +80,14 @@ export default function AdminArticlesPage() {
       const res = await fetch(`/api/articles/${id}`, { method: 'DELETE' });
       if (!res.ok) throw new Error('Falha ao excluir artigo.');
       setArticles(articles.filter((a) => a.id !== id));
+      setTotal((prev) => Math.max(0, prev - 1));
     } catch (err: any) {
       alert(err.message);
     }
   };
+
+  const startItem = articles.length > 0 ? (limit === 'all' ? 1 : (page - 1) * limit + 1) : 0;
+  const endItem = limit === 'all' ? total : Math.min(page * (limit as number), total);
 
   return (
     <div className="space-y-6">
@@ -90,13 +103,20 @@ export default function AdminArticlesPage() {
           </p>
         </div>
 
-        <Link
-          href="/admin/artigos/novo"
-          className="px-5 py-2.5 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-xs uppercase tracking-wider flex items-center gap-2 shadow-lg shadow-red-600/30 transition-all self-start sm:self-auto"
-        >
-          <Plus className="w-4 h-4" />
-          <span>Novo Artigo</span>
-        </Link>
+        <div className="flex items-center gap-3">
+          <div className="px-3.5 py-2 rounded-xl bg-[#12141c] border border-neutral-800 text-xs font-semibold text-neutral-300">
+            Total:{' '}
+            <span className="text-red-400 font-bold font-mono text-sm ml-1">{total}</span>{' '}
+            {total === 1 ? 'artigo' : 'artigos'}
+          </div>
+          <Link
+            href="/admin/artigos/novo"
+            className="px-5 py-2.5 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-xs uppercase tracking-wider flex items-center gap-2 shadow-lg shadow-red-600/30 transition-all self-start sm:self-auto"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Novo Artigo</span>
+          </Link>
+        </div>
       </div>
 
       {/* Filters Bar */}
@@ -106,7 +126,10 @@ export default function AdminArticlesPage() {
           <input
             type="text"
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setPage(1);
+            }}
             placeholder="Buscar por título ou trecho..."
             className="w-full pl-9 pr-3 py-2 rounded-xl bg-neutral-900 border border-neutral-700 text-white placeholder-neutral-500 text-xs focus:outline-none focus:border-red-500"
           />
@@ -115,7 +138,10 @@ export default function AdminArticlesPage() {
         <div className="flex flex-wrap items-center gap-2.5 w-full md:w-auto">
           <select
             value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value)}
+            onChange={(e) => {
+              setSelectedCategory(e.target.value);
+              setPage(1);
+            }}
             className="px-3 py-2 rounded-xl bg-neutral-900 border border-neutral-700 text-white text-xs focus:outline-none focus:border-red-500"
           >
             <option value="">Todas as Categorias</option>
@@ -126,7 +152,10 @@ export default function AdminArticlesPage() {
 
           <select
             value={selectedStatus}
-            onChange={(e) => setSelectedStatus(e.target.value)}
+            onChange={(e) => {
+              setSelectedStatus(e.target.value);
+              setPage(1);
+            }}
             className="px-3 py-2 rounded-xl bg-neutral-900 border border-neutral-700 text-white text-xs focus:outline-none focus:border-red-500"
           >
             <option value="">Todos os Status</option>
@@ -134,6 +163,24 @@ export default function AdminArticlesPage() {
             <option value="draft">Rascunhos</option>
             <option value="scheduled">Agendados</option>
           </select>
+
+          <div className="flex items-center gap-1.5 pl-2 border-l border-neutral-800">
+            <span className="text-[11px] text-neutral-400 font-medium">Exibir:</span>
+            <select
+              value={limit.toString()}
+              onChange={(e) => {
+                const val = e.target.value === 'all' ? 'all' : parseInt(e.target.value, 10);
+                setLimit(val as any);
+                setPage(1);
+              }}
+              className="px-2.5 py-1.5 rounded-lg bg-neutral-900 border border-neutral-700 text-white text-xs font-semibold focus:outline-none focus:border-red-500 cursor-pointer"
+            >
+              <option value="25">25 por pág.</option>
+              <option value="50">50 por pág.</option>
+              <option value="100">100 por pág.</option>
+              <option value="all">Todos ({total})</option>
+            </select>
+          </div>
         </div>
       </div>
 
@@ -151,109 +198,167 @@ export default function AdminArticlesPage() {
             <p className="text-xs text-neutral-500">Tente alterar os filtros ou publique um novo artigo.</p>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead>
-                <tr className="bg-[#161822] border-b border-neutral-800 text-neutral-400 font-semibold uppercase tracking-wider">
-                  <th className="py-3 px-4">Artigo</th>
-                  <th className="py-3 px-4">Categoria</th>
-                  <th className="py-3 px-4">Autor</th>
-                  <th className="py-3 px-4">Status</th>
-                  <th className="py-3 px-4">Visualizações</th>
-                  <th className="py-3 px-4">Data</th>
-                  <th className="py-3 px-4 text-right">Ações</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-neutral-800/60">
-                {articles.map((art) => (
-                  <tr key={art.id} className="hover:bg-neutral-800/40 transition-colors">
-                    <td className="py-3.5 px-4">
-                      <div className="flex items-center space-x-3 max-w-md">
-                        {art.cover_image && (
-                          <img
-                            src={art.cover_image}
-                            alt={art.title}
-                            className="w-12 h-12 rounded-lg object-cover bg-neutral-900 shrink-0"
-                          />
-                        )}
-                        <div className="min-w-0">
+          <>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs">
+                <thead>
+                  <tr className="bg-[#161822] border-b border-neutral-800 text-neutral-400 font-semibold uppercase tracking-wider">
+                    <th className="py-3 px-4">Artigo</th>
+                    <th className="py-3 px-4">Categoria</th>
+                    <th className="py-3 px-4">Autor</th>
+                    <th className="py-3 px-4">Status</th>
+                    <th className="py-3 px-4">Visualizações</th>
+                    <th className="py-3 px-4">Data</th>
+                    <th className="py-3 px-4 text-right">Ações</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-neutral-800/60">
+                  {articles.map((art) => (
+                    <tr key={art.id} className="hover:bg-neutral-800/40 transition-colors">
+                      <td className="py-3.5 px-4">
+                        <div className="flex items-center space-x-3 max-w-md">
+                          {art.cover_image && (
+                            <img
+                              src={art.cover_image}
+                              alt={art.title}
+                              className="w-12 h-12 rounded-lg object-cover bg-neutral-900 shrink-0"
+                            />
+                          )}
+                          <div className="min-w-0">
+                            <Link
+                              href={`/admin/artigos/${art.id}/editar`}
+                              className="font-bold text-white hover:text-red-400 transition-colors line-clamp-1"
+                            >
+                              {art.title}
+                            </Link>
+                            <span className="text-[11px] text-neutral-500 block truncate">
+                              /artigo/{art.slug}
+                            </span>
+                          </div>
+                        </div>
+                      </td>
+
+                      <td className="py-3.5 px-4 whitespace-nowrap">
+                        <span
+                          className="px-2.5 py-1 rounded font-semibold text-[11px]"
+                          style={{ backgroundColor: `${art.category_color}22`, color: art.category_color }}
+                        >
+                          {art.category_name}
+                        </span>
+                      </td>
+
+                      <td className="py-3.5 px-4 whitespace-nowrap text-neutral-300">
+                        {art.author_name}
+                      </td>
+
+                      <td className="py-3.5 px-4 whitespace-nowrap">
+                        <span
+                          className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase ${
+                            art.status === 'published'
+                              ? 'bg-emerald-950/80 text-emerald-400 border border-emerald-800/60'
+                              : 'bg-amber-950/80 text-amber-400 border border-amber-800/60'
+                          }`}
+                        >
+                          {art.status === 'published' ? 'Publicado' : 'Rascunho'}
+                        </span>
+                      </td>
+
+                      <td className="py-3.5 px-4 whitespace-nowrap text-neutral-400 font-mono">
+                        {art.views || 0}
+                      </td>
+
+                      <td className="py-3.5 px-4 whitespace-nowrap text-neutral-400">
+                        {formatDateBR(art.published_at)}
+                      </td>
+
+                      <td className="py-3.5 px-4 text-right whitespace-nowrap">
+                        <div className="flex items-center justify-end space-x-2">
+                          <Link
+                            href={`/artigo/${art.slug}`}
+                            target="_blank"
+                            className="p-1.5 text-neutral-400 hover:text-white rounded-lg hover:bg-neutral-800"
+                            title="Ver no site ao vivo"
+                          >
+                            <ExternalLink className="w-4 h-4" />
+                          </Link>
                           <Link
                             href={`/admin/artigos/${art.id}/editar`}
-                            className="font-bold text-white hover:text-red-400 transition-colors line-clamp-1"
+                            className="p-1.5 text-neutral-400 hover:text-white rounded-lg hover:bg-neutral-800"
+                            title="Editar matéria"
                           >
-                            {art.title}
+                            <Edit3 className="w-4 h-4" />
                           </Link>
-                          <span className="text-[11px] text-neutral-500 block truncate">
-                            /artigo/{art.slug}
-                          </span>
+                          <button
+                            onClick={() => handleDelete(art.id, art.title)}
+                            className="p-1.5 text-neutral-400 hover:text-red-400 rounded-lg hover:bg-neutral-800"
+                            title="Excluir matéria"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
                         </div>
-                      </div>
-                    </td>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
 
-                    <td className="py-3.5 px-4 whitespace-nowrap">
-                      <span
-                        className="px-2.5 py-1 rounded font-semibold text-[11px]"
-                        style={{ backgroundColor: `${art.category_color}22`, color: art.category_color }}
-                      >
-                        {art.category_name}
-                      </span>
-                    </td>
+            {/* Pagination Controls */}
+            {total > 0 && (
+              <div className="p-4 bg-[#141622] border-t border-neutral-800 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-neutral-400">
+                <div className="flex items-center gap-2">
+                  <span>
+                    Exibindo <strong className="text-white">{startItem}</strong> a{' '}
+                    <strong className="text-white">{endItem}</strong> de{' '}
+                    <strong className="text-white">{total}</strong> artigos
+                  </span>
+                  {limit === 'all' && (
+                    <span className="text-[10px] bg-red-600/20 text-red-400 border border-red-500/30 px-2 py-0.5 rounded-full font-bold">
+                      TODOS OS ARTIGOS NA TELA
+                    </span>
+                  )}
+                </div>
 
-                    <td className="py-3.5 px-4 whitespace-nowrap text-neutral-300">
-                      {art.author_name}
-                    </td>
+                {limit !== 'all' && totalPages > 1 && (
+                  <div className="flex items-center gap-1.5">
+                    <button
+                      onClick={() => setPage((p) => Math.max(1, p - 1))}
+                      disabled={page <= 1}
+                      className="px-3 py-1.5 rounded-lg bg-neutral-900 border border-neutral-700 text-neutral-300 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1 font-semibold transition-all"
+                    >
+                      <ChevronLeft className="w-3.5 h-3.5" />
+                      <span>Anterior</span>
+                    </button>
 
-                    <td className="py-3.5 px-4 whitespace-nowrap">
-                      <span
-                        className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase ${
-                          art.status === 'published'
-                            ? 'bg-emerald-950/80 text-emerald-400 border border-emerald-800/60'
-                            : 'bg-amber-950/80 text-amber-400 border border-amber-800/60'
-                        }`}
-                      >
-                        {art.status === 'published' ? 'Publicado' : 'Rascunho'}
-                      </span>
-                    </td>
-
-                    <td className="py-3.5 px-4 whitespace-nowrap text-neutral-400 font-mono">
-                      {art.views || 0}
-                    </td>
-
-                    <td className="py-3.5 px-4 whitespace-nowrap text-neutral-400">
-                      {formatDateBR(art.published_at)}
-                    </td>
-
-                    <td className="py-3.5 px-4 text-right whitespace-nowrap">
-                      <div className="flex items-center justify-end space-x-2">
-                        <Link
-                          href={`/artigo/${art.slug}`}
-                          target="_blank"
-                          className="p-1.5 text-neutral-400 hover:text-white rounded-lg hover:bg-neutral-800"
-                          title="Ver no site ao vivo"
-                        >
-                          <ExternalLink className="w-4 h-4" />
-                        </Link>
-                        <Link
-                          href={`/admin/artigos/${art.id}/editar`}
-                          className="p-1.5 text-neutral-400 hover:text-white rounded-lg hover:bg-neutral-800"
-                          title="Editar matéria"
-                        >
-                          <Edit3 className="w-4 h-4" />
-                        </Link>
+                    <div className="flex items-center gap-1">
+                      {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
                         <button
-                          onClick={() => handleDelete(art.id, art.title)}
-                          className="p-1.5 text-neutral-400 hover:text-red-400 rounded-lg hover:bg-neutral-800"
-                          title="Excluir matéria"
+                          key={p}
+                          onClick={() => setPage(p)}
+                          className={`w-7 h-7 rounded-lg text-xs font-bold transition-all ${
+                            p === page
+                              ? 'bg-red-600 text-white shadow-md shadow-red-600/30'
+                              : 'bg-neutral-900 border border-neutral-700 text-neutral-400 hover:text-white'
+                          }`}
                         >
-                          <Trash2 className="w-4 h-4" />
+                          {p}
                         </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                      ))}
+                    </div>
+
+                    <button
+                      onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                      disabled={page >= totalPages}
+                      className="px-3 py-1.5 rounded-lg bg-neutral-900 border border-neutral-700 text-neutral-300 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1 font-semibold transition-all"
+                    >
+                      <span>Próxima</span>
+                      <ChevronRight className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>

@@ -40,7 +40,7 @@ export default function AdminTagsPage() {
       if (!res.ok) throw new Error('Falha ao adicionar tag.');
 
       setName('');
-      setNotification({ type: 'success', text: 'Tag cadastrada com sucesso!' });
+      setNotification({ type: 'success', text: 'Tags cadastradas com sucesso!' });
       loadTags();
     } catch (err: any) {
       setNotification({ type: 'error', text: err.message });
@@ -80,15 +80,20 @@ export default function AdminTagsPage() {
 
           <form onSubmit={handleAddTag} className="space-y-3">
             <div>
-              <label className="block text-xs font-semibold text-neutral-300 mb-1">Nome da Tag</label>
+              <label className="block text-xs font-semibold text-neutral-300 mb-1">
+                Nome da Tag (ou várias separadas por vírgula)
+              </label>
               <input
                 type="text"
                 required
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="Ex: PlayStation 5, K-pop, Unreal Engine 5..."
+                placeholder="Ex: PlayStation 5, Xbox, Nintendo Switch..."
                 className="w-full px-3 py-2 rounded-xl bg-neutral-900 border border-neutral-700 text-white text-xs focus:outline-none focus:border-red-500"
               />
+              <span className="text-[11px] text-neutral-400 mt-1 block">
+                💡 Você pode cadastrar várias tags de uma vez separando por vírgula (<code className="text-red-400 font-bold">,</code>).
+              </span>
             </div>
 
             <button

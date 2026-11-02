@@ -301,14 +301,50 @@ export default function ArticleEditor({ initialData, articleId }: ArticleEditorP
     }
   };
 
-  const handleAddTag = (e: React.KeyboardEvent | React.MouseEvent) => {
-    if ('key' in e && e.key !== 'Enter') return;
-    e.preventDefault();
-    const trimmed = tagInput.trim();
-    if (trimmed && !tags.includes(trimmed)) {
-      setTags([...tags, trimmed]);
+  const addTagsFromString = (str: string) => {
+    if (!str) return;
+    const parts = str.split(',');
+    const newTags = [...tags];
+    for (const part of parts) {
+      const clean = part.trim().replace(/^#+/, '');
+      if (clean && !newTags.includes(clean)) {
+        newTags.push(clean);
+      }
+    }
+    setTags(newTags);
+  };
+
+  const handleTagKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' || e.key === ',') {
+      e.preventDefault();
+      addTagsFromString(tagInput);
       setTagInput('');
     }
+  };
+
+  const handleTagChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    if (val.includes(',')) {
+      addTagsFromString(val);
+      setTagInput('');
+    } else {
+      setTagInput(val);
+    }
+  };
+
+  const handleTagPaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    const text = e.clipboardData.getData('text');
+    if (text.includes(',')) {
+      e.preventDefault();
+      addTagsFromString(text);
+      setTagInput('');
+    }
+  };
+
+  const handleAddTagButton = (e: React.MouseEvent) => {
+    e.preventDefault();
+    addTagsFromString(tagInput);
+    setTagInput('');
   };
 
   const handleRemoveTag = (tagToRemove: string) => {
@@ -1003,19 +1039,24 @@ export default function ArticleEditor({ initialData, articleId }: ArticleEditorP
               <input
                 type="text"
                 value={tagInput}
-                onChange={(e) => setTagInput(e.target.value)}
-                onKeyDown={handleAddTag}
-                placeholder="Digite a tag e pressione Enter..."
+                onChange={handleTagChange}
+                onKeyDown={handleTagKeyDown}
+                onPaste={handleTagPaste}
+                placeholder="Digite as tags separadas por vírgula (,) ou Enter..."
                 className="flex-1 px-3 py-2 rounded-xl bg-neutral-900 border border-neutral-700 text-white text-xs focus:outline-none focus:border-red-500"
               />
               <button
                 type="button"
-                onClick={handleAddTag}
+                onClick={handleAddTagButton}
                 className="px-3 py-2 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-white text-xs font-bold"
+                title="Adicionar tag"
               >
                 +
               </button>
             </div>
+            <p className="text-[11px] text-neutral-400">
+              💡 Separe múltiplas tags usando vírgula (<code className="text-red-400 font-bold">,</code>) ou Enter (ex: <span className="text-neutral-300">Games, PlayStation 5, Análise</span>).
+            </p>
 
             <div className="flex flex-wrap gap-1.5 pt-2">
               {tags.map((t) => (

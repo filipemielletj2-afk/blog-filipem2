@@ -28,17 +28,25 @@ export async function POST(request: Request) {
     }
 
     const { name } = await request.json();
-    if (!name) {
+    if (!name || typeof name !== 'string') {
       return NextResponse.json({ error: 'Nome da tag é obrigatório.' }, { status: 400 });
     }
 
     const db = getDb();
-    const slug = slugify(name);
+    const insertStmt = db.prepare('INSERT OR IGNORE INTO tags (name, slug) VALUES (?, ?)');
+    const parts = name.split(',');
+    const createdTags: any[] = [];
 
-    db.prepare('INSERT OR IGNORE INTO tags (name, slug) VALUES (?, ?)').run(name.trim(), slug);
-    const tag = db.prepare('SELECT * FROM tags WHERE slug = ?').get(slug);
+    for (const part of parts) {
+      const clean = part.trim().replace(/^#+/, '');
+      if (!clean) continue;
+      const slug = slugify(clean);
+      insertStmt.run(clean, slug);
+      const tag = db.prepare('SELECT * FROM tags WHERE slug = ?').get(slug);
+      if (tag) createdTags.push(tag);
+    }
 
-    return NextResponse.json({ success: true, tag });
+    return NextResponse.json({ success: true, count: createdTags.length, tags: createdTags });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }

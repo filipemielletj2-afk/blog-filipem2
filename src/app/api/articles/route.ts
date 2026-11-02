@@ -12,8 +12,10 @@ export async function GET(request: Request) {
     const search = searchParams.get('search');
     const tag = searchParams.get('tag');
     const featured = searchParams.get('featured');
+    const sort = searchParams.get('sort') || 'default';
     const page = parseInt(searchParams.get('page') || '1', 10);
-    const limit = parseInt(searchParams.get('limit') || '10', 10);
+    const limitParam = searchParams.get('limit');
+    const limit = limitParam === 'all' || limitParam === '-1' ? 10000 : parseInt(limitParam || '10', 10);
     const offset = (page - 1) * limit;
 
     const db = getDb();
@@ -67,7 +69,15 @@ export async function GET(request: Request) {
     const countResult = db.prepare(countQuery).get(...params) as { total: number };
     const total = countResult ? countResult.total : 0;
 
-    query += ` ORDER BY a.featured DESC, a.published_at DESC LIMIT ? OFFSET ?`;
+    if (sort === 'newest' || sort === 'created_at' || sort === 'id_desc') {
+      query += ` ORDER BY a.id DESC LIMIT ? OFFSET ?`;
+    } else if (sort === 'views') {
+      query += ` ORDER BY a.views DESC LIMIT ? OFFSET ?`;
+    } else if (sort === 'title') {
+      query += ` ORDER BY a.title ASC LIMIT ? OFFSET ?`;
+    } else {
+      query += ` ORDER BY a.featured DESC, a.published_at DESC, a.id DESC LIMIT ? OFFSET ?`;
+    }
     params.push(limit, offset);
 
     const articles = db.prepare(query).all(...params);
@@ -184,20 +194,24 @@ export async function POST(request: Request) {
 
     const articleId = Number(result.lastInsertRowid);
 
-    // Handle tags
+    // Handle tags (support multiple tags separated by comma)
     if (Array.isArray(tags) && tags.length > 0) {
       const insertTagStmt = db.prepare('INSERT OR IGNORE INTO tags (name, slug) VALUES (?, ?)');
       const getTagStmt = db.prepare('SELECT id FROM tags WHERE slug = ?');
       const insertArtTagStmt = db.prepare('INSERT OR IGNORE INTO article_tags (article_id, tag_id) VALUES (?, ?)');
 
       for (const t of tags) {
-        const tagName = typeof t === 'string' ? t.trim() : t.name?.trim();
-        if (!tagName) continue;
-        const tagSlug = slugify(tagName);
-        insertTagStmt.run(tagName, tagSlug);
-        const tagRow = getTagStmt.get(tagSlug) as { id: number };
-        if (tagRow) {
-          insertArtTagStmt.run(articleId, tagRow.id);
+        const raw = typeof t === 'string' ? t : (t?.name || '');
+        const parts = raw.split(',');
+        for (const part of parts) {
+          const tagName = part.trim().replace(/^#+/, '');
+          if (!tagName) continue;
+          const tagSlug = slugify(tagName);
+          insertTagStmt.run(tagName, tagSlug);
+          const tagRow = getTagStmt.get(tagSlug) as { id: number };
+          if (tagRow) {
+            insertArtTagStmt.run(articleId, tagRow.id);
+          }
         }
       }
     }

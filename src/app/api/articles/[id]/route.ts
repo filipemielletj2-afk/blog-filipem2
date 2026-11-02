@@ -191,13 +191,17 @@ export async function PUT(request: Request, { params }: { params: { id: string }
       const insertArtTagStmt = db.prepare('INSERT OR IGNORE INTO article_tags (article_id, tag_id) VALUES (?, ?)');
 
       for (const t of tags) {
-        const tagName = typeof t === 'string' ? t.trim() : t.name?.trim();
-        if (!tagName) continue;
-        const tagSlug = slugify(tagName);
-        insertTagStmt.run(tagName, tagSlug);
-        const tagRow = getTagStmt.get(tagSlug) as { id: number };
-        if (tagRow) {
-          insertArtTagStmt.run(id, tagRow.id);
+        const raw = typeof t === 'string' ? t : (t?.name || '');
+        const parts = raw.split(',');
+        for (const part of parts) {
+          const tagName = part.trim().replace(/^#+/, '');
+          if (!tagName) continue;
+          const tagSlug = slugify(tagName);
+          insertTagStmt.run(tagName, tagSlug);
+          const tagRow = getTagStmt.get(tagSlug) as { id: number };
+          if (tagRow) {
+            insertArtTagStmt.run(id, tagRow.id);
+          }
         }
       }
     }
