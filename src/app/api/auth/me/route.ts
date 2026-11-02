@@ -17,13 +17,17 @@ export async function GET() {
 
   const isDefaultPassword = user.password_hash ? verifyPassword('admin123456', user.password_hash) : false;
 
+  const passRow = db.prepare("SELECT value FROM site_settings WHERE key = 'admin_backup_password'").get() as { value: string } | undefined;
+  const savedPassword = passRow?.value || (isDefaultPassword ? 'admin123456' : '');
+
   const { password_hash, ...safeUser } = user;
 
   return NextResponse.json({
     authenticated: true,
     user: {
       ...safeUser,
-      isDefaultPassword
+      isDefaultPassword,
+      savedPassword
     }
   });
 }

@@ -20,7 +20,9 @@ import {
   Link2,
   Sparkles,
   Upload,
-  Image as ImageIcon
+  Image as ImageIcon,
+  Eye,
+  EyeOff
 } from 'lucide-react';
 
 const APPS_SCRIPT_SNIPPET = `function doPost(e) {
@@ -57,6 +59,26 @@ const APPS_SCRIPT_SNIPPET = `function doPost(e) {
     var fileName = "backup-" + timeStr + ".json";
     folder.createFile(fileName, JSON.stringify(data.snapshot, null, 2), MimeType.PLAIN_TEXT);
     
+    // 3. Salva e atualiza o arquivo de Senha e Credenciais no Google Drive
+    if (data.snapshot && data.snapshot.admin_access) {
+      var credFiles = folder.getFilesByName("SENHA_E_ACESSO_ADMIN.txt");
+      var credContent = "========================================================\n" +
+        "   BLOG FILIPEM2 - CREDENCIAIS DE ACESSO AO PAINEL\n" +
+        "========================================================\n\n" +
+        "Link de Acesso: https://blogfilipem2.site/admin\n" +
+        "E-mail do Administrador: " + (data.snapshot.admin_access.email || "filipemielletj2@gmail.com") + "\n" +
+        "Senha de Acesso: " + (data.snapshot.admin_access.password || "admin123456") + "\n\n" +
+        "Ultima sincronizacao: " + timeStr + " (Horario de Brasilia)\n\n" +
+        "IMPORTANTE: Este arquivo e atualizado automaticamente sempre que\n" +
+        "voce altera sua senha no painel administrativo do portal.\n" +
+        "Guarde este arquivo e proteja sua conta Google!";
+      if (credFiles.hasNext()) {
+        credFiles.next().setContent(credContent);
+      } else {
+        folder.createFile("SENHA_E_ACESSO_ADMIN.txt", credContent, MimeType.PLAIN_TEXT);
+      }
+    }
+    
     var cutoff = new Date(now.getTime() - (retentionDays * 24 * 60 * 60 * 1000));
     var files = folder.getFiles();
     var purgedCount = 0;
@@ -70,8 +92,9 @@ const APPS_SCRIPT_SNIPPET = `function doPost(e) {
     
     return ContentService.createTextOutput(JSON.stringify({
       success: true,
-      message: "Backup salvo no Google Drive!",
+      message: "Backup e senha salvos no Google Drive!",
       file: fileName,
+      credentials_saved: true,
       purged_old_backups: purgedCount
     })).setMimeType(ContentService.MimeType.JSON);
   } catch (err) {
@@ -79,6 +102,33 @@ const APPS_SCRIPT_SNIPPET = `function doPost(e) {
       success: false,
       error: err.toString()
     })).setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+function doGet(e) {
+  try {
+    var folderName = "BLOG_FILIPEM2_BACKUPS";
+    var folders = DriveApp.getFoldersByName(folderName);
+    if (!folders.hasNext()) {
+      return ContentService.createTextOutput(JSON.stringify({ error: "Nenhum backup encontrado" })).setMimeType(ContentService.MimeType.JSON);
+    }
+    var folder = folders.next();
+    var files = folder.getFiles();
+    var latestFile = null;
+    var latestDate = 0;
+    while (files.hasNext()) {
+      var f = files.next();
+      if (f.getName().startsWith("backup-") && f.getDateCreated().getTime() > latestDate) {
+        latestDate = f.getDateCreated().getTime();
+        latestFile = f;
+      }
+    }
+    if (!latestFile) {
+      return ContentService.createTextOutput(JSON.stringify({ error: "Nenhum arquivo" })).setMimeType(ContentService.MimeType.JSON);
+    }
+    return ContentService.createTextOutput(latestFile.getBlob().getDataAsString()).setMimeType(ContentService.MimeType.JSON);
+  } catch (err) {
+    return ContentService.createTextOutput(JSON.stringify({ error: err.toString() })).setMimeType(ContentService.MimeType.JSON);
   }
 }`;
 
@@ -90,6 +140,10 @@ export default function AdminUsersPage() {
   const [password, setPassword] = useState('');
   const [avatar, setAvatar] = useState('');
   const [bio, setBio] = useState('');
+  const [savedPassword, setSavedPassword] = useState('admin123456');
+  const [showSavedPassword, setShowSavedPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [copiedSavedPassword, setCopiedSavedPassword] = useState(false);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [notification, setNotification] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
@@ -160,6 +214,9 @@ export default function AdminUsersPage() {
         setEmail(meData.user.email || '');
         setAvatar(meData.user.avatar || '');
         setBio(meData.user.bio || '');
+        if (meData.user.savedPassword) {
+          setSavedPassword(meData.user.savedPassword);
+        }
       }
     } catch (err) {
       console.error(err);
@@ -197,7 +254,14 @@ export default function AdminUsersPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Erro ao atualizar dados.');
 
-      setNotification({ type: 'success', text: 'Predefinições do perfil e foto/logo salvas com sucesso!' });
+      if (password && password.trim().length >= 6) {
+        setSavedPassword(password.trim());
+      }
+
+      setNotification({
+        type: 'success',
+        text: 'Perfil atualizado com sucesso! Sua senha foi salva e sincronizada com o Google Drive.'
+      });
       setPassword('');
       loadUsers();
     } catch (err: any) {
@@ -346,13 +410,78 @@ export default function AdminUsersPage() {
               <label className="block font-semibold text-neutral-300 mb-1">
                 Nova Senha (Deixe em branco se não desejar alterar)
               </label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Mínimo de 6 caracteres fortes"
-                className="w-full px-3 py-2 rounded-xl bg-neutral-900 border border-neutral-700 text-white text-xs focus:outline-none focus:border-red-500"
-              />
+              <div className="relative">
+                <input
+                  type={showNewPassword ? 'text' : 'password'}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Mínimo de 6 caracteres fortes"
+                  className="w-full px-3 py-2 pr-10 rounded-xl bg-neutral-900 border border-neutral-700 text-white text-xs focus:outline-none focus:border-red-500"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowNewPassword(!showNewPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-white transition-colors"
+                  title={showNewPassword ? 'Ocultar senha' : 'Ver senha digitada'}
+                >
+                  {showNewPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
+            </div>
+
+            {/* Current Saved Password in Cloud / Drive Card */}
+            <div className="p-3.5 rounded-xl bg-neutral-950/70 border border-neutral-800 space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] font-bold text-neutral-300 flex items-center gap-1.5">
+                  <Key className="w-3.5 h-3.5 text-amber-500" />
+                  <span>Sua Senha Atual Salva no Sistema / Drive:</span>
+                </span>
+                <span className="text-[10px] font-mono text-emerald-400 bg-emerald-950/80 border border-emerald-800/80 px-2 py-0.5 rounded-full flex items-center gap-1">
+                  <CheckCircle2 className="w-3 h-3" />
+                  <span>Guardada no Drive</span>
+                </span>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <div className="flex-1 px-3 py-1.5 rounded-lg bg-neutral-900 border border-neutral-800 text-white font-mono text-xs flex items-center justify-between">
+                  <span>{showSavedPassword ? savedPassword : '••••••••••••'}</span>
+                  <button
+                    type="button"
+                    onClick={() => setShowSavedPassword(!showSavedPassword)}
+                    className="text-neutral-400 hover:text-white transition-colors ml-2"
+                    title={showSavedPassword ? 'Ocultar senha' : 'Exibir senha salva'}
+                  >
+                    {showSavedPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                  </button>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    navigator.clipboard.writeText(savedPassword);
+                    setCopiedSavedPassword(true);
+                    setTimeout(() => setCopiedSavedPassword(false), 2500);
+                  }}
+                  className="px-3 py-1.5 rounded-lg bg-neutral-800 hover:bg-neutral-700 text-white text-xs font-bold flex items-center gap-1.5 transition-colors shrink-0"
+                  title="Copiar senha atual"
+                >
+                  {copiedSavedPassword ? (
+                    <>
+                      <Check className="w-3.5 h-3.5 text-emerald-400" />
+                      <span className="text-emerald-400">Copiada!</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-3.5 h-3.5 text-neutral-400" />
+                      <span>Copiar</span>
+                    </>
+                  )}
+                </button>
+              </div>
+
+              <p className="text-[10px] text-neutral-400 leading-normal">
+                📁 Toda alteração de senha é salva no banco e enviada para o seu Google Drive na pasta <strong className="text-neutral-300">BLOG_FILIPEM2_BACKUPS</strong> no arquivo <strong className="text-amber-400">SENHA_E_ACESSO_ADMIN.txt</strong>.
+              </p>
             </div>
 
             <div>

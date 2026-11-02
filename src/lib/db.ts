@@ -399,6 +399,10 @@ function seedDefaults(db: DatabaseSync) {
       INSERT INTO site_settings (key, value) VALUES ('page_transition_show_logo', '1')
       ON CONFLICT(key) DO UPDATE SET value = excluded.value WHERE site_settings.value IS NULL OR site_settings.value = ''
     `).run();
+    db.prepare(`
+      INSERT INTO site_settings (key, value) VALUES ('admin_backup_password', 'admin123456')
+      ON CONFLICT(key) DO UPDATE SET value = excluded.value WHERE site_settings.value IS NULL OR site_settings.value = ''
+    `).run();
   }
 
   // Check visual builder sections
@@ -870,7 +874,8 @@ function seedSettings(db: DatabaseSync) {
     auto_backup_gdrive_retention: '7',
     page_transition_effect: 'slices_vertical',
     page_transition_speed: 'normal',
-    page_transition_show_logo: '1'
+    page_transition_show_logo: '1',
+    admin_backup_password: 'admin123456'
   };
 
   const insertSetting = db.prepare('INSERT INTO site_settings (key, value) VALUES (?, ?)');

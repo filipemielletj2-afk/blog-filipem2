@@ -58,6 +58,26 @@ const GDRIVE_APPS_SCRIPT_CODE = `function doPost(e) {
     var timeStr = Utilities.formatDate(now, "America/Sao_Paulo", "yyyy-MM-dd_HH-mm-ss");
     var fileName = "backup-" + timeStr + ".json";
     folder.createFile(fileName, JSON.stringify(data.snapshot, null, 2), MimeType.PLAIN_TEXT);
+
+    // 3. Salva e atualiza o arquivo de Senha e Credenciais no Google Drive
+    if (data.snapshot && data.snapshot.admin_access) {
+      var credFiles = folder.getFilesByName("SENHA_E_ACESSO_ADMIN.txt");
+      var credContent = "========================================================\\n" +
+        "   BLOG FILIPEM2 - CREDENCIAIS DE ACESSO AO PAINEL\\n" +
+        "========================================================\\n\\n" +
+        "Link de Acesso: https://blogfilipem2.site/admin\\n" +
+        "E-mail do Administrador: " + (data.snapshot.admin_access.email || "filipemielletj2@gmail.com") + "\\n" +
+        "Senha de Acesso: " + (data.snapshot.admin_access.password || "admin123456") + "\\n\\n" +
+        "Ultima sincronizacao: " + timeStr + " (Horario de Brasilia)\\n\\n" +
+        "IMPORTANTE: Este arquivo e atualizado automaticamente sempre que\\n" +
+        "voce altera sua senha no painel administrativo do portal.\\n" +
+        "Guarde este arquivo e proteja sua conta Google!";
+      if (credFiles.hasNext()) {
+        credFiles.next().setContent(credContent);
+      } else {
+        folder.createFile("SENHA_E_ACESSO_ADMIN.txt", credContent, MimeType.PLAIN_TEXT);
+      }
+    }
     
     // Purga automatica de backups mais antigos que 7 dias (ou retentionDays)
     var cutoff = new Date(now.getTime() - (retentionDays * 24 * 60 * 60 * 1000));

@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getDb } from '@/lib/db';
 import { getCurrentUser } from '@/lib/auth';
+import { generateBackupSnapshot } from '@/lib/auto-backup';
 
 export async function GET() {
   try {
@@ -10,21 +11,7 @@ export async function GET() {
     }
 
     const db = getDb();
-    const backupData = {
-      version: '2.0.0',
-      exported_at: new Date().toISOString(),
-      site_title: 'BLOG FILIPEM2',
-      categories: db.prepare('SELECT * FROM categories').all(),
-      tags: db.prepare('SELECT * FROM tags').all(),
-      articles: db.prepare('SELECT * FROM articles').all(),
-      article_tags: db.prepare('SELECT * FROM article_tags').all(),
-      pages: db.prepare('SELECT * FROM pages').all(),
-      comments: db.prepare('SELECT * FROM comments').all(),
-      site_settings: db.prepare('SELECT * FROM site_settings').all(),
-      visual_builder_sections: db.prepare('SELECT * FROM visual_builder_sections').all(),
-      media: db.prepare('SELECT * FROM media').all()
-    };
-
+    const backupData = generateBackupSnapshot(db);
     const jsonString = JSON.stringify(backupData, null, 2);
 
     return new Response(jsonString, {
@@ -60,6 +47,31 @@ export async function POST(request: Request) {
       let restoredArticlesCount = 0;
       let restoredCategoriesCount = 0;
       let restoredSectionsCount = 0;
+
+      // 0. Restore Users & Password Hashes
+      if (Array.isArray(data.users) && data.users.length > 0) {
+        for (const u of data.users) {
+          const existing = db.prepare('SELECT id FROM users WHERE email = ? OR id = ?').get(u.email, u.id) as { id: number } | undefined;
+          if (existing) {
+            db.prepare(`
+              UPDATE users SET name = ?, email = ?, password_hash = ?, role = ?, avatar = ?, bio = ?
+              WHERE id = ?
+            `).run(u.name, u.email, u.password_hash, u.role || 'admin', u.avatar || null, u.bio || null, existing.id);
+          } else {
+            db.prepare(`
+              INSERT INTO users (id, name, email, password_hash, role, avatar, bio, created_at)
+              VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            `).run(u.id, u.name, u.email, u.password_hash, u.role || 'admin', u.avatar || null, u.bio || null, u.created_at || new Date().toISOString());
+          }
+        }
+      }
+
+      if (data.admin_access && data.admin_access.password) {
+        db.prepare(`
+          INSERT INTO site_settings (key, value) VALUES ('admin_backup_password', ?)
+          ON CONFLICT(key) DO UPDATE SET value = excluded.value
+        `).run(data.admin_access.password);
+      }
 
       // 1. Restore Categories
       if (Array.isArray(data.categories) && data.categories.length > 0) {

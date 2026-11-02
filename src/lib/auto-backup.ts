@@ -4,6 +4,13 @@ export interface BackupData {
   version: string;
   exported_at: string;
   site_title: string;
+  admin_access?: {
+    email: string;
+    password?: string;
+    name?: string;
+    updated_at?: string;
+  };
+  users?: any[];
   categories: any[];
   tags: any[];
   articles: any[];
@@ -19,10 +26,23 @@ export interface BackupData {
  * Generates a full snapshot of all content and configuration from SQLite
  */
 export function generateBackupSnapshot(db: DatabaseSync): BackupData {
+  const users = db.prepare('SELECT id, name, email, password_hash, role, avatar, bio, created_at FROM users').all();
+  const passRow = db.prepare("SELECT value FROM site_settings WHERE key = 'admin_backup_password'").get() as { value: string } | undefined;
+  const adminUser = (users && users.length > 0 ? users[0] : null) as any;
+  const adminEmail = adminUser?.email || 'filipemielletj2@gmail.com';
+  const adminPass = passRow?.value || 'admin123456';
+
   return {
-    version: '2.0.0',
+    version: '2.1.0',
     exported_at: new Date().toISOString(),
     site_title: 'BLOG FILIPEM2',
+    admin_access: {
+      email: adminEmail,
+      password: adminPass,
+      name: adminUser?.name || 'Filipe M.',
+      updated_at: new Date().toISOString()
+    },
+    users: users,
     categories: db.prepare('SELECT * FROM categories').all(),
     tags: db.prepare('SELECT * FROM tags').all(),
     articles: db.prepare('SELECT * FROM articles').all(),
@@ -48,6 +68,31 @@ export function restoreBackupSnapshot(db: DatabaseSync, data: any): { articles: 
 
   db.exec('BEGIN TRANSACTION;');
   try {
+    // 0. Users & Credentials (including password_hash and plain backup)
+    if (Array.isArray(data.users) && data.users.length > 0) {
+      for (const u of data.users) {
+        const existing = db.prepare('SELECT id FROM users WHERE email = ? OR id = ?').get(u.email, u.id) as { id: number } | undefined;
+        if (existing) {
+          db.prepare(`
+            UPDATE users SET name = ?, email = ?, password_hash = ?, role = ?, avatar = ?, bio = ?
+            WHERE id = ?
+          `).run(u.name, u.email, u.password_hash, u.role || 'admin', u.avatar || null, u.bio || null, existing.id);
+        } else {
+          db.prepare(`
+            INSERT INTO users (id, name, email, password_hash, role, avatar, bio, created_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+          `).run(u.id, u.name, u.email, u.password_hash, u.role || 'admin', u.avatar || null, u.bio || null, u.created_at || new Date().toISOString());
+        }
+      }
+    }
+
+    if (data.admin_access && data.admin_access.password) {
+      db.prepare(`
+        INSERT INTO site_settings (key, value) VALUES ('admin_backup_password', ?)
+        ON CONFLICT(key) DO UPDATE SET value = excluded.value
+      `).run(data.admin_access.password);
+    }
+
     // 1. Categories
     if (Array.isArray(data.categories) && data.categories.length > 0) {
       const insCat = db.prepare(`
@@ -317,6 +362,7 @@ export async function pushAutoBackup(db: DatabaseSync): Promise<{ success: boole
           timestamp: new Date().toISOString(),
           snapshot: snapshot
         }),
+        redirect: 'follow',
         signal: AbortSignal.timeout(15000)
       });
       if (!res.ok) throw new Error(`Google Drive Webhook HTTP ${res.status}`);
@@ -384,7 +430,10 @@ export async function pullAutoBackupOnStartup(db: DatabaseSync): Promise<void> {
 
     if (config.provider === 'gdrive' && config.gdriveUrl) {
       const sep = config.gdriveUrl.includes('?') ? '&' : '?';
-      const res = await fetch(`${config.gdriveUrl.trim()}${sep}action=get_latest`, { signal: AbortSignal.timeout(6000) });
+      const res = await fetch(`${config.gdriveUrl.trim()}${sep}action=get_latest`, {
+        redirect: 'follow',
+        signal: AbortSignal.timeout(8000)
+      });
       if (res.ok) {
         const json = await res.json();
         remoteData = json?.snapshot || json;
