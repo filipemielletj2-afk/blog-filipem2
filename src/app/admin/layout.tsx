@@ -180,7 +180,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2.5 min-w-0">
                 {user?.avatar ? (
-                  <img src={user.avatar} alt={user.name} className="w-8 h-8 rounded-full object-cover shrink-0" />
+                  <img
+                    src={user.avatar}
+                    alt={user.name}
+                    className="w-8 h-8 rounded-full object-cover shrink-0 bg-neutral-900 border border-neutral-700"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = '/logo.png';
+                    }}
+                  />
                 ) : (
                   <div className="w-8 h-8 rounded-full bg-neutral-800 text-neutral-300 flex items-center justify-center font-bold text-xs shrink-0">
                     {user?.name?.[0] || 'A'}

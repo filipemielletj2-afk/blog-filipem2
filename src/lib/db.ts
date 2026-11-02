@@ -298,7 +298,7 @@ function seedDefaults(db: DatabaseSync) {
       'filipemielletj2@gmail.com',
       adminPass,
       'Criador e editor-chefe do BLOG FILIPEM2. Apaixonado por tecnologia, games competitivos, cinema e trilhas sonoras épicas.',
-      'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80'
+      '/avatar.png'
     );
   }
 

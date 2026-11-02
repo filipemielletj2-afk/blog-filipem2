@@ -614,7 +614,10 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           <img
             src={article.author_avatar}
             alt={article.author_name}
-            className="w-16 h-16 rounded-2xl object-cover border border-neutral-700 shrink-0"
+            className="w-16 h-16 rounded-2xl object-cover border border-neutral-700 shrink-0 bg-neutral-900"
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = '/logo.png';
+            }}
           />
         ) : (
           <div className="w-16 h-16 rounded-2xl bg-neutral-800 flex items-center justify-center text-white shrink-0">

@@ -18,7 +18,9 @@ import {
   HelpCircle,
   Key,
   Link2,
-  Sparkles
+  Sparkles,
+  Upload,
+  Image as ImageIcon
 } from 'lucide-react';
 
 const APPS_SCRIPT_SNIPPET = `function doPost(e) {
@@ -91,6 +93,42 @@ export default function AdminUsersPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [notification, setNotification] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const fileInputRef = React.useRef<HTMLInputElement | null>(null);
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
+
+  const handleAvatarFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+    const file = files[0];
+    setUploadingAvatar(true);
+    setNotification(null);
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('alt_text', 'Logo / Avatar do Autor');
+
+      const res = await fetch('/api/media', {
+        method: 'POST',
+        body: formData
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Falha ao fazer upload da imagem.');
+
+      if (data.media?.url) {
+        setAvatar(data.media.url);
+        setNotification({
+          type: 'success',
+          text: 'Imagem da logo enviada com sucesso! Clique em "Atualizar Meu Perfil" abaixo para salvar as predefinições.'
+        });
+      }
+    } catch (err: any) {
+      setNotification({ type: 'error', text: err.message });
+    } finally {
+      setUploadingAvatar(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
+  };
 
   // Email notification channels state
   const [notificationEmail, setNotificationEmail] = useState('filipemielletj2@gmail.com');
@@ -159,7 +197,7 @@ export default function AdminUsersPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Erro ao atualizar dados.');
 
-      setNotification({ type: 'success', text: 'Dados e credenciais de segurança atualizados com sucesso!' });
+      setNotification({ type: 'success', text: 'Predefinições do perfil e foto/logo salvas com sucesso!' });
       setPassword('');
       loadUsers();
     } catch (err: any) {
@@ -318,14 +356,97 @@ export default function AdminUsersPage() {
             </div>
 
             <div>
-              <label className="block font-semibold text-neutral-300 mb-1">Foto de Perfil (URL do Avatar)</label>
-              <input
-                type="text"
-                value={avatar}
-                onChange={(e) => setAvatar(e.target.value)}
-                placeholder="https://..."
-                className="w-full px-3 py-2 rounded-xl bg-neutral-900 border border-neutral-700 text-white font-mono text-xs focus:outline-none focus:border-red-500"
-              />
+              <div className="flex items-center justify-between mb-1">
+                <label className="font-semibold text-neutral-300">Foto de Perfil &amp; Logo (Arquivo Local ou URL)</label>
+                <span className="text-[11px] text-neutral-400">
+                  Arquivo local: <code className="text-red-400 font-mono">public/avatar.png</code>
+                </span>
+              </div>
+
+              <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-neutral-900/80 border border-neutral-800">
+                {/* Avatar Preview */}
+                <div className="w-16 h-16 rounded-2xl bg-neutral-950 border border-neutral-700 overflow-hidden flex items-center justify-center shrink-0 shadow-md">
+                  {avatar ? (
+                    <img
+                      src={avatar}
+                      alt={name || 'Avatar'}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = '/logo.png';
+                      }}
+                    />
+                  ) : (
+                    <User className="w-8 h-8 text-neutral-600" />
+                  )}
+                </div>
+
+                <div className="flex-1 space-y-2 min-w-0">
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={avatar}
+                      onChange={(e) => setAvatar(e.target.value)}
+                      placeholder="/avatar.png ou /logo.png ou https://..."
+                      className="flex-1 px-3 py-2 rounded-xl bg-neutral-950 border border-neutral-700 text-white font-mono text-xs focus:outline-none focus:border-red-500"
+                    />
+
+                    {/* Hidden file input */}
+                    <input
+                      type="file"
+                      ref={fileInputRef}
+                      onChange={handleAvatarFileUpload}
+                      accept="image/png,image/jpeg,image/webp,image/svg+xml"
+                      className="hidden"
+                    />
+
+                    <button
+                      type="button"
+                      onClick={() => fileInputRef.current?.click()}
+                      disabled={uploadingAvatar}
+                      className="px-3.5 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-xs flex items-center gap-1.5 transition-all shadow-md shadow-red-600/30 shrink-0 disabled:opacity-50"
+                      title="Escolher arquivo de imagem do seu computador"
+                    >
+                      {uploadingAvatar ? (
+                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                      ) : (
+                        <Upload className="w-3.5 h-3.5" />
+                      )}
+                      <span>{uploadingAvatar ? 'Enviando...' : 'Fazer Upload'}</span>
+                    </button>
+                  </div>
+
+                  {/* Quick Preset Buttons */}
+                  <div className="flex flex-wrap items-center gap-1.5 text-[11px]">
+                    <span className="text-neutral-500 font-medium">Predefinições rápidas:</span>
+                    <button
+                      type="button"
+                      onClick={() => setAvatar('/avatar.png')}
+                      className={`px-2 py-0.5 rounded-lg border transition-all ${
+                        avatar === '/avatar.png'
+                          ? 'bg-red-600/20 text-red-400 border-red-500/40 font-bold'
+                          : 'bg-neutral-800 text-neutral-300 border-neutral-700 hover:border-neutral-500'
+                      }`}
+                    >
+                      📁 /avatar.png (Arquivo Local)
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setAvatar('/logo.png')}
+                      className={`px-2 py-0.5 rounded-lg border transition-all ${
+                        avatar === '/logo.png'
+                          ? 'bg-red-600/20 text-red-400 border-red-500/40 font-bold'
+                          : 'bg-neutral-800 text-neutral-300 border-neutral-700 hover:border-neutral-500'
+                      }`}
+                    >
+                      ⭐ /logo.png (Logo Oficial)
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <span className="text-[11px] text-neutral-400 mt-1.5 block leading-relaxed">
+                💡 <strong>Arquivo local pronto:</strong> Criamos o arquivo <code className="bg-black/60 px-1 py-0.5 rounded text-white font-mono">public/avatar.png</code> no seu projeto. Você pode colocar sua logo diretamente nessa pasta no seu computador ou clicar no botão <strong>&quot;Fazer Upload&quot;</strong> acima para selecionar a imagem direto do dispositivo.
+              </span>
             </div>
 
             <div>
@@ -587,7 +708,14 @@ export default function AdminUsersPage() {
                 <div key={u.id} className="p-3.5 rounded-xl bg-neutral-900 border border-neutral-800 flex items-center justify-between">
                   <div className="flex items-center space-x-3">
                     {u.avatar ? (
-                      <img src={u.avatar} alt={u.name} className="w-10 h-10 rounded-full object-cover border border-neutral-700" />
+                      <img
+                        src={u.avatar}
+                        alt={u.name}
+                        className="w-10 h-10 rounded-full object-cover border border-neutral-700 bg-neutral-950"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src = '/logo.png';
+                        }}
+                      />
                     ) : (
                       <div className="w-10 h-10 rounded-full bg-neutral-800 flex items-center justify-center text-white text-xs font-bold">
                         <User className="w-5 h-5" />
