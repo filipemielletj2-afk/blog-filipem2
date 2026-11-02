@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 import Header from './Header';
 import Footer from './Footer';
 import CookieBanner from './CookieBanner';
-import SitePreloader from './SitePreloader';
+import CurtainTransition from './CurtainTransition';
 import PageTransitionProgress from './PageTransitionProgress';
 
 interface AppShellProps {
@@ -49,10 +49,10 @@ export default function AppShell({
     );
   }
 
-  // Public portal pages render standard Header, Main, Footer, Preloader and CookieBanner
+  // Public portal pages render standard Header, Main, Footer, Curtain Transition and CookieBanner
   return (
     <>
-      <SitePreloader />
+      <CurtainTransition />
       <PageTransitionProgress />
       <Header categories={categories} siteTitle={siteTitle} />
       <main className="flex-1 animate-pageTransition">{children}</main>
