@@ -1,4 +1,6 @@
 import { DatabaseSync } from 'node:sqlite';
+import path from 'node:path';
+import fs from 'node:fs';
 
 export interface BackupData {
   version: string;
@@ -51,7 +53,7 @@ export function generateBackupSnapshot(db: DatabaseSync): BackupData {
     comments: db.prepare('SELECT * FROM comments').all(),
     site_settings: db.prepare('SELECT * FROM site_settings').all(),
     visual_builder_sections: db.prepare('SELECT * FROM visual_builder_sections').all(),
-    media: db.prepare('SELECT id, filename, original_name, mime_type, size, url, alt_text, credit, created_at FROM media').all()
+    media: db.prepare('SELECT id, filename, original_name, mime_type, size, url, alt_text, credit, data_base64, created_at FROM media').all()
   };
 }
 
@@ -255,11 +257,18 @@ export function restoreBackupSnapshot(db: DatabaseSync, data: any): { articles: 
       }
     }
 
-    // 8. Media metadata
+    // 8. Media metadata & Physical File Restoration on Disk
     if (Array.isArray(data.media) && data.media.length > 0) {
+      const uploadsDir = path.join(process.cwd(), 'public', 'uploads');
+      if (!fs.existsSync(uploadsDir)) {
+        try {
+          fs.mkdirSync(uploadsDir, { recursive: true });
+        } catch {}
+      }
+
       const insMedia = db.prepare(`
-        INSERT INTO media (id, filename, original_name, mime_type, size, url, alt_text, credit, created_at)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO media (id, filename, original_name, mime_type, size, url, alt_text, credit, data_base64, created_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ON CONFLICT(id) DO UPDATE SET
           filename = excluded.filename,
           original_name = excluded.original_name,
@@ -267,8 +276,10 @@ export function restoreBackupSnapshot(db: DatabaseSync, data: any): { articles: 
           size = excluded.size,
           url = excluded.url,
           alt_text = excluded.alt_text,
-          credit = excluded.credit
+          credit = excluded.credit,
+          data_base64 = COALESCE(excluded.data_base64, media.data_base64)
       `);
+
       for (const m of data.media) {
         insMedia.run(
           m.id,
@@ -279,8 +290,21 @@ export function restoreBackupSnapshot(db: DatabaseSync, data: any): { articles: 
           m.url,
           m.alt_text || null,
           m.credit || null,
+          m.data_base64 || null,
           m.created_at || new Date().toISOString()
         );
+
+        // Recreate physical file on disk from data_base64 so images never break
+        if (m.filename && m.data_base64) {
+          try {
+            const diskPath = path.join(uploadsDir, path.basename(m.filename));
+            if (!fs.existsSync(diskPath)) {
+              fs.writeFileSync(diskPath, Buffer.from(m.data_base64, 'base64'));
+            }
+          } catch (err) {
+            console.error('Erro ao recriar arquivo de mídia no disco:', err);
+          }
+        }
       }
     }
 

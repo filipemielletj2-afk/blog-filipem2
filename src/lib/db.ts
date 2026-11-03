@@ -39,12 +39,23 @@ export function getDb(): DatabaseSync {
     return dbInstance;
   }
 
-  const dataDir = path.join(process.cwd(), 'data');
+  const dataDir = process.env.DATA_DIR || path.join(process.cwd(), 'data');
   if (!fs.existsSync(dataDir)) {
     fs.mkdirSync(dataDir, { recursive: true });
   }
 
   const dbPath = path.join(dataDir, 'filipem2.sqlite');
+  if (process.env.DATA_DIR && !fs.existsSync(dbPath)) {
+    const seedPath = path.join(process.cwd(), 'data', 'filipem2.sqlite');
+    if (fs.existsSync(seedPath)) {
+      try {
+        fs.copyFileSync(seedPath, dbPath);
+      } catch (e) {
+        console.error('Erro ao inicializar banco no disco persistente:', e);
+      }
+    }
+  }
+
   dbInstance = new DatabaseSync(dbPath);
 
   // Enable WAL mode for high performance concurrency
